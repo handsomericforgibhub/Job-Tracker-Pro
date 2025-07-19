@@ -1,0 +1,96 @@
+{
+  "system_overview": {
+    "objective": "Replace manual project status updates with a question-based interface.",
+    "functionality": [
+      "Ask contextual questions at each job stage",
+      "Infer project stage based on answers",
+      "Create automatic tasks (reminders, checklists, documentation, etc.)",
+      "Trigger actions like SMS reminders or quote revisions"
+    ]
+  },
+  "core_components": {
+    "stages": [
+      "Lead Qualification",
+      "Initial Client Meeting",
+      "Quote Preparation",
+      "Quote Submission",
+      "Client Decision",
+      "Contract & Deposit",
+      "Planning & Procurement",
+      "On-Site Preparation",
+      "Construction Execution",
+      "Inspections & Progress Payments",
+      "Finalisation",
+      "Handover & Close"
+    ],
+    "stage_transition_engine": {
+      "example": {
+        "question": "Has the client accepted the quote?",
+        "response": "Yes",
+        "action": "Set project_stage = 'Contract & Deposit'"
+      }
+    },
+    "question_driven_ui": {
+      "sample_questions": [
+        "Have you had your initial meeting with the client?",
+        "When is the site meeting scheduled?",
+        "Has the client accepted the quote?",
+        "Have you ordered materials yet?",
+        "Are there any variations so far?"
+      ]
+    },
+    "task_templates": {
+      "types": {
+        "Reminder": "Prompt for future actions",
+        "Checklist": "Sequential task steps",
+        "Documentation": "Require notes or uploads",
+        "Communication": "External/internal updates",
+        "Approval": "Await confirmation",
+        "Scheduling": "Book date/time-based events",
+        "Quote Revision": "Trigger scope rework"
+      },
+      "example_task": {
+        "task_type": "Checklist",
+        "stage": "Quote Preparation",
+        "title": "Prepare Quote",
+        "description": "Complete all steps to prepare and send quote",
+        "subtasks": [
+          "Review site notes",
+          "Estimate materials",
+          "Estimate labor",
+          "Add markup",
+          "Generate quote document"
+        ],
+        "note_required": true,
+        "attachments": true,
+        "auto_generated": true
+      }
+    },
+    "example_flow": {
+      "question": "Have you conducted the site meeting with the client?",
+      "user_response": "Not yet, it is booked for Thursday",
+      "system_action": {
+        "create_task": {
+          "task_type": "Reminder",
+          "title": "Client meeting reminder",
+          "due_date": "Wednesday",
+          "reminder_sms_template": "Hi {{client_name}}, looking forward to our meeting tomorrow at {{job_address}}.",
+          "auto_generated": true
+        },
+        "stage": "Remain at Initial Meeting"
+      }
+    },
+    "dev_hooks": {
+      "backend": [
+        "Supabase tables: job_stages, stage_transitions, task_templates, job_tasks, user_responses",
+        "Triggers or functions for response evaluation and task creation"
+      ],
+      "frontend": [
+        "Dynamic question renderer",
+        "Conditional logic based on answers",
+        "Contextual task display",
+        "Read-only stage indicators"
+      ]
+    }
+  }
+}
