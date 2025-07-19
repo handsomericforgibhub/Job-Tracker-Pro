@@ -13,17 +13,36 @@ export async function POST(
 ) {
   try {
     const { id: jobId } = await params
+    const body = await request.json()
+    const { stage_id } = body
     
-    console.log('🔄 Assigning Lead Qualification stage to job:', jobId)
+    console.log('🔄 Assigning stage to job:', jobId, 'Stage ID:', stage_id)
 
-    // Get the Lead Qualification stage ID
-    const leadQualificationStageId = '550e8400-e29b-41d4-a716-446655440001'
+    // Use provided stage_id or fallback to first available stage
+    let targetStageId = stage_id
+    
+    if (!targetStageId) {
+      // Fallback: Get the first stage by sequence order
+      const { data: firstStage, error: stageError } = await supabase
+        .from('job_stages')
+        .select('id')
+        .order('sequence_order')
+        .limit(1)
+        .single()
+        
+      if (stageError || !firstStage) {
+        console.error('❌ Error finding first stage:', stageError)
+        return NextResponse.json({ error: 'No stages available' }, { status: 400 })
+      }
+      
+      targetStageId = firstStage.id
+    }
 
-    // Update the job to use the first stage
+    // Update the job to use the specified stage
     const { data, error } = await supabase
       .from('jobs')
       .update({
-        current_stage_id: leadQualificationStageId,
+        current_stage_id: targetStageId,
         stage_entered_at: new Date().toISOString()
       })
       .eq('id', jobId)
@@ -48,7 +67,7 @@ export async function POST(
     return NextResponse.json({ 
       success: true, 
       job: data,
-      message: 'Lead Qualification stage assigned successfully'
+      message: 'Stage assigned successfully'
     })
 
   } catch (error) {
