@@ -19,8 +19,8 @@ export async function GET(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (userError || userData.role !== 'owner') {
-      return NextResponse.json({ error: 'Access denied. Only owners can manage transitions.' }, { status: 403 })
+    if (userError || (userData.role !== 'owner' && userData.role !== 'site_admin')) {
+      return NextResponse.json({ error: 'Access denied. Only owners and site administrators can manage transitions.' }, { status: 403 })
     }
 
     // Get transitions for stages belonging to the company
@@ -68,8 +68,8 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (userError || userData.role !== 'owner') {
-      return NextResponse.json({ error: 'Access denied. Only owners can manage transitions.' }, { status: 403 })
+    if (userError || (userData.role !== 'owner' && userData.role !== 'site_admin')) {
+      return NextResponse.json({ error: 'Access denied. Only owners and site administrators can manage transitions.' }, { status: 403 })
     }
 
     const { from_stage_id, to_stage_id, trigger_response, conditions, is_automatic } = body
@@ -127,8 +127,8 @@ export async function PUT(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (userError || userData.role !== 'owner') {
-      return NextResponse.json({ error: 'Access denied. Only owners can manage transitions.' }, { status: 403 })
+    if (userError || (userData.role !== 'owner' && userData.role !== 'site_admin')) {
+      return NextResponse.json({ error: 'Access denied. Only owners and site administrators can manage transitions.' }, { status: 403 })
     }
 
     const { transitions } = body
@@ -201,8 +201,8 @@ export async function DELETE(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (userError || userData.role !== 'owner') {
-      return NextResponse.json({ error: 'Access denied. Only owners can manage transitions.' }, { status: 403 })
+    if (userError || (userData.role !== 'owner' && userData.role !== 'site_admin')) {
+      return NextResponse.json({ error: 'Access denied. Only owners and site administrators can manage transitions.' }, { status: 403 })
     }
 
     // Verify transition belongs to user's company through stages

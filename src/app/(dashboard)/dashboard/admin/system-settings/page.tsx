@@ -100,7 +100,7 @@ export default function SystemSettings() {
   })
 
   useEffect(() => {
-    if (user?.role === 'owner' && activeTab === 'stages') {
+    if ((user?.role === 'owner' || user?.role === 'site_admin') && activeTab === 'stages') {
       fetchStages()
     }
   }, [user, activeTab])
@@ -217,14 +217,14 @@ export default function SystemSettings() {
     }
   }
 
-  // Redirect if not owner
-  if (!user || user.role !== 'owner') {
+  // Redirect if not owner or site admin
+  if (!user || (user.role !== 'owner' && user.role !== 'site_admin')) {
     return (
       <div className="p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center">
             <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
-            <span className="text-red-800">Access denied. Only owners can access system settings.</span>
+            <span className="text-red-800">Access denied. Only owners and site administrators can access system settings.</span>
           </div>
         </div>
       </div>

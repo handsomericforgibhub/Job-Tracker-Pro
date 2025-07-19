@@ -21,8 +21,8 @@ export async function GET(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (userError || userData.role !== 'owner') {
-      return NextResponse.json({ error: 'Access denied. Only owners can manage questions.' }, { status: 403 })
+    if (userError || (userData.role !== 'owner' && userData.role !== 'site_admin')) {
+      return NextResponse.json({ error: 'Access denied. Only owners and site administrators can manage questions.' }, { status: 403 })
     }
 
     let query = supabase
@@ -72,8 +72,8 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (userError || userData.role !== 'owner') {
-      return NextResponse.json({ error: 'Access denied. Only owners can manage questions.' }, { status: 403 })
+    if (userError || (userData.role !== 'owner' && userData.role !== 'site_admin')) {
+      return NextResponse.json({ error: 'Access denied. Only owners and site administrators can manage questions.' }, { status: 403 })
     }
 
     const { stage_id, question_text, response_type, sequence_order, help_text, skip_conditions } = body
@@ -133,8 +133,8 @@ export async function PUT(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (userError || userData.role !== 'owner') {
-      return NextResponse.json({ error: 'Access denied. Only owners can manage questions.' }, { status: 403 })
+    if (userError || (userData.role !== 'owner' && userData.role !== 'site_admin')) {
+      return NextResponse.json({ error: 'Access denied. Only owners and site administrators can manage questions.' }, { status: 403 })
     }
 
     const { questions } = body
@@ -206,8 +206,8 @@ export async function DELETE(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (userError || userData.role !== 'owner') {
-      return NextResponse.json({ error: 'Access denied. Only owners can manage questions.' }, { status: 403 })
+    if (userError || (userData.role !== 'owner' && userData.role !== 'site_admin')) {
+      return NextResponse.json({ error: 'Access denied. Only owners and site administrators can manage questions.' }, { status: 403 })
     }
 
     // Verify question belongs to user's company through stage
