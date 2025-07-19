@@ -77,7 +77,18 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   // Debug logging
-  console.log('📊 GanttChart received jobs:', jobs.length, jobs.map(j => ({ id: j.id, title: j.title, status: j.status, start_date: j.start_date, end_date: j.end_date })))
+  console.log('📊 GanttChart received jobs:', jobs.length, jobs.map(j => ({ 
+    id: j.id, 
+    title: j.title, 
+    status: j.status, 
+    start_date: j.start_date, 
+    end_date: j.end_date,
+    current_stage: j.current_stage ? {
+      id: j.current_stage.id,
+      name: j.current_stage.name,
+      color: j.current_stage.color
+    } : null
+  })))
 
   // Fetch status history for all jobs (simplified to avoid auth issues)
   const fetchStatusHistories = async () => {
@@ -113,7 +124,7 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
       
       return [{
         status: job.status,
-        color: statusColors[job.status as keyof typeof statusColors] || '#6B7280',
+        color: job.current_stage?.color || statusColors[job.status as keyof typeof statusColors] || '#6B7280',
         startDate,
         endDate,
         duration: differenceInDays(endDate, startDate)
@@ -163,7 +174,7 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
 
     return segments.length > 0 ? segments : [{
       status: job.status,
-      color: statusColors[job.status as keyof typeof statusColors] || '#6B7280',
+      color: job.current_stage?.color || statusColors[job.status as keyof typeof statusColors] || '#6B7280',
       startDate: jobStartDate,
       endDate: jobEndDate,
       duration: differenceInDays(jobEndDate, jobStartDate)
@@ -232,6 +243,9 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
         }
       }
 
+      const taskColor = job.current_stage?.color || statusColors[job.status as keyof typeof statusColors] || '#6B7280'
+      console.log(`🎨 Task color for "${job.title}": ${taskColor} (stage: ${job.current_stage?.color}, status: ${statusColors[job.status as keyof typeof statusColors]})`)
+
       return {
         id: job.id,
         title: job.title,
@@ -240,7 +254,7 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
         expectedEndDate,
         status: job.status,
         progress,
-        color: statusColors[job.status as keyof typeof statusColors] || '#6B7280',
+        color: taskColor,
         statusSegments
       }
     })
@@ -403,15 +417,32 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
         <div className="relative">
           {/* Legend */}
           <div className="flex items-center gap-4 px-4 py-2 bg-gray-50 border-b text-xs">
-            {Object.entries(statusColors).map(([status, color]) => (
-              <div key={status} className="flex items-center gap-1">
-                <div 
-                  className="w-3 h-3 rounded" 
-                  style={{ backgroundColor: color }}
-                />
-                <span>{statusLabels[status as keyof typeof statusLabels]}</span>
-              </div>
-            ))}
+            {/* Show stage names if any jobs have current_stage */}
+            {jobs.some(job => job.current_stage) ? (
+              Array.from(new Set(jobs.filter(job => job.current_stage).map(job => ({
+                name: job.current_stage!.name,
+                color: job.current_stage!.color
+              })))).map((stage, index) => (
+                <div key={index} className="flex items-center gap-1">
+                  <div 
+                    className="w-3 h-3 rounded" 
+                    style={{ backgroundColor: stage.color }}
+                  />
+                  <span>{stage.name}</span>
+                </div>
+              ))
+            ) : (
+              /* Show traditional status labels when no jobs use stages */
+              Object.entries(statusColors).map(([status, color]) => (
+                <div key={status} className="flex items-center gap-1">
+                  <div 
+                    className="w-3 h-3 rounded" 
+                    style={{ backgroundColor: color }}
+                  />
+                  <span>{statusLabels[status as keyof typeof statusLabels]}</span>
+                </div>
+              ))
+            )}
             <div className="flex items-center gap-1 ml-4">
               <div className="w-3 h-0.5 bg-red-400" />
               <span>Expected End Date</span>
