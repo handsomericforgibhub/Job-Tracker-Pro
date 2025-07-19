@@ -4,9 +4,10 @@ import { supabase } from '@/lib/supabase'
 // GET - Fetch specific worker application
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const applicationId = params.id
 
     const { data: application, error } = await supabase
