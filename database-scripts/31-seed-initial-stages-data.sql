@@ -9,18 +9,18 @@ BEGIN;
 
 -- Insert job stages with proper sequence and status mapping
 INSERT INTO job_stages (id, name, description, color, sequence_order, maps_to_status, stage_type, min_duration_hours, max_duration_hours) VALUES
-('550e8400-e29b-41d4-a716-446655440001', 'Lead Qualification', 'Initial assessment of lead viability and requirements', '#8B5CF6', 1, 'planning', 'standard', 1, 168),
-('550e8400-e29b-41d4-a716-446655440002', 'Initial Client Meeting', 'First meeting with client to understand project scope', '#6366F1', 2, 'planning', 'milestone', 2, 72),
-('550e8400-e29b-41d4-a716-446655440003', 'Quote Preparation', 'Prepare detailed project quote and estimates', '#3B82F6', 3, 'planning', 'standard', 4, 120),
-('550e8400-e29b-41d4-a716-446655440004', 'Quote Submission', 'Submit quote to client and await response', '#1E40AF', 4, 'planning', 'milestone', 1, 336),
-('550e8400-e29b-41d4-a716-446655440005', 'Client Decision', 'Client reviews and makes decision on quote', '#1E3A8A', 5, 'planning', 'approval', 1, 168),
-('550e8400-e29b-41d4-a716-446655440006', 'Contract & Deposit', 'Finalize contract terms and collect deposit', '#10B981', 6, 'active', 'milestone', 2, 72),
-('550e8400-e29b-41d4-a716-446655440007', 'Planning & Procurement', 'Detailed planning and material procurement', '#059669', 7, 'active', 'standard', 8, 168),
-('550e8400-e29b-41d4-a716-446655440008', 'On-Site Preparation', 'Site preparation and setup for construction', '#047857', 8, 'active', 'standard', 4, 72),
-('550e8400-e29b-41d4-a716-446655440009', 'Construction Execution', 'Main construction and building phase', '#065F46', 9, 'active', 'standard', 40, 2000),
-('550e8400-e29b-41d4-a716-446655440010', 'Inspections & Progress Payments', 'Quality inspections and progress billing', '#6B7280', 10, 'active', 'milestone', 2, 48),
-('550e8400-e29b-41d4-a716-446655440011', 'Finalisation', 'Final touches and completion preparations', '#4B5563', 11, 'active', 'standard', 8, 120),
-('550e8400-e29b-41d4-a716-446655440012', 'Handover & Close', 'Final handover and project closure', '#374151', 12, 'completed', 'milestone', 1, 24);
+('550e8400-e29b-41d4-a716-446655440001', '1/12 Lead Qualification', 'Initial assessment of lead viability and requirements', '#C7D2FE', 1, 'planning', 'standard', 1, 168),
+('550e8400-e29b-41d4-a716-446655440002', '2/12 Initial Client Meeting', 'First meeting with client to understand project scope', '#A5B4FC', 2, 'planning', 'milestone', 2, 72),
+('550e8400-e29b-41d4-a716-446655440003', '3/12 Quote Preparation', 'Prepare detailed project quote and estimates', '#93C5FD', 3, 'planning', 'standard', 4, 120),
+('550e8400-e29b-41d4-a716-446655440004', '4/12 Quote Submission', 'Submit quote to client and await response', '#60A5FA', 4, 'planning', 'milestone', 1, 336),
+('550e8400-e29b-41d4-a716-446655440005', '5/12 Client Decision', 'Client reviews and makes decision on quote', '#38BDF8', 5, 'planning', 'approval', 1, 168),
+('550e8400-e29b-41d4-a716-446655440006', '6/12 Contract & Deposit', 'Finalize contract terms and collect deposit', '#34D399', 6, 'active', 'milestone', 2, 72),
+('550e8400-e29b-41d4-a716-446655440007', '7/12 Planning & Procurement', 'Detailed planning and material procurement', '#4ADE80', 7, 'active', 'standard', 8, 168),
+('550e8400-e29b-41d4-a716-446655440008', '8/12 On-Site Preparation', 'Site preparation and setup for construction', '#FACC15', 8, 'active', 'standard', 4, 72),
+('550e8400-e29b-41d4-a716-446655440009', '9/12 Construction Execution', 'Main construction and building phase', '#FB923C', 9, 'active', 'standard', 40, 2000),
+('550e8400-e29b-41d4-a716-446655440010', '10/12 Inspections & Progress Payments', 'Quality inspections and progress billing', '#F87171', 10, 'active', 'milestone', 2, 48),
+('550e8400-e29b-41d4-a716-446655440011', '11/12 Finalisation', 'Final touches and completion preparations', '#F472B6', 11, 'active', 'standard', 8, 120),
+('550e8400-e29b-41d4-a716-446655440012', '12/12 Handover & Close', 'Final handover and project closure', '#D1D5DB', 12, 'completed', 'milestone', 1, 24);
 
 -- =============================================
 -- 2. INSERT STAGE QUESTIONS

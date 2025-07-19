@@ -49,7 +49,7 @@ export default function EditJobPage() {
 
   // Question-driven system state
   const [questionResponses, setQuestionResponses] = useState<Record<string, string>>({})
-  const [currentStage, setCurrentStage] = useState('Lead Qualification')
+  const [currentStage, setCurrentStage] = useState('1/12 Lead Qualification')
   const [isProcessingResponse, setIsProcessingResponse] = useState(false)
 
   useEffect(() => {
@@ -368,33 +368,33 @@ export default function EditJobPage() {
       
       // Stage name to ID mapping (from the database)
       const stageNameToId = {
-        'Lead Qualification': '550e8400-e29b-41d4-a716-446655440001',
-        'Initial Client Meeting': '550e8400-e29b-41d4-a716-446655440002',
-        'Quote Preparation': '550e8400-e29b-41d4-a716-446655440003',
-        'Quote Submission': '550e8400-e29b-41d4-a716-446655440004',
-        'Client Decision': '550e8400-e29b-41d4-a716-446655440005',
-        'Contract & Deposit': '550e8400-e29b-41d4-a716-446655440006',
-        'Planning & Procurement': '550e8400-e29b-41d4-a716-446655440007',
-        'On-Site Preparation': '550e8400-e29b-41d4-a716-446655440008',
-        'Construction Execution': '550e8400-e29b-41d4-a716-446655440009',
-        'Inspections & Progress Payments': '550e8400-e29b-41d4-a716-446655440010',
-        'Finalisation': '550e8400-e29b-41d4-a716-446655440011',
-        'Handover & Close': '550e8400-e29b-41d4-a716-446655440012'
+        '1/12 Lead Qualification': '550e8400-e29b-41d4-a716-446655440001',
+        '2/12 Initial Client Meeting': '550e8400-e29b-41d4-a716-446655440002',
+        '3/12 Quote Preparation': '550e8400-e29b-41d4-a716-446655440003',
+        '4/12 Quote Submission': '550e8400-e29b-41d4-a716-446655440004',
+        '5/12 Client Decision': '550e8400-e29b-41d4-a716-446655440005',
+        '6/12 Contract & Deposit': '550e8400-e29b-41d4-a716-446655440006',
+        '7/12 Planning & Procurement': '550e8400-e29b-41d4-a716-446655440007',
+        '8/12 On-Site Preparation': '550e8400-e29b-41d4-a716-446655440008',
+        '9/12 Construction Execution': '550e8400-e29b-41d4-a716-446655440009',
+        '10/12 Inspections & Progress Payments': '550e8400-e29b-41d4-a716-446655440010',
+        '11/12 Finalisation': '550e8400-e29b-41d4-a716-446655440011',
+        '12/12 Handover & Close': '550e8400-e29b-41d4-a716-446655440012'
       }
       
       // Updated 12-stage progression
       const stageProgression = {
-        'Lead Qualification': 'Initial Client Meeting',
-        'Initial Client Meeting': 'Quote Preparation',
-        'Quote Preparation': 'Quote Submission',
-        'Quote Submission': 'Client Decision',
-        'Client Decision': 'Contract & Deposit',
-        'Contract & Deposit': 'Planning & Procurement',
-        'Planning & Procurement': 'On-Site Preparation',
-        'On-Site Preparation': 'Construction Execution',
-        'Construction Execution': 'Inspections & Progress Payments',
-        'Inspections & Progress Payments': 'Finalisation',
-        'Finalisation': 'Handover & Close'
+        '1/12 Lead Qualification': '2/12 Initial Client Meeting',
+        '2/12 Initial Client Meeting': '3/12 Quote Preparation',
+        '3/12 Quote Preparation': '4/12 Quote Submission',
+        '4/12 Quote Submission': '5/12 Client Decision',
+        '5/12 Client Decision': '6/12 Contract & Deposit',
+        '6/12 Contract & Deposit': '7/12 Planning & Procurement',
+        '7/12 Planning & Procurement': '8/12 On-Site Preparation',
+        '8/12 On-Site Preparation': '9/12 Construction Execution',
+        '9/12 Construction Execution': '10/12 Inspections & Progress Payments',
+        '10/12 Inspections & Progress Payments': '11/12 Finalisation',
+        '11/12 Finalisation': '12/12 Handover & Close'
       }
       
       const nextStageName = stageProgression[currentStage as keyof typeof stageProgression]
@@ -469,62 +469,62 @@ export default function EditJobPage() {
 
   const getQuestionsByStage = (stage: string) => {
     const questionsByStage = {
-      'Lead Qualification': [
+      '1/12 Lead Qualification': [
         { id: 'q1', title: 'Lead Viability', text: 'Have you qualified this lead as a viable opportunity?' },
         { id: 'q2', title: 'Project Value', text: 'What is the estimated project value?' },
         { id: 'q3', title: 'Start Date', text: 'When does the client want to start?' }
       ],
-      'Initial Client Meeting': [
+      '2/12 Initial Client Meeting': [
         { id: 'q4', title: 'Client Meeting', text: 'Have you had your initial meeting with the client?' },
         { id: 'q5', title: 'Site Meeting', text: 'When is the site meeting scheduled?' },
         { id: 'q6', title: 'Meeting Documentation', text: 'Have you documented meeting notes and photos?' }
       ],
-      'Quote Preparation': [
+      '3/12 Quote Preparation': [
         { id: 'q7', title: 'Site Assessment', text: 'Have you completed the site assessment?' },
         { id: 'q8', title: 'Cost Calculation', text: 'Are all materials and labor costs calculated?' },
         { id: 'q9', title: 'Quote Amount', text: 'What is the total quote amount?' }
       ],
-      'Quote Submission': [
+      '4/12 Quote Submission': [
         { id: 'q10', title: 'Quote Submitted', text: 'Has the quote been submitted to the client?' },
         { id: 'q11', title: 'Response Timeline', text: 'When do you expect a response?' },
         { id: 'q12', title: 'Follow-up', text: 'Have you scheduled a follow-up call?' }
       ],
-      'Client Decision': [
+      '5/12 Client Decision': [
         { id: 'q13', title: 'Client Response', text: 'Has the client responded to your quote?' },
         { id: 'q14', title: 'Decision Status', text: 'What is the client\'s decision status?' },
         { id: 'q15', title: 'Negotiations', text: 'Are there any negotiations or changes required?' }
       ],
-      'Contract & Deposit': [
+      '6/12 Contract & Deposit': [
         { id: 'q16', title: 'Contract Terms', text: 'Have you finalized all contract terms?' },
         { id: 'q17', title: 'Contract Signed', text: 'Has the contract been signed by both parties?' },
         { id: 'q18', title: 'Deposit Received', text: 'Have you received the initial deposit?' }
       ],
-      'Planning & Procurement': [
+      '7/12 Planning & Procurement': [
         { id: 'q19', title: 'Project Schedule', text: 'Have you created the detailed project schedule?' },
         { id: 'q20', title: 'Material Orders', text: 'Have all materials been ordered?' },
         { id: 'q21', title: 'Permits Applied', text: 'Have you applied for all necessary permits?' }
       ],
-      'On-Site Preparation': [
+      '8/12 On-Site Preparation': [
         { id: 'q22', title: 'Site Access', text: 'Is site access confirmed and ready?' },
         { id: 'q23', title: 'Safety Setup', text: 'Have safety measures and signage been installed?' },
         { id: 'q24', title: 'Equipment Ready', text: 'Are all tools and equipment on-site?' }
       ],
-      'Construction Execution': [
+      '9/12 Construction Execution': [
         { id: 'q25', title: 'Work Commenced', text: 'Has construction work officially started?' },
         { id: 'q26', title: 'Progress Tracking', text: 'Are you tracking daily progress?' },
         { id: 'q27', title: 'Quality Control', text: 'Are quality checks being performed regularly?' }
       ],
-      'Inspections & Progress Payments': [
+      '10/12 Inspections & Progress Payments': [
         { id: 'q28', title: 'Inspections Scheduled', text: 'Have required inspections been scheduled?' },
         { id: 'q29', title: 'Compliance Check', text: 'Are all works compliant with plans and regulations?' },
         { id: 'q30', title: 'Progress Payment', text: 'Have you invoiced for progress payment?' }
       ],
-      'Finalisation': [
+      '11/12 Finalisation': [
         { id: 'q31', title: 'Work Completion', text: 'Have all construction works been completed?' },
         { id: 'q32', title: 'Final Inspection', text: 'Has the final inspection been completed?' },
         { id: 'q33', title: 'Defects List', text: 'Have any defects been identified and addressed?' }
       ],
-      'Handover & Close': [
+      '12/12 Handover & Close': [
         { id: 'q34', title: 'Client Walkthrough', text: 'Have you completed the final walkthrough with the client?' },
         { id: 'q35', title: 'Documentation', text: 'Have all warranties and documentation been provided?' },
         { id: 'q36', title: 'Final Payment', text: 'Has final payment been received?' }
