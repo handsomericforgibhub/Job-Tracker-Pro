@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
 import { supabase } from '@/lib/supabase'
+import { LIMITS } from '@/config/timeouts'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -125,9 +126,9 @@ export default function WorkerLicenses({ workerId, canEdit }: WorkerLicensesProp
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      // Check file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setError('File size must be less than 5MB')
+      // Check file size (max from config)
+      if (file.size > LIMITS.MAX_FILE_SIZE_LICENSE * 1024 * 1024) {
+        setError(`File size must be less than ${LIMITS.MAX_FILE_SIZE_LICENSE}MB`)
         return
       }
       
@@ -164,7 +165,7 @@ export default function WorkerLicenses({ workerId, canEdit }: WorkerLicensesProp
         if (error.message.includes('bucket')) {
           setError('Storage bucket not found. Please run the storage setup script.')
         } else if (error.message.includes('size')) {
-          setError('File too large. Maximum size is 5MB.')
+          setError(`File too large. Maximum size is ${LIMITS.MAX_FILE_SIZE_LICENSE}MB.`)
         } else if (error.message.includes('type')) {
           setError('File type not allowed. Use PDF, JPG, or PNG.')
         } else {

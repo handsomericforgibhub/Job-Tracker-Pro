@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Job, Worker, LocationData } from '@/lib/types'
 import { useAuthStore } from '@/stores/auth-store'
+import { EXTERNAL_APIS } from '@/config/endpoints'
+import { TIMEOUTS } from '@/config/timeouts'
 import { 
   MapPin, 
   Building2, 
@@ -118,7 +120,7 @@ export default function QRCheckInPage() {
       // Get address from coordinates
       try {
         const response = await fetch(
-          `https://api.openstreetmap.org/reverse?format=json&lat=${locationData.latitude}&lon=${locationData.longitude}&zoom=18&addressdetails=1`
+          EXTERNAL_APIS.OPENSTREETMAP.getReverseGeocodingUrl(locationData.latitude, locationData.longitude)
         )
         const data = await response.json()
         if (data.display_name) {
@@ -238,10 +240,10 @@ export default function QRCheckInPage() {
       setCheckInSuccess(true)
       toast.success('Successfully checked in via QR code!')
       
-      // Redirect to dashboard after 3 seconds
+      // Redirect to dashboard after QR checkin timeout
       setTimeout(() => {
         router.push('/dashboard/time')
-      }, 3000)
+      }, TIMEOUTS.QR_CHECKIN_REDIRECT)
 
     } catch (error) {
       console.error('QR Check-in error:', error)

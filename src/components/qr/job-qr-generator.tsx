@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Job } from '@/lib/types'
+import { TIMEOUTS, LIMITS } from '@/config/timeouts'
 import { 
   QrCode, 
   Download, 
@@ -23,7 +24,7 @@ interface JobQRGeneratorProps {
 }
 
 export function JobQRGenerator({ job, className }: JobQRGeneratorProps) {
-  const [qrSize, setQrSize] = useState(256)
+  const [qrSize, setQrSize] = useState(LIMITS.QR_CODE_SIZE_DEFAULT)
   const [copySuccess, setCopySuccess] = useState(false)
 
   // Generate check-in URL with job information
@@ -41,7 +42,7 @@ export function JobQRGenerator({ job, className }: JobQRGeneratorProps) {
       }
 
       // Create a larger canvas for high quality
-      const size = 512
+      const size = LIMITS.QR_CODE_SIZE_EXPORT
       canvas.width = size
       canvas.height = size + 100 // Extra space for text
       
@@ -87,7 +88,7 @@ export function JobQRGenerator({ job, className }: JobQRGeneratorProps) {
     try {
       await navigator.clipboard.writeText(checkInUrl)
       setCopySuccess(true)
-      setTimeout(() => setCopySuccess(false), 2000)
+      setTimeout(() => setCopySuccess(false), TIMEOUTS.COPY_SUCCESS_FEEDBACK)
       toast.success('Check-in URL copied to clipboard!')
     } catch (err) {
       // Fallback for browsers that don't support clipboard API
@@ -98,7 +99,7 @@ export function JobQRGenerator({ job, className }: JobQRGeneratorProps) {
       document.execCommand('copy')
       document.body.removeChild(textArea)
       setCopySuccess(true)
-      setTimeout(() => setCopySuccess(false), 2000)
+      setTimeout(() => setCopySuccess(false), TIMEOUTS.COPY_SUCCESS_FEEDBACK)
       toast.success('Check-in URL copied to clipboard!')
     }
   }

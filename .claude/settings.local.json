@@ -28,7 +28,8 @@
       "Bash(true)",
       "Bash(npx tsc:*)",
       "Bash(tail:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

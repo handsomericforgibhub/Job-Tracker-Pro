@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { Project, ProjectWithStats } from '@/lib/types';
+import { LIMITS } from '@/config/timeouts';
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const projectManagerId = searchParams.get('project_manager_id');
     const includeStats = searchParams.get('include_stats') === 'true';
-    const limit = parseInt(searchParams.get('limit') || '50');
+    const limit = parseInt(searchParams.get('limit') || String(LIMITS.API_PAGE_SIZE_DEFAULT));
     const offset = parseInt(searchParams.get('offset') || '0');
 
     // Get user's company info for access control

@@ -3,6 +3,8 @@
 import { useState, useCallback } from 'react'
 import { FileUploadResult } from '@/lib/types/question-driven'
 import { Card, CardContent } from '@/components/ui/card'
+import { EXTERNAL_APIS } from '@/config/endpoints'
+import { LIMITS, TIMEOUTS } from '@/config/timeouts'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -29,8 +31,8 @@ interface FileUploadHandlerProps {
 
 export default function FileUploadHandler({
   acceptedTypes = ['image/*', 'application/pdf', '.doc', '.docx'],
-  maxFileSize = 10,
-  maxFiles = 5,
+  maxFileSize = LIMITS.MAX_FILE_SIZE_DOCUMENT,
+  maxFiles = LIMITS.MAX_FILES_QUESTION,
   onFilesUploaded,
   onError,
   className = ''
@@ -135,14 +137,14 @@ export default function FileUploadHandler({
               // Mock successful upload result
               resolve({
                 success: true,
-                file_url: `https://storage.example.com/uploads/${file.name}`,
+                file_url: EXTERNAL_APIS.STORAGE.getUploadUrl(file.name),
                 file_name: file.name,
                 file_size: file.size
               })
             } else {
               setUploadProgress(prev => ({ ...prev, [file.name]: progress }))
             }
-          }, 200)
+          }, TIMEOUTS.UPLOAD_PROGRESS_INTERVAL)
         })
 
         const result = await uploadPromise

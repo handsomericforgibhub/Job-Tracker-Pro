@@ -354,13 +354,48 @@ export const EXTERNAL_URLS = {
   - [x] Updated job creation/editing pages
   - [x] Updated system-settings page
   - [x] Synchronized TypeScript config with existing database
+- [x] **CATEGORY 2 COMPLETE**: Color Codes & Visual Styling
+  - [x] Created `/src/config/colors.ts` with centralized color configuration
+  - [x] Updated system-settings page to use central color config
+  - [x] Updated analytics page to use central color config  
+  - [x] Created database script `update-stage-colors-centralized.sql`
+  - [x] Added helper functions for color retrieval (getStageColor, getStatusColor, getPriorityColor)
+- [x] **CATEGORY 3 COMPLETE**: Status & Type Mappings
+  - [x] Created `/src/config/constants.ts` with centralized constants
+  - [x] Updated `/src/lib/types.ts` to use central type definitions
+  - [x] Updated `/src/lib/types/question-driven.ts` with central types
+  - [x] Updated `/src/hooks/useJobStages.ts` status configurations
+  - [x] Updated API validation in task management endpoints
+  - [x] Added comprehensive validation helpers and status transition logic
+- [x] **CATEGORY 4 COMPLETE**: Question Response Types
+  - [x] Extended `/src/config/constants.ts` with response type configuration
+  - [x] Updated system-settings page response type configurations
+  - [x] Updated MobileQuestionInterface component to use central constants
+  - [x] Updated API validation in stage-response and questions routes
+  - [x] Created `/scripts/constants.js` for Node.js scripts
+  - [x] Updated `/scripts/load-stages.js` with central response types
+  - [x] Added RESPONSE_TYPE_CONFIG array for UI components with icons
+- [x] **CATEGORY 5 COMPLETE**: External URLs & Endpoints
+  - [x] Created `/src/config/endpoints.ts` with centralized endpoint configuration
+  - [x] Updated Supabase configuration with fallback URLs and environment helpers
+  - [x] Updated OpenStreetMap API calls in time-clock, QR checkin, and document upload
+  - [x] Updated Google Maps directions API in share assignment page
+  - [x] Updated demo page documentation links to use central config
+  - [x] Updated file upload handler with central storage configuration
+  - [x] Added URL validation helpers and environment-specific functions
 
 ### **Next Steps:**
-- [ ] **CATEGORY 2**: Color Codes & Visual Styling (15+ files)
-- [ ] **CATEGORY 3**: Status & Type Mappings (10+ files)
-- [ ] **CATEGORY 4**: Question Response Types (8+ files)
-- [ ] **CATEGORY 5**: External URLs & Endpoints (5+ files)
-- [ ] **CATEGORY 6**: Configuration Values & Timeouts (3+ files)
+- [x] **CATEGORY 6 COMPLETE**: Configuration Values & Timeouts (3+ files)
+  - [x] Created `/src/config/timeouts.ts` with centralized timeout and limit configuration
+  - [x] Updated QR checkin timeout from hardcoded 3000ms to central config
+  - [x] Updated geolocation timeouts (10000ms timeout, 300000ms max age) to use central config
+  - [x] Updated UI feedback timeouts (copy success 2000ms, notifications 5000ms) to central config
+  - [x] Updated file size limits across components (documents 50MB, photos 20MB, licenses 5MB)
+  - [x] Updated pagination limits across API routes (default 50, large 100)
+  - [x] Updated upload progress interval (200ms) and other UI timing values
+  - [x] Updated QR code sizes (default 256px, export 512px) and Gantt chart height (600px max)
+  - [x] Updated signature pen width limits (min 1px, max 3px) and autocomplete limits (5 results)
+  - [x] Added helper functions and comprehensive type exports for configuration access
 - [ ] Final validation and testing
 
 ---

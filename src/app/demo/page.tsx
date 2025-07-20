@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { DOCUMENTATION_LINKS } from '@/config/endpoints'
 import { AlertCircle, Database, ExternalLink } from 'lucide-react'
 
 export default function DemoPage() {
@@ -30,7 +31,7 @@ export default function DemoPage() {
             <div className="bg-yellow-100 p-4 rounded-lg">
               <h4 className="font-semibold mb-2">Required Steps:</h4>
               <ol className="list-decimal list-inside space-y-1 text-sm">
-                <li>Create a Supabase account at supabase.com</li>
+                <li>Create a Supabase account at {DOCUMENTATION_LINKS.SUPABASE.MAIN.replace('https://', '')}</li>
                 <li>Create a new project or use existing one</li>
                 <li>Copy your project URL and anon key</li>
                 <li>Update the .env.local file with your credentials</li>
@@ -106,7 +107,7 @@ export default function DemoPage() {
         <div className="flex justify-center space-x-4">
           <Button asChild>
             <a 
-              href="https://supabase.com" 
+              href={DOCUMENTATION_LINKS.SUPABASE.MAIN} 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center space-x-2"
@@ -117,7 +118,7 @@ export default function DemoPage() {
           </Button>
           <Button variant="outline" asChild>
             <a 
-              href="https://github.com/supabase/supabase" 
+              href={DOCUMENTATION_LINKS.SUPABASE.GITHUB} 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center space-x-2"

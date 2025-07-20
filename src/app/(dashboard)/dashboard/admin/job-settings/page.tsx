@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
 import { supabase } from '@/lib/supabase'
+import { TIMEOUTS } from '@/config/timeouts'
 import { 
   Plus, 
   Edit2, 
@@ -163,7 +164,7 @@ export default function JobSettings() {
 
   const showMessage = (type: 'success' | 'error', text: string) => {
     setMessage({ type, text })
-    setTimeout(() => setMessage(null), 5000)
+    setTimeout(() => setMessage(null), TIMEOUTS.NOTIFICATION_AUTO_HIDE)
   }
 
   const addStage = (newStage: JobStage) => {

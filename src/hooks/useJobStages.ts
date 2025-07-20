@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { 
+  JOB_STATUSES, 
+  JOB_STATUS_LABELS, 
+  JOB_STATUS_DESCRIPTIONS,
+  getAllowedJobStatusTransitions,
+  getStatusColor 
+} from '@/config/constants'
 import { useAuthStore } from '@/stores/auth-store'
 import { useCompanyContextStore } from '@/stores/company-context-store'
 
@@ -101,52 +108,52 @@ export function useJobStages(): UseJobStagesReturn {
       
       if (platformError) {
         console.warn('Error fetching platform settings, using hardcoded fallback:', platformError)
-        // Use hardcoded fallback stages
+        // Use centralized configuration fallback stages
         setStages([
           {
-            key: 'planning',
-            label: 'Planning',
-            color: '#6B7280',
-            description: 'Job is in planning phase',
+            key: JOB_STATUSES.PLANNING,
+            label: JOB_STATUS_LABELS[JOB_STATUSES.PLANNING],
+            color: getStatusColor(JOB_STATUSES.PLANNING),
+            description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.PLANNING],
             is_initial: true,
             is_final: false,
-            allowed_transitions: ['active', 'cancelled']
+            allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.PLANNING)
           },
           {
-            key: 'active',
-            label: 'Active',
-            color: '#3B82F6',
-            description: 'Job is actively in progress',
+            key: JOB_STATUSES.ACTIVE,
+            label: JOB_STATUS_LABELS[JOB_STATUSES.ACTIVE],
+            color: getStatusColor(JOB_STATUSES.ACTIVE),
+            description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.ACTIVE],
             is_initial: false,
             is_final: false,
-            allowed_transitions: ['on_hold', 'completed', 'cancelled']
+            allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.ACTIVE)
           },
           {
-            key: 'on_hold',
-            label: 'On Hold',
-            color: '#F59E0B',
-            description: 'Job is temporarily paused',
+            key: JOB_STATUSES.ON_HOLD,
+            label: JOB_STATUS_LABELS[JOB_STATUSES.ON_HOLD],
+            color: getStatusColor(JOB_STATUSES.ON_HOLD),
+            description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.ON_HOLD],
             is_initial: false,
             is_final: false,
-            allowed_transitions: ['active', 'cancelled']
+            allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.ON_HOLD)
           },
           {
-            key: 'completed',
-            label: 'Completed',
-            color: '#10B981',
-            description: 'Job has been completed successfully',
+            key: JOB_STATUSES.COMPLETED,
+            label: JOB_STATUS_LABELS[JOB_STATUSES.COMPLETED],
+            color: getStatusColor(JOB_STATUSES.COMPLETED),
+            description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.COMPLETED],
             is_initial: false,
             is_final: true,
-            allowed_transitions: []
+            allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.COMPLETED)
           },
           {
-            key: 'cancelled',
-            label: 'Cancelled',
-            color: '#EF4444',
-            description: 'Job has been cancelled',
+            key: JOB_STATUSES.CANCELLED,
+            label: JOB_STATUS_LABELS[JOB_STATUSES.CANCELLED],
+            color: getStatusColor(JOB_STATUSES.CANCELLED),
+            description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.CANCELLED],
             is_initial: false,
             is_final: true,
-            allowed_transitions: []
+            allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.CANCELLED)
           }
         ])
         return
@@ -159,52 +166,52 @@ export function useJobStages(): UseJobStagesReturn {
       console.error('Error fetching job stages:', err)
       setError(err instanceof Error ? err.message : 'Failed to fetch job stages')
       
-      // Fallback to hardcoded stages if all else fails
+      // Fallback to centralized configuration if all else fails
       setStages([
         {
-          key: 'planning',
-          label: 'Planning',
-          color: '#6B7280',
-          description: 'Job is in planning phase',
+          key: JOB_STATUSES.PLANNING,
+          label: JOB_STATUS_LABELS[JOB_STATUSES.PLANNING],
+          color: getStatusColor(JOB_STATUSES.PLANNING),
+          description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.PLANNING],
           is_initial: true,
           is_final: false,
-          allowed_transitions: ['active', 'cancelled']
+          allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.PLANNING)
         },
         {
-          key: 'active',
-          label: 'Active',
-          color: '#3B82F6',
-          description: 'Job is actively in progress',
+          key: JOB_STATUSES.ACTIVE,
+          label: JOB_STATUS_LABELS[JOB_STATUSES.ACTIVE],
+          color: getStatusColor(JOB_STATUSES.ACTIVE),
+          description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.ACTIVE],
           is_initial: false,
           is_final: false,
-          allowed_transitions: ['on_hold', 'completed', 'cancelled']
+          allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.ACTIVE)
         },
         {
-          key: 'on_hold',
-          label: 'On Hold',
-          color: '#F59E0B',
-          description: 'Job is temporarily paused',
+          key: JOB_STATUSES.ON_HOLD,
+          label: JOB_STATUS_LABELS[JOB_STATUSES.ON_HOLD],
+          color: getStatusColor(JOB_STATUSES.ON_HOLD),
+          description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.ON_HOLD],
           is_initial: false,
           is_final: false,
-          allowed_transitions: ['active', 'cancelled']
+          allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.ON_HOLD)
         },
         {
-          key: 'completed',
-          label: 'Completed',
-          color: '#10B981',
-          description: 'Job has been completed successfully',
+          key: JOB_STATUSES.COMPLETED,
+          label: JOB_STATUS_LABELS[JOB_STATUSES.COMPLETED],
+          color: getStatusColor(JOB_STATUSES.COMPLETED),
+          description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.COMPLETED],
           is_initial: false,
           is_final: true,
-          allowed_transitions: []
+          allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.COMPLETED)
         },
         {
-          key: 'cancelled',
-          label: 'Cancelled',
-          color: '#EF4444',
-          description: 'Job has been cancelled',
+          key: JOB_STATUSES.CANCELLED,
+          label: JOB_STATUS_LABELS[JOB_STATUSES.CANCELLED],
+          color: getStatusColor(JOB_STATUSES.CANCELLED),
+          description: JOB_STATUS_DESCRIPTIONS[JOB_STATUSES.CANCELLED],
           is_initial: false,
           is_final: true,
-          allowed_transitions: []
+          allowed_transitions: getAllowedJobStatusTransitions(JOB_STATUSES.CANCELLED)
         }
       ])
       console.log('✅ Using emergency hardcoded fallback stages')

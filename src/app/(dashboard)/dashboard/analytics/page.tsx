@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuthStore } from '@/stores/auth-store'
+import { CHART_COLOR_PALETTE, CHART_COLORS } from '@/config/colors'
 import { useCompanyContextStore } from '@/stores/company-context-store'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -224,7 +225,7 @@ export default function AnalyticsPage() {
     return total > 0 ? Math.round((completed / total) * 100) : 0
   }
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
+  const COLORS = CHART_COLOR_PALETTE
 
   const CustomTooltip = ({ active, payload, label }: {
     active?: boolean;
@@ -410,7 +411,7 @@ export default function AnalyticsPage() {
                           labelLine={false}
                           label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                           outerRadius={80}
-                          fill="#8884d8"
+                          fill={CHART_COLORS.PRIMARY}
                           dataKey="count"
                         >
                           {analyticsData.charts.jobsByStatus.map((entry, index) => (
@@ -442,7 +443,7 @@ export default function AnalyticsPage() {
                         <XAxis dataKey="priority" />
                         <YAxis />
                         <Tooltip content={<CustomTooltip />} />
-                        <Bar dataKey="completionRate" fill="#8884d8" />
+                        <Bar dataKey="completionRate" fill={CHART_COLORS.PRIMARY} />
                       </BarChart>
                     </ResponsiveContainer>
                   </CardContent>
@@ -464,7 +465,7 @@ export default function AnalyticsPage() {
                         <XAxis dataKey="month" />
                         <YAxis />
                         <Tooltip content={<CustomTooltip />} />
-                        <Line type="monotone" dataKey="revenue" stroke="#8884d8" strokeWidth={2} />
+                        <Line type="monotone" dataKey="revenue" stroke={CHART_COLORS.PRIMARY} strokeWidth={2} />
                       </LineChart>
                     </ResponsiveContainer>
                   </CardContent>
@@ -551,9 +552,9 @@ export default function AnalyticsPage() {
                         <XAxis dataKey="month" />
                         <YAxis />
                         <Tooltip content={<CustomTooltip />} />
-                        <Area type="monotone" dataKey="revenue" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                        <Area type="monotone" dataKey="laborCosts" stackId="2" stroke="#82ca9d" fill="#82ca9d" />
-                        <Area type="monotone" dataKey="profit" stackId="3" stroke="#ffc658" fill="#ffc658" />
+                        <Area type="monotone" dataKey="revenue" stackId="1" stroke={CHART_COLORS.PRIMARY} fill={CHART_COLORS.PRIMARY} />
+                        <Area type="monotone" dataKey="laborCosts" stackId="2" stroke={CHART_COLORS.SECONDARY} fill={CHART_COLORS.SECONDARY} />
+                        <Area type="monotone" dataKey="profit" stackId="3" stroke={CHART_COLORS.TERTIARY} fill={CHART_COLORS.TERTIARY} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </CardContent>
@@ -702,8 +703,8 @@ export default function AnalyticsPage() {
                         <XAxis dataKey="week" />
                         <YAxis />
                         <Tooltip content={<CustomTooltip />} />
-                        <Line type="monotone" dataKey="efficiency" stroke="#8884d8" strokeWidth={2} />
-                        <Line type="monotone" dataKey="hoursWorked" stroke="#82ca9d" strokeWidth={2} />
+                        <Line type="monotone" dataKey="efficiency" stroke={CHART_COLORS.PRIMARY} strokeWidth={2} />
+                        <Line type="monotone" dataKey="hoursWorked" stroke={CHART_COLORS.SECONDARY} strokeWidth={2} />
                       </LineChart>
                     </ResponsiveContainer>
                   </CardContent>
@@ -725,7 +726,7 @@ export default function AnalyticsPage() {
                         <XAxis dataKey="day" />
                         <YAxis />
                         <Tooltip content={<CustomTooltip />} />
-                        <Bar dataKey="totalHours" fill="#8884d8" />
+                        <Bar dataKey="totalHours" fill={CHART_COLORS.PRIMARY} />
                       </BarChart>
                     </ResponsiveContainer>
                   </CardContent>

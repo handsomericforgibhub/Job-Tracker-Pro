@@ -114,7 +114,6 @@ export default function CompanyContextSelector() {
 
   const selectedCompany = availableCompanies.find(c => c.id === selectedCompanyId)
 
-
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
       <div className="flex items-center justify-between">

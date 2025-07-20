@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Job, JobStatusHistory, JobStatusTimeline } from '@/lib/types'
 import { format, addDays, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, isWithinInterval } from 'date-fns'
+import { LIMITS } from '@/config/timeouts'
 
 interface GanttChartProps {
   jobs: Job[]
@@ -317,7 +318,7 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
   // Calculate dynamic height based on number of jobs
   const minHeight = headerHeight + (tasks.length > 0 ? rowHeight : 100) // Header + at least one row or empty state
   const contentHeight = headerHeight + (tasks.length * rowHeight)
-  const maxHeight = 600 // Maximum height when many jobs
+  const maxHeight = LIMITS.GANTT_CHART_MAX_HEIGHT // Maximum height when many jobs
   const dynamicHeight = Math.max(minHeight, Math.min(contentHeight, maxHeight))
   
   // Define column widths

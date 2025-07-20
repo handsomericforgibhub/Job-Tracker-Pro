@@ -3,6 +3,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
 import { supabase } from '@/lib/supabase'
+import { EXTERNAL_APIS } from '@/config/endpoints'
+import { TIMEOUTS, LIMITS } from '@/config/timeouts'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Input } from '@/components/ui/input'
@@ -76,8 +78,8 @@ const ALLOWED_FILE_TYPES = {
   'text/csv': { icon: FileText, name: 'CSV' }
 }
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024 // 50MB
-const MAX_PHOTO_SIZE = 20 * 1024 * 1024 // 20MB
+const MAX_FILE_SIZE = LIMITS.MAX_FILE_SIZE_DOCUMENT * 1024 * 1024 // From central config
+const MAX_PHOTO_SIZE = LIMITS.MAX_FILE_SIZE_PHOTO * 1024 * 1024 // From central config
 
 export function DocumentUpload({
   jobId,
@@ -85,7 +87,7 @@ export function DocumentUpload({
   categoryId: defaultCategoryId,
   onUploadSuccess,
   onCancel,
-  maxFiles = 10,
+  maxFiles = LIMITS.MAX_FILES_UPLOAD,
   accept,
   className,
   showCamera = true
@@ -132,8 +134,8 @@ export function DocumentUpload({
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 300000 // 5 minutes
+          timeout: TIMEOUTS.GEOLOCATION_TIMEOUT,
+          maximumAge: TIMEOUTS.GEOLOCATION_MAX_AGE
         })
       })
 
@@ -147,7 +149,7 @@ export function DocumentUpload({
       // Try to get address from coordinates
       try {
         const response = await fetch(
-          `https://api.openstreetmap.org/reverse?format=json&lat=${locationData.latitude}&lon=${locationData.longitude}&zoom=18&addressdetails=1`
+          EXTERNAL_APIS.OPENSTREETMAP.getReverseGeocodingUrl(locationData.latitude, locationData.longitude)
         )
         const data = await response.json()
         if (data.display_name) {

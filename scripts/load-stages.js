@@ -1,4 +1,5 @@
 const { createClient } = require('@supabase/supabase-js')
+const { RESPONSE_TYPES } = require('./constants')
 
 const supabase = createClient(
   'https://iyfrjrudqjftkjvegevi.supabase.co',
@@ -158,7 +159,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440001',
     stage_id: '550e8400-e29b-41d4-a716-446655440001',
     question_text: 'Have you qualified this lead as a viable opportunity?',
-    response_type: 'yes_no',
+    response_type: RESPONSE_TYPES.YES_NO,
     sequence_order: 1,
     help_text: 'Consider budget, timeline, and project scope',
     skip_conditions: {}
@@ -167,7 +168,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440002',
     stage_id: '550e8400-e29b-41d4-a716-446655440001',
     question_text: 'What is the estimated project value?',
-    response_type: 'number',
+    response_type: RESPONSE_TYPES.NUMBER,
     sequence_order: 2,
     help_text: 'Enter rough estimate in dollars',
     skip_conditions: {}
@@ -176,7 +177,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440003',
     stage_id: '550e8400-e29b-41d4-a716-446655440001',
     question_text: 'When does the client want to start?',
-    response_type: 'date',
+    response_type: RESPONSE_TYPES.DATE,
     sequence_order: 3,
     help_text: 'Ideal project start date',
     skip_conditions: {}
@@ -187,7 +188,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440004',
     stage_id: '550e8400-e29b-41d4-a716-446655440002',
     question_text: 'Have you had your initial meeting with the client?',
-    response_type: 'yes_no',
+    response_type: RESPONSE_TYPES.YES_NO,
     sequence_order: 1,
     help_text: 'Face-to-face or video meeting to discuss project',
     skip_conditions: {}
@@ -196,7 +197,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440005',
     stage_id: '550e8400-e29b-41d4-a716-446655440002',
     question_text: 'When is the site meeting scheduled?',
-    response_type: 'date',
+    response_type: RESPONSE_TYPES.DATE,
     sequence_order: 2,
     help_text: 'Schedule on-site assessment',
     skip_conditions: { "previous_responses": [{ "question_id": "650e8400-e29b-41d4-a716-446655440004", "response_value": "Yes" }] }
@@ -205,7 +206,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440006',
     stage_id: '550e8400-e29b-41d4-a716-446655440002',
     question_text: 'Upload meeting notes or photos',
-    response_type: 'file_upload',
+    response_type: RESPONSE_TYPES.FILE_UPLOAD,
     sequence_order: 3,
     help_text: 'Document important details from the meeting',
     skip_conditions: {}
@@ -216,7 +217,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440007',
     stage_id: '550e8400-e29b-41d4-a716-446655440003',
     question_text: 'Have you completed the site assessment?',
-    response_type: 'yes_no',
+    response_type: RESPONSE_TYPES.YES_NO,
     sequence_order: 1,
     help_text: 'Detailed on-site evaluation for accurate quoting',
     skip_conditions: {}
@@ -225,7 +226,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440008',
     stage_id: '550e8400-e29b-41d4-a716-446655440003',
     question_text: 'Are all materials and labor costs calculated?',
-    response_type: 'yes_no',
+    response_type: RESPONSE_TYPES.YES_NO,
     sequence_order: 2,
     help_text: 'Ensure comprehensive cost breakdown',
     skip_conditions: {}
@@ -234,7 +235,7 @@ const questions = [
     id: '650e8400-e29b-41d4-a716-446655440009',
     stage_id: '550e8400-e29b-41d4-a716-446655440003',
     question_text: 'What is the total quote amount?',
-    response_type: 'number',
+    response_type: RESPONSE_TYPES.NUMBER,
     sequence_order: 3,
     help_text: 'Final quote amount including all costs and margin',
     skip_conditions: {}

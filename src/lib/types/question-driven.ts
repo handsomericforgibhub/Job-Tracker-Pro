@@ -1,6 +1,8 @@
 // TypeScript types for Question-Driven Job Progression System
 // Comprehensive type definitions matching the database schema
 
+import { JobStatus, ResponseType, StageType } from '@/config/constants'
+
 // =============================================
 // 1. CORE STAGE SYSTEM TYPES
 // =============================================
@@ -12,7 +14,7 @@ export interface JobStage {
   color: string;
   sequence_order: number;
   maps_to_status: JobStatus;
-  stage_type: 'standard' | 'milestone' | 'approval';
+  stage_type: StageType;
   min_duration_hours: number;
   max_duration_hours?: number;
   requires_approval: boolean;
@@ -46,13 +48,7 @@ export interface TransitionConditions {
 // 2. QUESTION SYSTEM TYPES
 // =============================================
 
-export type QuestionResponseType = 
-  | 'yes_no'
-  | 'text'
-  | 'date'
-  | 'number'
-  | 'file_upload'
-  | 'multiple_choice';
+export type QuestionResponseType = ResponseType;
 
 export interface StageQuestion {
   id: string;

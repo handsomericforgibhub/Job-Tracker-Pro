@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { TaskUpdateRequest, SubtaskUpdateRequest } from '@/lib/types/question-driven'
+import { TASK_STATUSES, isValidTaskStatus } from '@/config/constants'
 
 // Create server-side Supabase client
 const supabase = createClient(
@@ -99,7 +100,7 @@ export async function GET(
 
     // Check SLA status
     let slaStatus = 'ok'
-    if (task.template?.sla_hours && task.status !== 'completed') {
+    if (task.template?.sla_hours && task.status !== TASK_STATUSES.COMPLETED) {
       const createdAt = new Date(task.created_at)
       const slaDeadline = new Date(createdAt.getTime() + (task.template.sla_hours * 60 * 60 * 1000))
       const now = new Date()
@@ -229,17 +230,17 @@ export async function PUT(
       
       if (totalSubtasks > 0) {
         if (completedSubtasks === totalSubtasks) {
-          newStatus = 'completed'
+          newStatus = TASK_STATUSES.COMPLETED
         } else if (completedSubtasks > 0) {
           newStatus = 'in_progress'
         } else {
-          newStatus = 'pending'
+          newStatus = TASK_STATUSES.PENDING
         }
       }
     }
 
     // Validate file uploads if required
-    if (currentTask.template?.upload_required && newStatus === 'completed') {
+    if (currentTask.template?.upload_required && newStatus === TASK_STATUSES.COMPLETED) {
       const hasUploads = updateData.upload_urls && updateData.upload_urls.length > 0
       if (!hasUploads) {
         return NextResponse.json({ 
@@ -263,7 +264,7 @@ export async function PUT(
       updateObject.upload_urls = updateData.upload_urls
     }
 
-    if (newStatus === 'completed' && currentTask.status !== 'completed') {
+    if (newStatus === TASK_STATUSES.COMPLETED && currentTask.status !== TASK_STATUSES.COMPLETED) {
       updateObject.completed_at = new Date().toISOString()
     }
 
@@ -309,7 +310,7 @@ export async function PUT(
     }
 
     // Update stage performance metrics if task completed
-    if (newStatus === 'completed' && currentTask.status !== 'completed') {
+    if (newStatus === TASK_STATUSES.COMPLETED && currentTask.status !== TASK_STATUSES.COMPLETED) {
       const { data: job } = await supabase
         .from('jobs')
         .select('current_stage_id')
@@ -399,7 +400,7 @@ export async function DELETE(
     }
 
     // Only allow deletion of pending or cancelled tasks
-    if (task.status === 'completed') {
+    if (task.status === TASK_STATUSES.COMPLETED) {
       return NextResponse.json({ 
         error: 'Cannot delete completed tasks' 
       }, { status: 400 })
@@ -409,7 +410,7 @@ export async function DELETE(
     const { error: deleteError } = await supabase
       .from('job_tasks')
       .update({ 
-        status: 'cancelled',
+        status: TASK_STATUSES.CANCELLED,
         updated_at: new Date().toISOString()
       })
       .eq('id', taskId)

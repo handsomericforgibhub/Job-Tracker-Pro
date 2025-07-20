@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { LIMITS } from '@/config/timeouts'
 
 // POST - Submit new worker application
 export async function POST(request: NextRequest) {
@@ -127,7 +128,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const company_id = searchParams.get('company_id')
     const status = searchParams.get('status')
-    const limit = parseInt(searchParams.get('limit') || '50')
+    const limit = parseInt(searchParams.get('limit') || String(LIMITS.API_PAGE_SIZE_DEFAULT))
     const offset = parseInt(searchParams.get('offset') || '0')
 
     if (!company_id) {

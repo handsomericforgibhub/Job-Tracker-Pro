@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Input } from '@/components/ui/input'
 import { MapPin, Loader2 } from 'lucide-react'
+import { UI_CONFIG } from '@/config/timeouts'
 
 interface AddressComponents {
   formatted: string
@@ -91,7 +92,7 @@ export default function AddressAutocomplete({
 
     try {
       const response = await fetch(
-        `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(query)}&limit=5&apiKey=${apiKey}`
+        `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(query)}&limit=${UI_CONFIG.AUTOCOMPLETE_LIMIT}&apiKey=${apiKey}`
       )
 
       if (!response.ok) {

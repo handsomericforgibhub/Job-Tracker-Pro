@@ -25,9 +25,11 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import CompanyContextSelector from '@/components/site-admin/company-context-selector'
+import { useSiteAdminContextStore } from '@/stores/site-admin-context-store'
 
 export default function SiteAdminDashboard() {
   const { user } = useAuthStore()
+  const { selectedCompanyId, selectedCompany, isPlatformWide, getContextLabel } = useSiteAdminContextStore()
   const [companies, setCompanies] = useState<CompanyWithStats[]>([])
   const [stats, setStats] = useState<PlatformStats>({
     total_companies: 0,
@@ -125,54 +127,86 @@ export default function SiteAdminDashboard() {
     )
   }
 
+  const getContextualDescription = (baseDescription: string, companySpecific: string) => {
+    return isPlatformWide() ? baseDescription : companySpecific
+  }
+
+  const getContextualCount = (platformCount: number, companySpecific?: number) => {
+    return isPlatformWide() ? platformCount : companySpecific
+  }
+
   const adminSections = [
     {
       title: 'Company Management',
-      description: 'Manage all companies and their settings',
+      description: getContextualDescription(
+        'Manage all companies and their settings',
+        'Manage this company\'s details'
+      ),
       icon: Building,
       href: '/dashboard/site-admin/companies',
       color: 'bg-blue-500',
-      count: stats.total_companies
+      count: isPlatformWide() ? stats.total_companies : null,
+      contextTag: isPlatformWide() ? 'Platform Wide' : 'Company Specific'
     },
     {
       title: 'User Management',
-      description: 'Manage users across all companies',
+      description: getContextualDescription(
+        'Manage users across all companies',
+        'Manage users for this company'
+      ),
       icon: Users,
       href: '/dashboard/site-admin/users',
       color: 'bg-green-500',
-      count: stats.total_users
+      count: isPlatformWide() ? stats.total_users : selectedCompany?.user_count,
+      contextTag: isPlatformWide() ? 'Platform Wide' : 'Company Specific'
     },
     {
       title: 'Job Management',
-      description: 'View and manage jobs across all companies',
+      description: getContextualDescription(
+        'View and manage jobs across all companies',
+        'View and manage jobs for this company'
+      ),
       icon: Briefcase,
       href: '/dashboard/site-admin/jobs',
       color: 'bg-purple-500',
-      count: stats.total_jobs
+      count: isPlatformWide() ? stats.total_jobs : selectedCompany?.job_count,
+      contextTag: isPlatformWide() ? 'Platform Wide' : 'Company Specific'
     },
     {
       title: 'Platform Settings',
-      description: 'Configure platform-wide settings',
+      description: getContextualDescription(
+        'Configure platform-wide settings',
+        'Configure settings for this company'
+      ),
       icon: Settings,
       href: '/dashboard/admin/system-settings',
       color: 'bg-orange-500',
-      count: null
+      count: null,
+      contextTag: isPlatformWide() ? 'Platform Wide' : 'Company Specific'
     },
     {
       title: 'Analytics & Reports',
-      description: 'Platform usage and performance analytics',
+      description: getContextualDescription(
+        'Platform usage and performance analytics',
+        'Company-specific usage and performance'
+      ),
       icon: BarChart3,
       href: '/dashboard/site-admin/analytics',
       color: 'bg-indigo-500',
-      count: null
+      count: null,
+      contextTag: isPlatformWide() ? 'Platform Wide' : 'Company Specific'
     },
     {
       title: 'System Health',
-      description: 'Monitor system performance and health',
+      description: getContextualDescription(
+        'Monitor system performance and health',
+        'Monitor this company\'s system data'
+      ),
       icon: Database,
       href: '/dashboard/site-admin/health',
       color: 'bg-red-500',
-      count: null
+      count: null,
+      contextTag: isPlatformWide() ? 'Platform Wide' : 'Company Specific'
     }
   ]
 
@@ -186,7 +220,10 @@ export default function SiteAdminDashboard() {
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Site Administration</h1>
               <p className="text-gray-600">
-                Cross-company platform management and oversight
+                {isPlatformWide() 
+                  ? 'Cross-company platform management and oversight'
+                  : `Managing ${selectedCompany?.name || 'selected company'}`
+                }
               </p>
             </div>
           </div>
@@ -212,7 +249,9 @@ export default function SiteAdminDashboard() {
 
       {/* Platform Statistics */}
       <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Platform Overview</h2>
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">
+          {isPlatformWide() ? 'Platform Overview' : `${selectedCompany?.name} Overview`}
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
@@ -299,10 +338,19 @@ export default function SiteAdminDashboard() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {section.title}
-                      </h3>
-                      {section.count !== null && (
+                      <div className="flex items-center space-x-2">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {section.title}
+                        </h3>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          isPlatformWide() 
+                            ? 'bg-purple-100 text-purple-700' 
+                            : 'bg-blue-100 text-blue-700'
+                        }`}>
+                          {section.contextTag}
+                        </span>
+                      </div>
+                      {section.count !== null && section.count !== undefined && (
                         <span className="text-sm bg-gray-100 text-gray-600 px-2 py-1 rounded">
                           {section.count}
                         </span>
@@ -323,7 +371,9 @@ export default function SiteAdminDashboard() {
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">Companies</h2>
+            <h2 className="text-xl font-semibold text-gray-900">
+              {isPlatformWide() ? 'Companies' : `${selectedCompany?.name} Details`}
+            </h2>
             <Link href="/dashboard/site-admin/companies">
               <button className="text-blue-600 hover:text-blue-800 text-sm">
                 View All →

@@ -1,18 +1,25 @@
 import { createClient } from '@supabase/supabase-js'
+import { 
+  getSupabaseUrl, 
+  getSupabaseAnonKey, 
+  isUsingFallbackConfig,
+  isValidUrl,
+  SUPABASE_CONFIG 
+} from '@/config/endpoints'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://demo.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'demo_key'
+const supabaseUrl = getSupabaseUrl()
+const supabaseAnonKey = getSupabaseAnonKey()
 
 // Validate URL format
-const isValidUrl = supabaseUrl.startsWith('https://') && supabaseUrl.includes('supabase.co')
+const isValidSupabaseUrl = isValidUrl(supabaseUrl) && supabaseUrl.includes('supabase.co')
 
-if (!isValidUrl || supabaseAnonKey === 'demo_key') {
-  console.warn('⚠️ Supabase not configured properly. Please update .env.local with real credentials.')
+if (!isValidSupabaseUrl || isUsingFallbackConfig()) {
+  console.warn('⚠️ Supabase not configured properly. Using fallback configuration. Please update .env.local with real credentials.')
 }
 
 export const supabase = createClient(
-  isValidUrl ? supabaseUrl : 'https://demo.supabase.co',
-  supabaseAnonKey !== 'demo_key' ? supabaseAnonKey : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbW8iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDk5NTIwMCwiZXhwIjoxOTU2NTcxMjAwfQ.demo',
+  isValidSupabaseUrl ? supabaseUrl : SUPABASE_CONFIG.FALLBACK_CONFIG.url,
+  !isUsingFallbackConfig() ? supabaseAnonKey : SUPABASE_CONFIG.FALLBACK_CONFIG.anonKey,
   {
     auth: {
       autoRefreshToken: true,

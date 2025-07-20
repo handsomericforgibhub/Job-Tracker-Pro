@@ -22,6 +22,7 @@ import {
   Users,
   Star
 } from 'lucide-react'
+import { EXTERNAL_APIS } from '@/config/endpoints'
 
 interface SharedAssignmentData {
   id: string
@@ -133,7 +134,7 @@ export default function SharedAssignmentPage({ params }: { params: { token: stri
 
   const openDirections = () => {
     if (assignment?.job.latitude && assignment.job.longitude) {
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${assignment.job.latitude},${assignment.job.longitude}`
+      const url = EXTERNAL_APIS.GOOGLE_MAPS.getDirectionsUrl(assignment.job.latitude, assignment.job.longitude)
       window.open(url, '_blank')
       logAction('view')
     }

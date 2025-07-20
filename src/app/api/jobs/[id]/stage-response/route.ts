@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { RESPONSE_TYPES, isValidResponseType } from '@/config/constants'
 import { 
   StageProgressionResult, 
   QuestionFormData,
@@ -231,32 +232,32 @@ function validateResponseFormat(
   responseValue: string
 ): { valid: boolean; error?: string } {
   switch (responseType) {
-    case 'yes_no':
+    case RESPONSE_TYPES.YES_NO:
       if (!['Yes', 'No'].includes(responseValue)) {
         return { valid: false, error: 'Response must be "Yes" or "No"' }
       }
       break
 
-    case 'number':
+    case RESPONSE_TYPES.NUMBER:
       if (!/^\d+(\.\d+)?$/.test(responseValue)) {
         return { valid: false, error: 'Response must be a valid number' }
       }
       break
 
-    case 'date':
+    case RESPONSE_TYPES.DATE:
       if (isNaN(Date.parse(responseValue))) {
         return { valid: false, error: 'Response must be a valid date' }
       }
       break
 
-    case 'file_upload':
+    case RESPONSE_TYPES.FILE_UPLOAD:
       if (!responseValue || responseValue.trim().length === 0) {
         return { valid: false, error: 'File upload response cannot be empty' }
       }
       break
 
-    case 'text':
-    case 'multiple_choice':
+    case RESPONSE_TYPES.TEXT:
+    case RESPONSE_TYPES.MULTIPLE_CHOICE:
       // Text and multiple choice don't need specific validation
       break
 

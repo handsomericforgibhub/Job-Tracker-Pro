@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import SignatureCanvas from 'react-signature-canvas'
+import { LIMITS } from '@/config/timeouts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -179,8 +180,8 @@ export function SignatureCapture({
                 }}
                 backgroundColor="white"
                 penColor="black"
-                minWidth={1}
-                maxWidth={3}
+                minWidth={LIMITS.SIGNATURE_MIN_WIDTH}
+                maxWidth={LIMITS.SIGNATURE_MAX_WIDTH}
                 velocityFilterWeight={0.7}
                 onBegin={handleBeginDraw}
                 onEnd={handleEndDraw}

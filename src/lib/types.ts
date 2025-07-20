@@ -1,9 +1,17 @@
 // Shared types from the mobile app - keeping consistency
+import { 
+  JobStatus, 
+  TaskStatus, 
+  ResponseType, 
+  UserRole, 
+  PriorityLevel,
+  StageType 
+} from '@/config/constants'
 export interface User {
   id: string;
   email: string;
   full_name: string;
-  role: 'owner' | 'foreman' | 'worker' | 'site_admin';
+  role: UserRole;
   company_id: string | null; // null for site_admin
   created_at: string;
   updated_at: string;
@@ -49,7 +57,7 @@ export interface Project {
   id: string;
   name: string;
   description?: string;
-  status: 'planning' | 'active' | 'on_hold' | 'completed' | 'cancelled';
+  status: JobStatus;
   
   // Client and location
   client_name?: string;
@@ -129,7 +137,7 @@ export interface ProjectStage {
   description?: string;
   sequence_order: number;
   color: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'on_hold' | 'cancelled';
+  status: TaskStatus;
   
   // Timeline
   planned_start_date?: string;
@@ -228,7 +236,7 @@ export interface Job {
   id: string;
   title: string;
   description?: string;
-  status: 'planning' | 'active' | 'on_hold' | 'completed' | 'cancelled';
+  status: JobStatus;
   start_date: string;
   end_date: string;
   budget?: number;
@@ -270,7 +278,7 @@ export interface Job {
 export interface JobStatusHistory {
   id: string;
   job_id: string;
-  status: 'planning' | 'active' | 'on_hold' | 'completed' | 'cancelled';
+  status: JobStatus;
   changed_at: string;
   changed_by: string;
   changed_by_name: string;
@@ -304,7 +312,7 @@ export interface Worker {
     id: string;
     full_name: string;
     email: string;
-    role: 'owner' | 'foreman' | 'worker' | 'site_admin';
+    role: UserRole;
   };
   // Worker skills
   skills?: WorkerSkill[];

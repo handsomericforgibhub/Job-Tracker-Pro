@@ -7,6 +7,7 @@ import {
   QuestionFormData, 
   ResponseMetadata 
 } from '@/lib/types/question-driven'
+import { RESPONSE_TYPES } from '@/config/constants'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
@@ -146,7 +147,7 @@ export default function MobileQuestionInterface({
 
   const renderQuestionInput = (question: StageQuestion) => {
     switch (question.response_type) {
-      case 'yes_no':
+      case RESPONSE_TYPES.YES_NO:
         return (
           <div className="space-y-2">
             <Button
@@ -166,7 +167,7 @@ export default function MobileQuestionInterface({
           </div>
         )
 
-      case 'multiple_choice':
+      case RESPONSE_TYPES.MULTIPLE_CHOICE:
         return (
           <div className="space-y-2">
             {question.response_options?.map((option, index) => (
@@ -182,7 +183,7 @@ export default function MobileQuestionInterface({
           </div>
         )
 
-      case 'number':
+      case RESPONSE_TYPES.NUMBER:
         return (
           <input
             type="number"
@@ -193,7 +194,7 @@ export default function MobileQuestionInterface({
           />
         )
 
-      case 'date':
+      case RESPONSE_TYPES.DATE:
         return (
           <input
             type="date"

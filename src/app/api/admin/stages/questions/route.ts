@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { RESPONSE_TYPES, isValidResponseType } from '@/config/constants'
 
 // Create server-side Supabase client
 const supabase = createClient(
@@ -69,7 +70,7 @@ export async function POST(request: NextRequest) {
         skip_conditions: skip_conditions || {},
         reminder_enabled: reminder_enabled || false,
         default_reminder_offset_hours: default_reminder_offset_hours || 24,
-        response_options: response_type === 'multiple_choice' ? response_options : null,
+        response_options: response_type === RESPONSE_TYPES.MULTIPLE_CHOICE ? response_options : null,
         is_required: is_required !== undefined ? is_required : true
       })
       .select()

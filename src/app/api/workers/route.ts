@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { LIMITS } from '@/config/timeouts'
 
 // GET - Fetch workers with filtering
 export async function GET(request: NextRequest) {
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
     const company_id = searchParams.get('company_id')
     const user_id = searchParams.get('user_id')
     const employment_status = searchParams.get('employment_status')
-    const limit = parseInt(searchParams.get('limit') || '100')
+    const limit = parseInt(searchParams.get('limit') || String(LIMITS.API_PAGE_SIZE_LARGE))
     const offset = parseInt(searchParams.get('offset') || '0')
 
     let query = supabase

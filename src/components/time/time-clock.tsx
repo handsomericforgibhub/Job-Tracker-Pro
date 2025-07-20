@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { SelectWithValue } from '@/components/ui/select-with-value'
 import { TimeClockStatus, Worker, Job, LocationData } from '@/lib/types'
 import { useAuthStore } from '@/stores/auth-store'
+import { EXTERNAL_APIS } from '@/config/endpoints'
 import { 
   Clock, 
   Play, 
@@ -122,7 +123,7 @@ export function TimeClock({ worker, jobs, onStatusChange, className }: TimeClock
       // Try to get address from coordinates
       try {
         const response = await fetch(
-          `https://api.openstreetmap.org/reverse?format=json&lat=${locationData.latitude}&lon=${locationData.longitude}&zoom=18&addressdetails=1`
+          EXTERNAL_APIS.OPENSTREETMAP.getReverseGeocodingUrl(locationData.latitude, locationData.longitude)
         )
         const data = await response.json()
         if (data.display_name) {

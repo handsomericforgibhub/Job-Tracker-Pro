@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { z } from 'zod'
+import { LIMITS } from '@/config/timeouts'
 
 const timeEntrySchema = z.object({
   worker_id: z.string().uuid(),
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
     const start_date = searchParams.get('start_date')
     const end_date = searchParams.get('end_date')
     const status = searchParams.get('status')
-    const limit = parseInt(searchParams.get('limit') || '50')
+    const limit = parseInt(searchParams.get('limit') || String(LIMITS.API_PAGE_SIZE_DEFAULT))
     const offset = parseInt(searchParams.get('offset') || '0')
 
     let query = supabase

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
+import { TIMEOUTS } from '@/config/timeouts'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -161,7 +162,7 @@ export default function ApplicationsPage() {
     try {
       await navigator.clipboard.writeText(applicationUrl)
       setCopySuccess(true)
-      setTimeout(() => setCopySuccess(false), 2000)
+      setTimeout(() => setCopySuccess(false), TIMEOUTS.COPY_SUCCESS_FEEDBACK)
     } catch (err) {
       // Fallback for browsers that don't support clipboard API
       const textArea = document.createElement('textarea')
@@ -171,7 +172,7 @@ export default function ApplicationsPage() {
       document.execCommand('copy')
       document.body.removeChild(textArea)
       setCopySuccess(true)
-      setTimeout(() => setCopySuccess(false), 2000)
+      setTimeout(() => setCopySuccess(false), TIMEOUTS.COPY_SUCCESS_FEEDBACK)
     }
   }
 

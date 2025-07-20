@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Input } from './input'
+import { UI_CONFIG } from '@/config/timeouts'
 
 export interface AddressComponents {
   formatted: string
@@ -72,7 +73,7 @@ export default function LocationAutocomplete({
       console.log('🔍 Searching addresses for:', query)
       
       const response = await fetch(
-        `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(query)}&limit=5&apiKey=${apiKey}`
+        `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(query)}&limit=${UI_CONFIG.AUTOCOMPLETE_LIMIT}&apiKey=${apiKey}`
       )
 
       if (!response.ok) {

@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
 import { useSiteAdminContextStore } from '@/stores/site-admin-context-store'
 import { STAGES_ARRAY } from '@/config/stages'
+import { THEME_COLORS, getStatusColor, SYSTEM_COLORS } from '@/config/colors'
+import { RESPONSE_TYPES, RESPONSE_TYPE_CONFIG, isValidResponseType } from '@/config/constants'
 import { 
   ArrowLeft,
   Database,
@@ -143,7 +145,7 @@ export default function SystemSettings() {
   const [stageForm, setStageForm] = useState({
     name: '',
     description: '',
-    color: '#3B82F6',
+    color: SYSTEM_COLORS.INFO,
     sequence_order: 1,
     maps_to_status: 'planning',
     stage_type: 'standard',
@@ -190,14 +192,22 @@ export default function SystemSettings() {
     }>
   })
 
-  const responseTypes = [
-    { value: 'yes_no', label: 'Yes/No', icon: ToggleLeft },
-    { value: 'text', label: 'Text Input', icon: Type },
-    { value: 'number', label: 'Number', icon: Hash },
-    { value: 'date', label: 'Date', icon: Calendar },
-    { value: 'multiple_choice', label: 'Multiple Choice', icon: Target },
-    { value: 'file_upload', label: 'File Upload', icon: Upload }
-  ]
+  // Icon mapping for response types
+  const iconMap = {
+    'ToggleLeft': ToggleLeft,
+    'Type': Type,
+    'Hash': Hash,
+    'Calendar': Calendar,
+    'Target': Target,
+    'Upload': Upload
+  }
+
+  // Use central response type configuration
+  const responseTypes = RESPONSE_TYPE_CONFIG.map(config => ({
+    value: config.value,
+    label: config.label,
+    icon: iconMap[config.iconName as keyof typeof iconMap]
+  }))
 
   const stageTypes = [
     { value: 'standard', label: 'Standard', description: 'Regular workflow stage' },
@@ -216,11 +226,11 @@ export default function SystemSettings() {
   ]
 
   const statusOptions = [
-    { value: 'planning', label: 'Planning', color: '#60A5FA' },
-    { value: 'active', label: 'Active', color: '#34D399' },
-    { value: 'on_hold', label: 'On Hold', color: '#FBBF24' },
-    { value: 'completed', label: 'Completed', color: '#9CA3AF' },
-    { value: 'cancelled', label: 'Cancelled', color: '#F87171' }
+    { value: 'planning', label: 'Planning', color: getStatusColor('planning') },
+    { value: 'active', label: 'Active', color: getStatusColor('active') },
+    { value: 'on_hold', label: 'On Hold', color: getStatusColor('on_hold') },
+    { value: 'completed', label: 'Completed', color: getStatusColor('completed') },
+    { value: 'cancelled', label: 'Cancelled', color: getStatusColor('cancelled') }
   ]
 
   // Convert STAGES_ARRAY to builder preset format
@@ -230,7 +240,7 @@ export default function SystemSettings() {
       1: [
         {
           question_text: "Have you qualified this lead as a viable opportunity?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Consider budget, timeline, and project scope",
           mobile_optimized: true,
@@ -241,7 +251,7 @@ export default function SystemSettings() {
         },
         {
           question_text: "What is the estimated project value?",
-          response_type: "number",
+          response_type: RESPONSE_TYPES.NUMBER,
           is_required: false,
           help_text: "Enter rough estimate in dollars",
           mobile_optimized: true,
@@ -252,7 +262,7 @@ export default function SystemSettings() {
       2: [
         {
           question_text: "Have you scheduled a site meeting?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Schedule an on-site meeting to assess the project",
           mobile_optimized: true,
@@ -261,7 +271,7 @@ export default function SystemSettings() {
         },
         {
           question_text: "Have you conducted the meeting?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Complete the initial site assessment meeting",
           mobile_optimized: true,
@@ -274,7 +284,7 @@ export default function SystemSettings() {
       3: [
         {
           question_text: "Have you completed the site assessment?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Detailed on-site evaluation for accurate quoting",
           mobile_optimized: true,
@@ -283,7 +293,7 @@ export default function SystemSettings() {
         },
         {
           question_text: "Are all materials and labor costs calculated?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Ensure comprehensive cost breakdown",
           mobile_optimized: true,
@@ -296,7 +306,7 @@ export default function SystemSettings() {
       4: [
         {
           question_text: "Has the quote been submitted to the client?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Quote formally sent via email or hand-delivered",
           mobile_optimized: true,
@@ -309,7 +319,7 @@ export default function SystemSettings() {
       5: [
         {
           question_text: "Has the client accepted the quote?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Client formally agreed to proceed",
           mobile_optimized: true,
@@ -323,7 +333,7 @@ export default function SystemSettings() {
       6: [
         {
           question_text: "Has the deposit been received?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Confirm deposit payment has been received",
           mobile_optimized: true,
@@ -336,7 +346,7 @@ export default function SystemSettings() {
       7: [
         {
           question_text: "Have all materials been ordered?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "All required materials ordered from suppliers",
           mobile_optimized: true,
@@ -345,7 +355,7 @@ export default function SystemSettings() {
         },
         {
           question_text: "Have subcontractors been booked?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "All required subcontractors scheduled",
           mobile_optimized: true,
@@ -358,7 +368,7 @@ export default function SystemSettings() {
       8: [
         {
           question_text: "Have materials been delivered to site?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "All materials delivered and secured on site",
           mobile_optimized: true,
@@ -367,7 +377,7 @@ export default function SystemSettings() {
         },
         {
           question_text: "Is the site access ready?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Clear access for equipment and workers",
           mobile_optimized: true,
@@ -380,7 +390,7 @@ export default function SystemSettings() {
       9: [
         {
           question_text: "Has construction commenced?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Main construction work has begun",
           mobile_optimized: true,
@@ -389,7 +399,7 @@ export default function SystemSettings() {
         },
         {
           question_text: "Are there any issues or delays?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: false,
           help_text: "Track any problems during construction",
           mobile_optimized: true,
@@ -402,7 +412,7 @@ export default function SystemSettings() {
       10: [
         {
           question_text: "Have inspections been completed?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Required quality and safety inspections",
           mobile_optimized: true,
@@ -415,7 +425,7 @@ export default function SystemSettings() {
       11: [
         {
           question_text: "Are final touches complete?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "All finishing work and cleanup completed",
           mobile_optimized: true,
@@ -428,7 +438,7 @@ export default function SystemSettings() {
       12: [
         {
           question_text: "Has the project been handed over?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "Final handover to client completed",
           mobile_optimized: true,
@@ -437,7 +447,7 @@ export default function SystemSettings() {
         },
         {
           question_text: "Are final payments complete?",
-          response_type: "yes_no",
+          response_type: RESPONSE_TYPES.YES_NO,
           is_required: true,
           help_text: "All invoicing and payments finalized",
           mobile_optimized: true,
@@ -539,7 +549,7 @@ export default function SystemSettings() {
         setStageForm({
           name: '',
           description: '',
-          color: '#3B82F6',
+          color: SYSTEM_COLORS.INFO,
           sequence_order: 1,
           maps_to_status: 'planning',
           stage_type: 'standard',
@@ -1655,7 +1665,7 @@ export default function SystemSettings() {
                   <Input
                     value={stageForm.color}
                     onChange={(e) => setStageForm({ ...stageForm, color: e.target.value })}
-                    placeholder="#3B82F6"
+                    placeholder={SYSTEM_COLORS.INFO}
                   />
                 </div>
               </div>
