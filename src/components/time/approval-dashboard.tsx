@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SelectWithValue } from '@/components/ui/select-with-value'
 import { Checkbox } from '@/components/ui/checkbox'
 import { TimeEntry, TimeApproval, Worker } from '@/lib/types'
 import { useAuthStore } from '@/stores/auth-store'
@@ -278,22 +279,18 @@ export function ApprovalDashboard({ workers = [], className }: ApprovalDashboard
 
             <div>
               <Label htmlFor="worker-filter">Worker</Label>
-              <Select 
+              <SelectWithValue
                 value={filters.worker_id} 
                 onValueChange={(value) => setFilters(prev => ({ ...prev, worker_id: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="All workers" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">All Workers</SelectItem>
-                  {workers.map((worker) => (
-                    <SelectItem key={worker.id} value={worker.id}>
-                      {worker.first_name} {worker.last_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="All workers"
+                options={[
+                  { value: "", label: "All Workers" },
+                  ...workers.map((worker) => ({
+                    value: worker.id,
+                    label: `${worker.first_name} ${worker.last_name}`
+                  }))
+                ]}
+              />
             </div>
 
             <div>

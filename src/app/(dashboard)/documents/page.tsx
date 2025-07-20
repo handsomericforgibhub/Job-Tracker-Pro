@@ -10,6 +10,7 @@ import { DocumentList } from '@/components/ui/document-list';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SelectWithValue } from '@/components/ui/select-with-value';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -197,19 +198,19 @@ export default function DocumentsPage() {
               </div>
             </div>
             
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="All Categories" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <SelectWithValue
+              value={selectedCategory}
+              onValueChange={setSelectedCategory}
+              placeholder="All Categories"
+              triggerClassName="w-48"
+              options={[
+                { value: "all", label: "All Categories" },
+                ...categories.map((category) => ({
+                  value: category.id,
+                  label: category.name
+                }))
+              ]}
+            />
 
             <div className="flex border rounded-md">
               <Button

@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
+import { useSiteAdminContextStore } from '@/stores/site-admin-context-store'
+import { STAGES_ARRAY } from '@/config/stages'
 import { 
   ArrowLeft,
   Database,
@@ -45,6 +47,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SelectWithValue } from '@/components/ui/select-with-value'
 import { Switch } from '@/components/ui/switch'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 
@@ -116,6 +119,14 @@ interface TransitionForm {
 
 export default function SystemSettings() {
   const { user } = useAuthStore()
+  const { 
+    selectedCompanyId, 
+    selectedCompany, 
+    isPlatformWide, 
+    getContextLabel, 
+    getContextDescription 
+  } = useSiteAdminContextStore()
+  
   const [activeTab, setActiveTab] = useState('overview')
   const [stages, setStages] = useState<Stage[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -212,373 +223,266 @@ export default function SystemSettings() {
     { value: 'cancelled', label: 'Cancelled', color: '#F87171' }
   ]
 
-  const builderPresetData = {
-    stages: [
-      {
-        name: "1/12 Lead Qualification",
-        description: "Initial client contact and qualification",
-        color: "#EF4444",
-        maps_to_status: "planning",
-        stage_type: "standard",
-        min_duration_hours: 1,
-        max_duration_hours: 24,
-        requires_approval: false,
-        sequence_order: 1,
-        questions: [
-          {
-            question_text: "Have you spoken to the client yet?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Initial client contact to understand their needs",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: [
-              { response_value: "yes", to_stage_order: 2, is_automatic: true, requires_admin_override: false }
-              // Note: "no" response keeps the job in the current stage (no transition needed)
-            ]
-          }
-        ]
-      },
-      {
-        name: "2/12 Initial Client Meeting",
-        description: "Schedule and conduct initial site meeting",
-        color: "#F97316",
-        maps_to_status: "planning",
-        stage_type: "standard",
-        min_duration_hours: 2,
-        max_duration_hours: 72,
-        requires_approval: false,
-        sequence_order: 2,
-        questions: [
-          {
-            question_text: "Have you scheduled a site meeting?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Schedule an on-site meeting to assess the project",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: []
-          },
-          {
-            question_text: "Have you conducted the meeting?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Complete the initial site assessment meeting",
-            mobile_optimized: true,
-            sequence_order: 2,
-            transitions: [
-              { response_value: "yes", to_stage_order: 3, is_automatic: true, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "3/12 Quote Preparation",
-        description: "Prepare detailed quote for the project",
-        color: "#EAB308",
-        maps_to_status: "planning",
-        stage_type: "standard",
-        min_duration_hours: 4,
-        max_duration_hours: 120,
-        requires_approval: false,
-        sequence_order: 3,
-        questions: [
-          {
-            question_text: "Are you ready to prepare the quote?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Ensure all measurements and requirements are gathered",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: [
-              { response_value: "yes", to_stage_order: 4, is_automatic: true, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "4/12 Quote Submission",
-        description: "Submit quote to client for review",
-        color: "#84CC16",
-        maps_to_status: "planning",
-        stage_type: "standard",
-        min_duration_hours: 1,
-        max_duration_hours: 24,
-        requires_approval: false,
-        sequence_order: 4,
-        questions: [
-          {
-            question_text: "Have you sent the quote to the client?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Submit the detailed quote via email or in person",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: [
-              { response_value: "yes", to_stage_order: 5, is_automatic: true, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "5/12 Client Decision",
-        description: "Await client decision on quote",
-        color: "#22C55E",
-        maps_to_status: "planning",
-        stage_type: "milestone",
-        min_duration_hours: 24,
-        max_duration_hours: 168,
-        requires_approval: false,
-        sequence_order: 5,
-        questions: [
-          {
-            question_text: "Has the client accepted the quote?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Client's decision on the submitted quote",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: [
-              { response_value: "yes", to_stage_order: 6, is_automatic: true, requires_admin_override: false },
-              { response_value: "no", to_stage_order: 3, is_automatic: false, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "6/12 Contract & Deposit",
-        description: "Finalize contract and collect deposit",
-        color: "#06B6D4",
-        maps_to_status: "active",
-        stage_type: "milestone",
-        min_duration_hours: 2,
-        max_duration_hours: 72,
-        requires_approval: false,
-        sequence_order: 6,
-        questions: [
-          {
-            question_text: "Has the deposit been received?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Confirm deposit payment has been received",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: [
-              { response_value: "yes", to_stage_order: 7, is_automatic: true, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "7/12 Planning & Procurement",
-        description: "Order materials and book subcontractors",
-        color: "#3B82F6",
-        maps_to_status: "active",
-        stage_type: "standard",
-        min_duration_hours: 8,
-        max_duration_hours: 120,
-        requires_approval: false,
-        sequence_order: 7,
-        questions: [
-          {
-            question_text: "Have all materials been ordered?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "All required materials ordered from suppliers",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: []
-          },
-          {
-            question_text: "Have subcontractors been booked?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "All required subcontractors scheduled",
-            mobile_optimized: true,
-            sequence_order: 2,
-            transitions: [
-              { response_value: "yes", to_stage_order: 8, is_automatic: true, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "8/12 On-Site Preparation",
-        description: "Site preparation and material delivery",
-        color: "#6366F1",
-        maps_to_status: "active",
-        stage_type: "standard",
-        min_duration_hours: 4,
-        max_duration_hours: 48,
-        requires_approval: false,
-        sequence_order: 8,
-        questions: [
-          {
-            question_text: "Have materials been delivered to site?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "All materials delivered and secured on site",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: []
-          },
-          {
-            question_text: "Is the site access ready?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Site access cleared and ready for construction",
-            mobile_optimized: true,
-            sequence_order: 2,
-            transitions: [
-              { response_value: "yes", to_stage_order: 9, is_automatic: true, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "9/12 Construction Execution",
-        description: "Active construction phase",
-        color: "#8B5CF6",
-        maps_to_status: "active",
-        stage_type: "standard",
-        min_duration_hours: 40,
-        max_duration_hours: 720,
-        requires_approval: false,
-        sequence_order: 9,
-        questions: [
-          {
-            question_text: "Has construction started?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Construction work has commenced",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: []
-          },
-          {
-            question_text: "Are there any scope changes?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Any changes to the original scope of work",
-            mobile_optimized: true,
-            sequence_order: 2,
-            transitions: [
-              { response_value: "yes", to_stage_order: 3, is_automatic: false, requires_admin_override: false },
-              { response_value: "no", to_stage_order: 10, is_automatic: false, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "10/12 Inspections & Progress Payments",
-        description: "Required inspections and progress payments",
-        color: "#EC4899",
-        maps_to_status: "active",
-        stage_type: "milestone",
-        min_duration_hours: 4,
-        max_duration_hours: 72,
-        requires_approval: false,
-        sequence_order: 10,
-        questions: [
-          {
-            question_text: "Have required inspections passed?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "All building inspections completed and passed",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: []
-          },
-          {
-            question_text: "Has the progress payment been made?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Progress payment received from client",
-            mobile_optimized: true,
-            sequence_order: 2,
-            transitions: [
-              { response_value: "yes", to_stage_order: 11, is_automatic: true, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "11/12 Finalisation",
-        description: "Final touches and client walkthrough",
-        color: "#F59E0B",
-        maps_to_status: "active",
-        stage_type: "standard",
-        min_duration_hours: 8,
-        max_duration_hours: 72,
-        requires_approval: false,
-        sequence_order: 11,
-        questions: [
-          {
-            question_text: "Has the client walkthrough been completed?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Final walkthrough with client completed",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: []
-          },
-          {
-            question_text: "Are there any outstanding defects?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Any defects or items requiring attention",
-            mobile_optimized: true,
-            sequence_order: 2,
-            transitions: [
-              { response_value: "no", to_stage_order: 12, is_automatic: true, requires_admin_override: false }
-            ]
-          }
-        ]
-      },
-      {
-        name: "12/12 Handover & Close",
-        description: "Final handover and project completion",
-        color: "#10B981",
-        maps_to_status: "completed",
-        stage_type: "milestone",
-        min_duration_hours: 2,
-        max_duration_hours: 24,
-        requires_approval: false,
-        sequence_order: 12,
-        questions: [
-          {
-            question_text: "Have all handover documents been issued?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "All warranties, manuals, and certificates provided",
-            mobile_optimized: true,
-            sequence_order: 1,
-            transitions: []
-          },
-          {
-            question_text: "Has the final invoice been paid?",
-            response_type: "yes_no",
-            is_required: true,
-            help_text: "Final payment received from client",
-            mobile_optimized: true,
-            sequence_order: 2,
-            transitions: []
-          }
-        ]
-      }
-    ]
+  // Convert STAGES_ARRAY to builder preset format
+  const getBuilderPresetData = () => {
+    // Define comprehensive questions for each stage using central configuration
+    const stageQuestions = {
+      1: [
+        {
+          question_text: "Have you qualified this lead as a viable opportunity?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Consider budget, timeline, and project scope",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: [
+            { response_value: "yes", to_stage_order: 2, is_automatic: true, requires_admin_override: false }
+          ]
+        },
+        {
+          question_text: "What is the estimated project value?",
+          response_type: "number",
+          is_required: false,
+          help_text: "Enter rough estimate in dollars",
+          mobile_optimized: true,
+          sequence_order: 2,
+          transitions: []
+        }
+      ],
+      2: [
+        {
+          question_text: "Have you scheduled a site meeting?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Schedule an on-site meeting to assess the project",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: []
+        },
+        {
+          question_text: "Have you conducted the meeting?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Complete the initial site assessment meeting",
+          mobile_optimized: true,
+          sequence_order: 2,
+          transitions: [
+            { response_value: "yes", to_stage_order: 3, is_automatic: true, requires_admin_override: false }
+          ]
+        }
+      ],
+      3: [
+        {
+          question_text: "Have you completed the site assessment?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Detailed on-site evaluation for accurate quoting",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: []
+        },
+        {
+          question_text: "Are all materials and labor costs calculated?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Ensure comprehensive cost breakdown",
+          mobile_optimized: true,
+          sequence_order: 2,
+          transitions: [
+            { response_value: "yes", to_stage_order: 4, is_automatic: true, requires_admin_override: false }
+          ]
+        }
+      ],
+      4: [
+        {
+          question_text: "Has the quote been submitted to the client?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Quote formally sent via email or hand-delivered",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: [
+            { response_value: "yes", to_stage_order: 5, is_automatic: true, requires_admin_override: false }
+          ]
+        }
+      ],
+      5: [
+        {
+          question_text: "Has the client accepted the quote?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Client formally agreed to proceed",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: [
+            { response_value: "yes", to_stage_order: 6, is_automatic: true, requires_admin_override: false },
+            { response_value: "no", to_stage_order: 3, is_automatic: false, requires_admin_override: false }
+          ]
+        }
+      ],
+      6: [
+        {
+          question_text: "Has the deposit been received?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Confirm deposit payment has been received",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: [
+            { response_value: "yes", to_stage_order: 7, is_automatic: true, requires_admin_override: false }
+          ]
+        }
+      ],
+      7: [
+        {
+          question_text: "Have all materials been ordered?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "All required materials ordered from suppliers",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: []
+        },
+        {
+          question_text: "Have subcontractors been booked?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "All required subcontractors scheduled",
+          mobile_optimized: true,
+          sequence_order: 2,
+          transitions: [
+            { response_value: "yes", to_stage_order: 8, is_automatic: true, requires_admin_override: false }
+          ]
+        }
+      ],
+      8: [
+        {
+          question_text: "Have materials been delivered to site?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "All materials delivered and secured on site",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: []
+        },
+        {
+          question_text: "Is the site access ready?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Clear access for equipment and workers",
+          mobile_optimized: true,
+          sequence_order: 2,
+          transitions: [
+            { response_value: "yes", to_stage_order: 9, is_automatic: true, requires_admin_override: false }
+          ]
+        }
+      ],
+      9: [
+        {
+          question_text: "Has construction commenced?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Main construction work has begun",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: []
+        },
+        {
+          question_text: "Are there any issues or delays?",
+          response_type: "yes_no",
+          is_required: false,
+          help_text: "Track any problems during construction",
+          mobile_optimized: true,
+          sequence_order: 2,
+          transitions: [
+            { response_value: "no", to_stage_order: 10, is_automatic: false, requires_admin_override: false }
+          ]
+        }
+      ],
+      10: [
+        {
+          question_text: "Have inspections been completed?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Required quality and safety inspections",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: [
+            { response_value: "yes", to_stage_order: 11, is_automatic: true, requires_admin_override: false }
+          ]
+        }
+      ],
+      11: [
+        {
+          question_text: "Are final touches complete?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "All finishing work and cleanup completed",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: [
+            { response_value: "yes", to_stage_order: 12, is_automatic: true, requires_admin_override: false }
+          ]
+        }
+      ],
+      12: [
+        {
+          question_text: "Has the project been handed over?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "Final handover to client completed",
+          mobile_optimized: true,
+          sequence_order: 1,
+          transitions: []
+        },
+        {
+          question_text: "Are final payments complete?",
+          response_type: "yes_no",
+          is_required: true,
+          help_text: "All invoicing and payments finalized",
+          mobile_optimized: true,
+          sequence_order: 2,
+          transitions: []
+        }
+      ]
+    }
+
+    // Convert STAGES_ARRAY to builder preset format with questions
+    const stages = STAGES_ARRAY.map(stage => ({
+      name: stage.name,
+      description: stage.description,
+      color: stage.color,
+      maps_to_status: stage.maps_to_status,
+      stage_type: stage.stage_type,
+      min_duration_hours: stage.min_duration_hours,
+      max_duration_hours: stage.max_duration_hours,
+      requires_approval: stage.stage_type === 'approval',
+      sequence_order: stage.sequence_order,
+      questions: stageQuestions[stage.sequence_order] || []
+    }))
+
+    return {
+      stages
+    }
   }
 
   useEffect(() => {
     if ((user?.role === 'owner' || user?.role === 'site_admin') && activeTab === 'stages') {
       fetchStages()
     }
-  }, [user, activeTab])
+    // Platform settings can be loaded immediately as they're mostly UI-based for now
+  }, [user, activeTab, selectedCompanyId])
 
   const fetchStages = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch('/api/admin/stages')
+      
+      // Build API URL with company context
+      const apiUrl = selectedCompanyId 
+        ? `/api/admin/stages?company_id=${selectedCompanyId}`
+        : '/api/admin/stages'
+      
+      const response = await fetch(apiUrl)
       const data = await response.json()
       
       if (response.ok) {
@@ -599,7 +503,10 @@ export default function SystemSettings() {
       const response = await fetch('/api/admin/stages', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stages })
+        body: JSON.stringify({ 
+          stages,
+          company_id: selectedCompanyId 
+        })
       })
       
       if (response.ok) {
@@ -623,7 +530,8 @@ export default function SystemSettings() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...stageForm,
-          sequence_order: stages.length + 1
+          sequence_order: stages.length + 1,
+          company_id: selectedCompanyId
         })
       })
       
@@ -688,7 +596,8 @@ export default function SystemSettings() {
           stage_id: stageId,
           sequence_order: (stages.find(s => s.id === stageId)?.questions.length || 0) + 1,
           response_options: questionForm.response_type === 'multiple_choice' ? 
-            questionForm.response_options : null
+            questionForm.response_options : null,
+          company_id: selectedCompanyId
         })
       })
       
@@ -793,7 +702,8 @@ export default function SystemSettings() {
       
       const clearResponse = await fetch(clearEndpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ company_id: selectedCompanyId })
       })
 
       if (!clearResponse.ok) {
@@ -858,7 +768,10 @@ export default function SystemSettings() {
         console.log(`Renamed stages: ${clearData.renamedStages.join(', ')}`)
       }
 
-      // 3. Create stages and track their IDs for transitions
+      // 3. Get builder preset data using central stage configuration
+      const builderPresetData = getBuilderPresetData()
+      
+      // 4. Create stages and track their IDs for transitions
       const stageIdMap: { [order: number]: string } = {}
       
       for (const stageData of builderPresetData.stages) {
@@ -870,6 +783,7 @@ export default function SystemSettings() {
             name: stageData.name,
             description: stageData.description,
             color: stageData.color,
+            company_id: selectedCompanyId,
             sequence_order: stageData.sequence_order,
             maps_to_status: stageData.maps_to_status,
             stage_type: stageData.stage_type,
@@ -896,6 +810,7 @@ export default function SystemSettings() {
               stage_id: newStage.data.id,
               question_text: questionData.question_text,
               response_type: questionData.response_type,
+              company_id: selectedCompanyId,
               sequence_order: questionData.sequence_order,
               is_required: questionData.is_required,
               help_text: questionData.help_text,
@@ -1237,42 +1152,15 @@ export default function SystemSettings() {
 
         <div>
           <Label>Response Type</Label>
-          <Select
+          <SelectWithValue
             value={questionForm.response_type}
             onValueChange={(value) => setQuestionForm({ ...questionForm, response_type: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select response type...">
-                {questionForm.response_type && (
-                  <div className="flex items-center gap-2">
-                    {(() => {
-                      const selectedType = responseTypes.find(t => t.value === questionForm.response_type)
-                      if (selectedType) {
-                        const IconComponent = selectedType.icon
-                        return (
-                          <>
-                            <IconComponent className="h-4 w-4" />
-                            {selectedType.label}
-                          </>
-                        )
-                      }
-                      return null
-                    })()}
-                  </div>
-                )}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {responseTypes.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
-                  <div className="flex items-center gap-2">
-                    <type.icon className="h-4 w-4" />
-                    {type.label}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            placeholder="Select response type..."
+            options={responseTypes.map(type => ({
+              value: type.value,
+              label: type.label
+            }))}
+          />
         </div>
 
         <div>
@@ -1353,52 +1241,39 @@ export default function SystemSettings() {
                     <Label className="text-sm font-medium text-gray-700">When response is:</Label>
                     
                     {questionForm.response_type === 'yes_no' ? (
-                      <Select
+                      <SelectWithValue
                         value={transition.response_value}
                         onValueChange={(value) => updateQuestionFormTransitionRule(index, 'response_value', value)}
-                      >
-                        <SelectTrigger className="bg-gray-50 border-gray-300">
-                          <SelectValue placeholder="Select Yes/No..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
-                        </SelectContent>
-                      </Select>
+                        placeholder="Select Yes/No..."
+                        triggerClassName="bg-gray-50 border-gray-300"
+                        options={[
+                          { value: "yes", label: "Yes" },
+                          { value: "no", label: "No" }
+                        ]}
+                      />
                     ) : questionForm.response_type === 'multiple_choice' ? (
-                      <Select
+                      <SelectWithValue
                         value={transition.response_value}
                         onValueChange={(value) => updateQuestionFormTransitionRule(index, 'response_value', value)}
-                      >
-                        <SelectTrigger className="bg-gray-50 border-gray-300">
-                          <SelectValue placeholder="Select option..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {questionForm.response_options.map((option) => (
-                            <SelectItem key={option} value={option}>{option}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        placeholder="Select option..."
+                        triggerClassName="bg-gray-50 border-gray-300"
+                        options={questionForm.response_options.map(option => ({
+                          value: option,
+                          label: option
+                        }))}
+                      />
                     ) : questionForm.response_type === 'number' ? (
                       <div className="space-y-2">
-                        <Select
+                        <SelectWithValue
                           value={transition.numeric_operator || 'eq'}
                           onValueChange={(value) => updateQuestionFormTransitionRule(index, 'numeric_operator', value)}
-                        >
-                          <SelectTrigger className="bg-gray-50 border-gray-300">
-                            <SelectValue placeholder="Select condition..." />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {numericOperators.map((op) => (
-                              <SelectItem key={op.value} value={op.value}>
-                                <div>
-                                  <div className="font-medium">{op.label}</div>
-                                  <div className="text-xs text-gray-500">{op.description}</div>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                          placeholder="Select condition..."
+                          triggerClassName="bg-gray-50 border-gray-300"
+                          options={numericOperators.map(op => ({
+                            value: op.value,
+                            label: op.label
+                          }))}
+                        />
                         
                         {(transition.numeric_operator === 'between' || transition.numeric_operator === 'between_exclusive') ? (
                           <div className="flex items-center gap-2">
@@ -1440,27 +1315,16 @@ export default function SystemSettings() {
 
                   <div className="space-y-2">
                     <Label className="text-sm font-medium text-gray-700">Then move to stage:</Label>
-                    <Select
+                    <SelectWithValue
                       value={transition.to_stage_id}
                       onValueChange={(value) => updateQuestionFormTransitionRule(index, 'to_stage_id', value)}
-                    >
-                      <SelectTrigger className="bg-gray-50 border-gray-300">
-                        <SelectValue placeholder="Select stage..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {stages.map((stage) => (
-                          <SelectItem key={stage.id} value={stage.id}>
-                            <div className="flex items-center gap-2">
-                              <div 
-                                className="w-3 h-3 rounded"
-                                style={{ backgroundColor: stage.color }}
-                              />
-                              {stage.name}
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      placeholder="Select stage..."
+                      triggerClassName="bg-gray-50 border-gray-300"
+                      options={stages.map(stage => ({
+                        value: stage.id,
+                        label: stage.name
+                      }))}
+                    />
                   </div>
                 </div>
 
@@ -1529,59 +1393,41 @@ export default function SystemSettings() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label>From Stage</Label>
-            <Select
+            <SelectWithValue
               value={transitionForm.from_stage_id}
               onValueChange={(value) => setTransitionForm({ ...transitionForm, from_stage_id: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select source stage" />
-              </SelectTrigger>
-              <SelectContent>
-                {stages.map((stage) => (
-                  <SelectItem key={stage.id} value={stage.id}>
-                    {stage.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              placeholder="Select source stage"
+              options={stages.map(stage => ({
+                value: stage.id,
+                label: stage.name
+              }))}
+            />
           </div>
 
           <div>
             <Label>To Stage</Label>
-            <Select
+            <SelectWithValue
               value={transitionForm.to_stage_id}
               onValueChange={(value) => setTransitionForm({ ...transitionForm, to_stage_id: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select target stage" />
-              </SelectTrigger>
-              <SelectContent>
-                {stages.map((stage) => (
-                  <SelectItem key={stage.id} value={stage.id}>
-                    {stage.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              placeholder="Select target stage"
+              options={stages.map(stage => ({
+                value: stage.id,
+                label: stage.name
+              }))}
+            />
           </div>
 
           <div>
             <Label>Question</Label>
-            <Select
+            <SelectWithValue
               value={transitionForm.question_id}
               onValueChange={(value) => setTransitionForm({ ...transitionForm, question_id: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select question" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableQuestions.map((question) => (
-                  <SelectItem key={question.id} value={question.id}>
-                    {question.question_text}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              placeholder="Select question"
+              options={availableQuestions.map(question => ({
+                value: question.id,
+                label: question.question_text
+              }))}
+            />
           </div>
 
           <div>
@@ -1622,6 +1468,74 @@ export default function SystemSettings() {
       </div>
     )
   }
+
+  const renderPlatformSettings = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">
+            {isPlatformWide ? 'Global Platform Settings' : `${selectedCompany?.name || 'Company'} Settings`}
+          </h2>
+          <p className="text-gray-600">
+            {isPlatformWide 
+              ? 'Configure platform-wide settings that affect all companies' 
+              : `Configure settings specific to ${selectedCompany?.name || 'this company'}`
+            }
+          </p>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Badge variant={isPlatformWide ? "default" : "secondary"}>
+            {getContextLabel()}
+          </Badge>
+        </div>
+      </div>
+
+      {/* Platform Settings Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              General Settings
+            </CardTitle>
+            <CardDescription>
+              {isPlatformWide ? 'Global' : 'Company-specific'} configuration options
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="text-sm text-gray-600">
+              Platform settings configuration coming soon...
+            </div>
+            {!isPlatformWide && (
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p className="text-sm text-blue-800">
+                  <strong>Company Context:</strong> Settings here will only affect {selectedCompany?.name || 'this company'}.
+                  To configure global settings, switch to "Platform Wide" view.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5" />
+              {isPlatformWide ? 'Platform Configuration' : 'Company Configuration'}
+            </CardTitle>
+            <CardDescription>
+              Advanced {isPlatformWide ? 'platform' : 'company'} configuration
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="text-sm text-gray-600">
+              Advanced configuration options coming soon...
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
 
   const renderStageManagement = () => (
     <div className="space-y-6">
@@ -2086,9 +2000,14 @@ export default function SystemSettings() {
     {
       title: 'Platform Configuration',
       icon: Globe,
-      description: 'System-wide settings that affect all companies',
+      description: isPlatformWide 
+        ? 'Global platform settings that affect all companies' 
+        : `Company-specific settings for ${selectedCompany?.name || 'this company'}`,
       status: 'configured',
-      value: 'Basic settings configured'
+      value: isPlatformWide 
+        ? 'Global platform settings configured' 
+        : 'Company-specific settings configured',
+      action: () => setActiveTab('platform')
     },
     {
       title: 'Email & Notifications',
@@ -2132,14 +2051,28 @@ export default function SystemSettings() {
     <div className="space-y-6">
       {/* Header */}
       <div className="border-b border-gray-200 pb-4">
-        <div className="flex items-center">
-          <Link href="/dashboard/admin" className="text-gray-500 hover:text-gray-700 mr-2">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <Database className="h-8 w-8 text-blue-600 mr-3" />
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">System Settings</h1>
-            <p className="text-gray-600">Configure platform-wide settings and job progression</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/dashboard/admin" className="text-gray-500 hover:text-gray-700 mr-2">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <Database className="h-8 w-8 text-blue-600 mr-3" />
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {isPlatformWide ? 'System Settings' : `${selectedCompany?.name || 'Company'} Settings`}
+              </h1>
+              <p className="text-gray-600">
+                {isPlatformWide 
+                  ? 'Configure platform-wide settings and job progression' 
+                  : `Configure settings and job progression for ${selectedCompany?.name || 'this company'}`
+                }
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Badge variant={isPlatformWide ? "default" : "secondary"}>
+              {getContextLabel()}
+            </Badge>
           </div>
         </div>
       </div>
@@ -2166,6 +2099,16 @@ export default function SystemSettings() {
             }`}
           >
             Stage Management
+          </button>
+          <button
+            onClick={() => setActiveTab('platform')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'platform'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            Platform Settings
           </button>
         </nav>
       </div>
@@ -2195,9 +2138,11 @@ export default function SystemSettings() {
             </Card>
           ))}
         </div>
-      ) : (
+      ) : activeTab === 'stages' ? (
         renderStageManagement()
-      )}
+      ) : activeTab === 'platform' ? (
+        renderPlatformSettings()
+      ) : null}
 
       {/* Question Editor Modal */}
       <Dialog open={!!editingQuestion} onOpenChange={(open) => !open && setEditingQuestion(null)}>
@@ -2235,42 +2180,15 @@ export default function SystemSettings() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>Response Type</Label>
-                  <Select
+                  <SelectWithValue
                     value={questionEditForm.response_type}
                     onValueChange={(value) => setQuestionEditForm({ ...questionEditForm, response_type: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select response type...">
-                        {questionEditForm.response_type && (
-                          <div className="flex items-center gap-2">
-                            {(() => {
-                              const selectedType = responseTypes.find(t => t.value === questionEditForm.response_type)
-                              if (selectedType) {
-                                const IconComponent = selectedType.icon
-                                return (
-                                  <>
-                                    <IconComponent className="h-4 w-4" />
-                                    {selectedType.label}
-                                  </>
-                                )
-                              }
-                              return null
-                            })()}
-                          </div>
-                        )}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      {responseTypes.map((type) => (
-                        <SelectItem key={type.value} value={type.value}>
-                          <div className="flex items-center gap-2">
-                            <type.icon className="h-4 w-4" />
-                            {type.label}
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder="Select response type..."
+                    options={responseTypes.map(type => ({
+                      value: type.value,
+                      label: type.label
+                    }))}
+                  />
                 </div>
 
                 <div className="pt-6">
@@ -2386,52 +2304,39 @@ export default function SystemSettings() {
                           <Label className="text-sm font-medium text-gray-700">When response is:</Label>
                           
                           {questionEditForm.response_type === 'yes_no' ? (
-                            <Select
+                            <SelectWithValue
                               value={transition.response_value}
                               onValueChange={(value) => updateTransitionRule(index, 'response_value', value)}
-                            >
-                              <SelectTrigger className="bg-gray-50 border-gray-300">
-                                <SelectValue placeholder="Select Yes/No..." />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="yes">Yes</SelectItem>
-                                <SelectItem value="no">No</SelectItem>
-                              </SelectContent>
-                            </Select>
+                              placeholder="Select Yes/No..."
+                              triggerClassName="bg-gray-50 border-gray-300"
+                              options={[
+                                { value: "yes", label: "Yes" },
+                                { value: "no", label: "No" }
+                              ]}
+                            />
                           ) : questionEditForm.response_type === 'multiple_choice' ? (
-                            <Select
+                            <SelectWithValue
                               value={transition.response_value}
                               onValueChange={(value) => updateTransitionRule(index, 'response_value', value)}
-                            >
-                              <SelectTrigger className="bg-gray-50 border-gray-300">
-                                <SelectValue placeholder="Select option..." />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {questionEditForm.response_options.map((option) => (
-                                  <SelectItem key={option} value={option}>{option}</SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                              placeholder="Select option..."
+                              triggerClassName="bg-gray-50 border-gray-300"
+                              options={questionEditForm.response_options.map(option => ({
+                                value: option,
+                                label: option
+                              }))}
+                            />
                           ) : questionEditForm.response_type === 'number' ? (
                             <div className="space-y-2">
-                              <Select
+                              <SelectWithValue
                                 value={transition.numeric_operator || 'eq'}
                                 onValueChange={(value) => updateTransitionRule(index, 'numeric_operator', value)}
-                              >
-                                <SelectTrigger className="bg-gray-50 border-gray-300">
-                                  <SelectValue placeholder="Select condition..." />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {numericOperators.map((op) => (
-                                    <SelectItem key={op.value} value={op.value}>
-                                      <div>
-                                        <div className="font-medium">{op.label}</div>
-                                        <div className="text-xs text-gray-500">{op.description}</div>
-                                      </div>
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                                placeholder="Select condition..."
+                                triggerClassName="bg-gray-50 border-gray-300"
+                                options={numericOperators.map(op => ({
+                                  value: op.value,
+                                  label: op.label
+                                }))}
+                              />
                               
                               {(transition.numeric_operator === 'between' || transition.numeric_operator === 'between_exclusive') ? (
                                 <div className="flex items-center gap-2">
@@ -2473,27 +2378,16 @@ export default function SystemSettings() {
 
                         <div className="space-y-3">
                           <Label className="text-sm font-medium text-gray-700">Then move to stage:</Label>
-                          <Select
+                          <SelectWithValue
                             value={transition.to_stage_id}
                             onValueChange={(value) => updateTransitionRule(index, 'to_stage_id', value)}
-                          >
-                            <SelectTrigger className="bg-gray-50 border-gray-300">
-                              <SelectValue placeholder="Select stage..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {stages.map((stage) => (
-                                <SelectItem key={stage.id} value={stage.id}>
-                                  <div className="flex items-center gap-2">
-                                    <div 
-                                      className="w-3 h-3 rounded"
-                                      style={{ backgroundColor: stage.color }}
-                                    />
-                                    {stage.name}
-                                  </div>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                            placeholder="Select stage..."
+                            triggerClassName="bg-gray-50 border-gray-300"
+                            options={stages.map(stage => ({
+                              value: stage.id,
+                              label: stage.name
+                            }))}
+                          />
                         </div>
                       </div>
 

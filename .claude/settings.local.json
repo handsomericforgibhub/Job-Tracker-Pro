@@ -27,7 +27,8 @@
       "Bash(git config:*)",
       "Bash(true)",
       "Bash(npx tsc:*)",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

@@ -24,6 +24,7 @@ import {
   MoreVertical
 } from 'lucide-react'
 import Link from 'next/link'
+import CompanyContextSelector from '@/components/site-admin/company-context-selector'
 
 export default function SiteAdminDashboard() {
   const { user } = useAuthStore()
@@ -197,6 +198,9 @@ export default function SiteAdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Company Context Selector */}
+      <CompanyContextSelector />
 
       {/* System Status */}
       <div className="bg-green-50 border border-green-200 rounded-lg p-4">
