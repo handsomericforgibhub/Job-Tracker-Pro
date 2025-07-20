@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { SelectWithValue } from '@/components/ui/select-with-value'
 import { Checkbox } from '@/components/ui/checkbox'
 import { TimeEntry, TimeApproval, Worker } from '@/lib/types'
@@ -261,20 +261,17 @@ export function ApprovalDashboard({ workers = [], className }: ApprovalDashboard
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <Label htmlFor="status-filter">Status</Label>
-              <Select 
-                value={filters.status} 
+              <SelectWithValue
+                value={filters.status}
                 onValueChange={(value) => setFilters(prev => ({ ...prev, status: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                </SelectContent>
-              </Select>
+                placeholder="Select status..."
+                options={[
+                  { value: "pending", label: "Pending" },
+                  { value: "approved", label: "Approved" },
+                  { value: "rejected", label: "Rejected" },
+                  { value: "all", label: "All Statuses" }
+                ]}
+              />
             </div>
 
             <div>

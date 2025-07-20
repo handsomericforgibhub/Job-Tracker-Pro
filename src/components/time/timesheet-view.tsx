@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { SelectWithValue } from '@/components/ui/select-with-value'
 import { TimeEntry, Worker, TimesheetData } from '@/lib/types'
 import { useAuthStore } from '@/stores/auth-store'
@@ -313,17 +313,17 @@ export function TimesheetView({
 
             <div>
               <Label htmlFor="status-filter">Status Filter</Label>
-              <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
-                </SelectContent>
-              </Select>
+              <SelectWithValue
+                value={filterStatus}
+                onValueChange={setFilterStatus}
+                placeholder="Select status..."
+                options={[
+                  { value: "all", label: "All Statuses" },
+                  { value: "pending", label: "Pending" },
+                  { value: "approved", label: "Approved" },
+                  { value: "rejected", label: "Rejected" }
+                ]}
+              />
             </div>
 
             <div className="flex items-end">

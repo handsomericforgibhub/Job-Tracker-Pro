@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
 import { useSiteAdminContextStore } from '@/stores/site-admin-context-store'
 import { STAGES_ARRAY } from '@/config/stages'
-import { THEME_COLORS, getStatusColor, SYSTEM_COLORS } from '@/config/colors'
-import { RESPONSE_TYPES, RESPONSE_TYPE_CONFIG, isValidResponseType } from '@/config/constants'
+import { THEME_COLORS, SYSTEM_COLORS } from '@/config/colors'
+import { RESPONSE_TYPES, RESPONSE_TYPE_CONFIG } from '@/config/constants'
 import { 
   ArrowLeft,
   Database,
@@ -13,9 +13,7 @@ import {
   Settings,
   Globe,
   Mail,
-  FileText,
   Shield,
-  Clock,
   Palette,
   Construction,
   Plus,
@@ -28,17 +26,13 @@ import {
   Workflow,
   HelpCircle,
   ArrowRight,
-  Move,
-  Check,
   Target,
   Calendar,
   Type,
   ToggleLeft,
   Upload,
   Hash,
-  GripVertical,
-  Copy,
-  ExternalLink
+  Copy
 } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -48,7 +42,7 @@ import { Badge } from '@/components/ui/badge'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { SelectWithValue } from '@/components/ui/select-with-value'
 import { Switch } from '@/components/ui/switch'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
@@ -1599,48 +1593,27 @@ export default function SystemSettings() {
             </div>
             <div>
               <Label>Stage Type</Label>
-              <Select
+              <SelectWithValue
                 value={stageForm.stage_type}
                 onValueChange={(value) => setStageForm({ ...stageForm, stage_type: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {stageTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      <div>
-                        <div className="font-medium">{type.label}</div>
-                        <div className="text-xs text-gray-500">{type.description}</div>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="Select stage type..."
+                options={stageTypes.map(type => ({
+                  value: type.value,
+                  label: type.label
+                }))}
+              />
             </div>
             <div>
               <Label>Maps to Status</Label>
-              <Select
+              <SelectWithValue
                 value={stageForm.maps_to_status}
                 onValueChange={(value) => setStageForm({ ...stageForm, maps_to_status: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map((status) => (
-                    <SelectItem key={status.value} value={status.value}>
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: status.color }}
-                        />
-                        {status.label}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="Select status..."
+                options={statusOptions.map(status => ({
+                  value: status.value,
+                  label: status.label
+                }))}
+              />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1815,21 +1788,15 @@ export default function SystemSettings() {
                     </div>
                     <div>
                       <Label>Stage Type</Label>
-                      <Select
+                      <SelectWithValue
                         value={stage.stage_type}
                         onValueChange={(value) => updateStage(stage.id, 'stage_type', value)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {stageTypes.map((type) => (
-                            <SelectItem key={type.value} value={type.value}>
-                              {type.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        placeholder="Select stage type..."
+                        options={stageTypes.map(type => ({
+                          value: type.value,
+                          label: type.label
+                        }))}
+                      />
                     </div>
                     <div className="flex items-center space-x-2">
                       <Switch

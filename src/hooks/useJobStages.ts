@@ -4,9 +4,9 @@ import {
   JOB_STATUSES, 
   JOB_STATUS_LABELS, 
   JOB_STATUS_DESCRIPTIONS,
-  getAllowedJobStatusTransitions,
-  getStatusColor 
+  getAllowedJobStatusTransitions
 } from '@/config/constants'
+import { getStatusColor } from '@/config/colors'
 import { useAuthStore } from '@/stores/auth-store'
 import { useCompanyContextStore } from '@/stores/company-context-store'
 

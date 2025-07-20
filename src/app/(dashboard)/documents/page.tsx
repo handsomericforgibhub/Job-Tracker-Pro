@@ -9,7 +9,7 @@ import { DocumentViewer } from '@/components/ui/document-viewer';
 import { DocumentList } from '@/components/ui/document-list';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { SelectWithValue } from '@/components/ui/select-with-value';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
