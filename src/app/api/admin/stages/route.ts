@@ -9,9 +9,11 @@ const supabase = createClient(
 
 export async function GET(request: NextRequest) {
   try {
-    // For now, return global stages (this would normally require proper authentication)
-    // TODO: Add proper session-based authentication
-    const { data: stages, error: stagesError } = await supabase
+    const { searchParams } = new URL(request.url)
+    const companyId = searchParams.get('company_id')
+    
+    // Determine which stages to fetch
+    let stagesQuery = supabase
       .from('job_stages')
       .select(`
         *,
@@ -19,15 +21,42 @@ export async function GET(request: NextRequest) {
         transitions_from:stage_transitions!stage_transitions_from_stage_id_fkey(*),
         transitions_to:stage_transitions!stage_transitions_to_stage_id_fkey(*)
       `)
-      .filter('company_id', 'is', null)
-      .order('sequence_order')
+    
+    if (companyId && companyId !== 'null') {
+      // Fetch company-specific stages first, fallback to global if none exist
+      const { data: companyStages } = await supabase
+        .from('job_stages')
+        .select('id')
+        .eq('company_id', companyId)
+        .limit(1)
+      
+      if (companyStages && companyStages.length > 0) {
+        // Company has custom stages
+        stagesQuery = stagesQuery.eq('company_id', companyId)
+      } else {
+        // Fall back to global stages
+        stagesQuery = stagesQuery.filter('company_id', 'is', null)
+      }
+    } else {
+      // Fetch global stages (platform-wide view)
+      stagesQuery = stagesQuery.filter('company_id', 'is', null)
+    }
+    
+    const { data: stages, error: stagesError } = await stagesQuery.order('sequence_order')
 
     if (stagesError) {
       console.error('Error fetching stages:', stagesError)
       return NextResponse.json({ error: 'Failed to fetch stages' }, { status: 500 })
     }
 
-    return NextResponse.json({ data: stages })
+    return NextResponse.json({ 
+      data: stages,
+      context: {
+        company_id: companyId,
+        is_global: !companyId || companyId === 'null',
+        stage_count: stages?.length || 0
+      }
+    })
   } catch (error) {
     console.error('Error in stages API:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -37,9 +66,19 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, description, color, sequence_order, maps_to_status, stage_type, min_duration_hours, max_duration_hours } = body
+    const { 
+      name, 
+      description, 
+      color, 
+      sequence_order, 
+      maps_to_status, 
+      stage_type, 
+      min_duration_hours, 
+      max_duration_hours,
+      company_id 
+    } = body
 
-    // Create new global stage (TODO: Add proper authentication and company handling)
+    // Create new stage (global or company-specific based on company_id)
     const { data: newStage, error: createError } = await supabase
       .from('job_stages')
       .insert({
@@ -51,8 +90,8 @@ export async function POST(request: NextRequest) {
         stage_type: stage_type || 'standard',
         min_duration_hours: min_duration_hours || 1,
         max_duration_hours: max_duration_hours || 168,
-        company_id: null, // Global stage
-        created_by: null  // System created
+        company_id: company_id || null, // null for global, UUID for company-specific
+        created_by: null  // TODO: Get from auth
       })
       .select()
       .single()
@@ -72,11 +111,11 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { stages } = body
+    const { stages, company_id } = body
 
-    // Update multiple stages (TODO: Add proper authentication)
-    const updatePromises = stages.map((stage: any) => 
-      supabase
+    // Update multiple stages with company context awareness
+    const updatePromises = stages.map((stage: any) => {
+      let query = supabase
         .from('job_stages')
         .update({
           name: stage.name,
@@ -89,8 +128,16 @@ export async function PUT(request: NextRequest) {
           max_duration_hours: stage.max_duration_hours
         })
         .eq('id', stage.id)
-        .filter('company_id', 'is', null) // Only update global stages
-    )
+      
+      // Apply company context filter
+      if (company_id && company_id !== 'null') {
+        query = query.eq('company_id', company_id)
+      } else {
+        query = query.filter('company_id', 'is', null)
+      }
+      
+      return query
+    })
 
     const results = await Promise.all(updatePromises)
     
@@ -101,7 +148,14 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to update some stages' }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ 
+      success: true,
+      context: {
+        company_id: company_id,
+        is_global: !company_id || company_id === 'null',
+        stages_updated: stages.length
+      }
+    })
   } catch (error) {
     console.error('Error in stages PUT API:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

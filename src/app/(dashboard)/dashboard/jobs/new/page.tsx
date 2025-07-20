@@ -14,6 +14,7 @@ import Link from 'next/link'
 import ForemanSelect from '@/components/ui/foreman-select'
 import { NewJobStatusSelect } from '@/components/ui/job-status-select'
 import { useJobStages } from '@/hooks/useJobStages'
+import { DEFAULT_STAGE_ID } from '@/config/stages'
 
 export default function NewJobPage() {
   const router = useRouter()
@@ -88,7 +89,7 @@ export default function NewJobPage() {
         company_id: effectiveCompany.id,
         created_by: user.id,
         // Auto-assign to first stage of question-driven system
-        current_stage_id: '550e8400-e29b-41d4-a716-446655440001', // Lead Qualification
+        current_stage_id: DEFAULT_STAGE_ID, // Lead Qualification
         stage_entered_at: new Date().toISOString()
       }
 

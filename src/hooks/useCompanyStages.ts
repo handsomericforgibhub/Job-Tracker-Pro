@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
 import { useCompanyContextStore } from '@/stores/company-context-store'
+import { useSiteAdminContextStore } from '@/stores/site-admin-context-store'
 
 export interface CompanyStage {
   id: string
@@ -49,6 +50,7 @@ export interface StageNameToIdMapping {
 export function useCompanyStages() {
   const { user, company } = useAuthStore()
   const { currentCompanyContext } = useCompanyContextStore()
+  const { selectedCompanyId, selectedCompany } = useSiteAdminContextStore()
   const [stages, setStages] = useState<CompanyStage[]>([])
   const [stageProgression, setStageProgression] = useState<StageProgression>({})
   const [stageNameToId, setStageNameToId] = useState<StageNameToIdMapping>({})
@@ -56,17 +58,30 @@ export function useCompanyStages() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Get the effective company - for site admins use context, for others use their company
-  const effectiveCompany = user?.role === 'site_admin' ? currentCompanyContext : company
+  // Get the effective company based on user role and context
+  const effectiveCompany = user?.role === 'site_admin' 
+    ? (selectedCompany || currentCompanyContext) 
+    : company
+  
+  // For site admins, use the selected company ID, otherwise use effective company
+  const contextCompanyId = user?.role === 'site_admin' 
+    ? selectedCompanyId 
+    : effectiveCompany?.id
 
   const fetchStages = async () => {
-    if (!effectiveCompany) return
+    // For site admins, allow fetching without a company (platform-wide view)
+    if (!effectiveCompany && user?.role !== 'site_admin') return
 
     try {
       setIsLoading(true)
       setError(null)
 
-      const response = await fetch('/api/admin/stages')
+      // Build API URL with company context
+      const apiUrl = contextCompanyId 
+        ? `/api/admin/stages?company_id=${contextCompanyId}`
+        : '/api/admin/stages'
+      
+      const response = await fetch(apiUrl)
       const data = await response.json()
 
       if (response.ok) {
@@ -112,10 +127,11 @@ export function useCompanyStages() {
   }
 
   useEffect(() => {
-    if (user && effectiveCompany) {
+    // Fetch when user changes, company context changes, or for site admins when selection changes
+    if (user && (effectiveCompany || user.role === 'site_admin')) {
       fetchStages()
     }
-  }, [user, effectiveCompany])
+  }, [user, effectiveCompany, contextCompanyId])
 
   const getStageById = (stageId: string): CompanyStage | undefined => {
     return stages.find(stage => stage.id === stageId)
@@ -151,13 +167,14 @@ export function useCompanyStages() {
   }
 
   const copyGlobalStages = async (): Promise<boolean> => {
-    if (!effectiveCompany || !user) return false
+    const targetCompanyId = contextCompanyId || effectiveCompany?.id
+    if (!targetCompanyId || !user) return false
 
     try {
       const response = await fetch('/api/admin/stages/copy-global', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ company_id: effectiveCompany.id })
+        body: JSON.stringify({ company_id: targetCompanyId })
       })
 
       if (response.ok) {

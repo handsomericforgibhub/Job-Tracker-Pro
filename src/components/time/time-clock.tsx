@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SelectWithValue } from '@/components/ui/select-with-value'
 import { TimeClockStatus, Worker, Job, LocationData } from '@/lib/types'
 import { useAuthStore } from '@/stores/auth-store'
 import { 
@@ -539,21 +540,15 @@ export function TimeClock({ worker, jobs, onStatusChange, className }: TimeClock
           {!status.is_clocked_in && (
             <div>
               <Label htmlFor="job-select">Select Job *</Label>
-              <Select value={selectedJobId} onValueChange={setSelectedJobId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose a job to work on" />
-                </SelectTrigger>
-                <SelectContent>
-                  {jobs.map((job) => (
-                    <SelectItem key={job.id} value={job.id}>
-                      <div>
-                        <div className="font-medium">{job.title}</div>
-                        <div className="text-xs text-gray-500">{job.client_name}</div>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SelectWithValue
+                value={selectedJobId}
+                onValueChange={setSelectedJobId}
+                placeholder="Choose a job to work on"
+                options={jobs.map((job) => ({
+                  value: job.id,
+                  label: job.title
+                }))}
+              />
             </div>
           )}
 

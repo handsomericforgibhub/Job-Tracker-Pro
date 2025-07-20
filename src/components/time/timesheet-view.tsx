@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SelectWithValue } from '@/components/ui/select-with-value'
 import { TimeEntry, Worker, TimesheetData } from '@/lib/types'
 import { useAuthStore } from '@/stores/auth-store'
 import { 
@@ -299,18 +300,15 @@ export function TimesheetView({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="week-select">Time Period</Label>
-              <Select value={selectedWeek} onValueChange={setSelectedWeek}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select week" />
-                </SelectTrigger>
-                <SelectContent>
-                  {getWeekOptions().map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SelectWithValue
+                value={selectedWeek}
+                onValueChange={setSelectedWeek}
+                placeholder="Select week"
+                options={getWeekOptions().map((option) => ({
+                  value: option.value,
+                  label: option.label
+                }))}
+              />
             </div>
 
             <div>

@@ -4,6 +4,12 @@
 **Status:** In Progress  
 **Priority:** High - Code maintainability and consistency
 
+## 📋 Instructions for Implementation
+**Process:** Work through categories sequentially starting with Category 1. After completing each category:
+1. Report any SQL code that needs to be run and where to test on the platform
+2. Mention the next category before asking for permission to proceed
+3. Update this document to mark completed items
+
 ## 🎯 Overview
 
 This document catalogs all hardcoded values found across the codebase that should be centralized for better maintainability, consistency, and configuration management.
@@ -342,14 +348,19 @@ export const EXTERNAL_URLS = {
 - [x] Categorized all hardcoded values
 - [x] Identified affected files and line numbers
 - [x] Created refactoring plan
+- [x] **CATEGORY 1 COMPLETE**: Job Stage Names & Definitions
+  - [x] Created `/src/config/stages.ts` with actual database UUIDs
+  - [x] Updated API routes to use central configuration
+  - [x] Updated job creation/editing pages
+  - [x] Updated system-settings page
+  - [x] Synchronized TypeScript config with existing database
 
 ### **Next Steps:**
-- [ ] Create central configuration files
-- [ ] Update type definitions with enums
-- [ ] Phase 1: Replace stage definitions (highest impact)
-- [ ] Phase 2: Replace status and response type mappings  
-- [ ] Phase 3: Replace color codes and UI constants
-- [ ] Phase 4: Replace external URLs and configuration values
+- [ ] **CATEGORY 2**: Color Codes & Visual Styling (15+ files)
+- [ ] **CATEGORY 3**: Status & Type Mappings (10+ files)
+- [ ] **CATEGORY 4**: Question Response Types (8+ files)
+- [ ] **CATEGORY 5**: External URLs & Endpoints (5+ files)
+- [ ] **CATEGORY 6**: Configuration Values & Timeouts (3+ files)
 - [ ] Final validation and testing
 
 ---
