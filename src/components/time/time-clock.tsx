@@ -300,6 +300,112 @@ export function TimeClock({ worker, jobs, onStatusChange, className }: TimeClock
     }
   }
 
+  const handleStartBreak = async () => {
+    if (!currentWorker?.id || !status.current_time_entry?.id) {
+      toast.error('No active time entry found')
+      return
+    }
+
+    if (status.active_break) {
+      toast.error('Break already in progress')
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      const breakData = {
+        time_entry_id: status.current_time_entry.id,
+        worker_id: currentWorker.id,
+        break_type: 'general' as const,
+        start_time: new Date().toISOString(),
+        is_paid: false,
+        location: location?.address || 'Location unavailable',
+        gps_lat: location?.latitude,
+        gps_lng: location?.longitude,
+        notes
+      }
+
+      const response = await fetch('/api/time/breaks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (user as any)?.access_token || 'demo-token'
+        },
+        body: JSON.stringify(breakData)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to start break')
+      }
+
+      const result = await response.json()
+      toast.success('Break started successfully')
+      
+      // Clear notes
+      setNotes('')
+      
+      // Refresh status
+      await fetchCurrentStatus()
+
+    } catch (error) {
+      console.error('Start break error:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to start break')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleEndBreak = async () => {
+    if (!status.active_break?.id) {
+      toast.error('No active break found')
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      const endBreakData = {
+        id: status.active_break.id,
+        end_time: new Date().toISOString(),
+        location: location?.address || 'Location unavailable',
+        gps_lat: location?.latitude,
+        gps_lng: location?.longitude,
+        notes
+      }
+
+      const response = await fetch('/api/time/breaks', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + (user as any)?.access_token || 'demo-token'
+        },
+        body: JSON.stringify(endBreakData)
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to end break')
+      }
+
+      const result = await response.json()
+      toast.success('Break ended successfully')
+      
+      // Clear notes
+      setNotes('')
+      
+      // Refresh status
+      await fetchCurrentStatus()
+
+    } catch (error) {
+      console.error('End break error:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to end break')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
       hour: '2-digit',
@@ -656,25 +762,37 @@ export function TimeClock({ worker, jobs, onStatusChange, className }: TimeClock
                 <Button
                   variant="outline"
                   className="w-full"
-                  onClick={() => {
-                    // TODO: Implement end break functionality
-                    toast.info('End break functionality coming soon!')
-                  }}
+                  onClick={handleEndBreak}
+                  disabled={isLoading}
                 >
-                  End Break
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Ending Break...
+                    </>
+                  ) : (
+                    'End Break'
+                  )}
                 </Button>
               </div>
             ) : (
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => {
-                  // TODO: Implement start break functionality
-                  toast.info('Start break functionality coming soon!')
-                }}
+                onClick={handleStartBreak}
+                disabled={isLoading}
               >
-                <Coffee className="h-4 w-4 mr-2" />
-                Start Break
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Starting Break...
+                  </>
+                ) : (
+                  <>
+                    <Coffee className="h-4 w-4 mr-2" />
+                    Start Break
+                  </>
+                )}
               </Button>
             )}
           </CardContent>

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface StatItem {
   title: string
@@ -306,38 +307,38 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {(user.role === 'owner' || (user.role === 'site_admin' && currentCompanyContext)) && (
               <>
-                <button 
-                  onClick={() => router.push('/dashboard/jobs/new')}
-                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer"
+                <Link 
+                  href="/dashboard/jobs/new"
+                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer block"
                 >
                   <Briefcase className="h-8 w-8 text-blue-600 mb-2" />
                   <h3 className="font-medium">Create New Job</h3>
                   <p className="text-sm text-gray-600">Start a new project</p>
-                </button>
-                <button 
-                  onClick={() => router.push('/dashboard/workers/new')}
-                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer"
+                </Link>
+                <Link 
+                  href="/dashboard/workers/new"
+                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer block"
                 >
                   <Users className="h-8 w-8 text-green-600 mb-2" />
                   <h3 className="font-medium">Add Worker</h3>
                   <p className="text-sm text-gray-600">Invite team member</p>
-                </button>
-                <button 
-                  onClick={() => router.push('/dashboard/analytics')}
-                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer"
+                </Link>
+                <Link 
+                  href="/dashboard/analytics"
+                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer block"
                 >
                   <TrendingUp className="h-8 w-8 text-purple-600 mb-2" />
                   <h3 className="font-medium">View Analytics</h3>
                   <p className="text-sm text-gray-600">Business insights</p>
-                </button>
-                <button 
-                  onClick={() => router.push('/dashboard/analytics')}
-                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer"
+                </Link>
+                <Link 
+                  href="/dashboard/accounting/reports"
+                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer block"
                 >
                   <DollarSign className="h-8 w-8 text-yellow-600 mb-2" />
                   <h3 className="font-medium">Financial Reports</h3>
                   <p className="text-sm text-gray-600">Revenue & expenses</p>
-                </button>
+                </Link>
               </>
             )}
             
@@ -417,30 +418,30 @@ export default function DashboardPage() {
 
             {user.role === 'site_admin' && (
               <>
-                <button 
-                  onClick={() => router.push('/dashboard/site-admin/companies')}
-                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer"
+                <Link 
+                  href="/dashboard/admin/companies"
+                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer block"
                 >
                   <Building className="h-8 w-8 text-blue-600 mb-2" />
                   <h3 className="font-medium">Manage Companies</h3>
                   <p className="text-sm text-gray-600">Platform administration</p>
-                </button>
-                <button 
-                  onClick={() => router.push('/dashboard/site-admin')}
-                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer"
+                </Link>
+                <Link 
+                  href="/dashboard/admin/stats"
+                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer block"
                 >
                   <TrendingUp className="h-8 w-8 text-purple-600 mb-2" />
                   <h3 className="font-medium">Platform Stats</h3>
                   <p className="text-sm text-gray-600">View analytics</p>
-                </button>
-                <button 
-                  onClick={() => router.push('/dashboard/admin')}
-                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer"
+                </Link>
+                <Link 
+                  href="/dashboard/admin/settings"
+                  className="p-4 text-left rounded-lg border hover:bg-gray-50 transition-colors cursor-pointer block"
                 >
                   <Crown className="h-8 w-8 text-yellow-600 mb-2" />
                   <h3 className="font-medium">Platform Admin</h3>
                   <p className="text-sm text-gray-600">System configuration</p>
-                </button>
+                </Link>
               </>
             )}
 

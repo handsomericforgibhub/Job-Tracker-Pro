@@ -242,8 +242,12 @@ export default function AnalyticsPage() {
           <p className="font-medium">{label}</p>
           {payload.map((entry, index) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
-              {entry.name}: {entry.name.includes('$') || entry.name.includes('Revenue') || entry.name.includes('Cost') ? 
-                formatCurrency(entry.value) : entry.value}
+              {`${entry.name ?? 'Unnamed'}: ${
+                typeof entry.name === 'string' &&
+                (entry.name.includes('$') || entry.name.includes('Revenue') || entry.name.includes('Cost'))
+                  ? formatCurrency(entry.value)
+                  : entry.value
+              }`}
             </p>
           ))}
         </div>

@@ -21,8 +21,12 @@ import {
   Upload, 
   User,
   Calendar,
-  Loader2
+  Loader2,
+  X
 } from 'lucide-react'
+import FileUploadHandler from './FileUploadHandler'
+import { FileUploadResult } from '@/lib/types/question-driven'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 interface MobileTaskListProps {
   jobId: string
@@ -44,6 +48,7 @@ export default function MobileTaskList({
   const [error, setError] = useState<string | null>(null)
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set())
   const [updatingTasks, setUpdatingTasks] = useState<Set<string>>(new Set())
+  const [uploadDialogOpen, setUploadDialogOpen] = useState<string | null>(null)
 
   useEffect(() => {
     loadTasks()
@@ -178,6 +183,51 @@ export default function MobileTaskList({
         newSet.delete(taskId)
         return newSet
       })
+    }
+  }
+
+  const handleFileUpload = async (taskId: string, results: FileUploadResult[]) => {
+    try {
+      // Filter successful uploads
+      const successfulUploads = results.filter(r => r.success)
+      
+      if (successfulUploads.length === 0) {
+        setError('No files were uploaded successfully')
+        return
+      }
+
+      // In a real implementation, you would save these files to the task
+      // For now, we'll simulate saving the file references
+      const fileData = successfulUploads.map(result => ({
+        url: result.file_url,
+        name: result.file_name,
+        size: result.file_size
+      }))
+
+      // Here you would typically make an API call to save the files to the task
+      // await fetch(`/api/jobs/${jobId}/tasks/${taskId}/files`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ files: fileData })
+      // })
+
+      // Close the upload dialog
+      setUploadDialogOpen(null)
+      
+      // Show success message
+      const fileCount = successfulUploads.length
+      const fileText = fileCount === 1 ? 'file' : 'files'
+      console.log(`Successfully uploaded ${fileCount} ${fileText} for task ${taskId}:`, fileData)
+      
+      // Update task state to show files were uploaded (optional)
+      setTasks(prev => prev.map(t => 
+        t.id === taskId 
+          ? { ...t, files: [...(t.files || []), ...fileData] } 
+          : t
+      ))
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save uploaded files')
     }
   }
 
@@ -363,17 +413,29 @@ export default function MobileTaskList({
                     </Button>
                   )}
                   {task.template?.upload_required && task.status !== 'completed' && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        // TODO: Implement file upload
-                        console.log('File upload for task:', task.id)
-                      }}
+                    <Dialog 
+                      open={uploadDialogOpen === task.id} 
+                      onOpenChange={(open) => setUploadDialogOpen(open ? task.id : null)}
                     >
-                      <Upload className="w-4 h-4 mr-1" />
-                      Upload
-                    </Button>
+                      <DialogTrigger asChild>
+                        <Button size="sm" variant="outline">
+                          <Upload className="w-4 h-4 mr-1" />
+                          Upload
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-lg">
+                        <DialogHeader>
+                          <DialogTitle>Upload Files for Task</DialogTitle>
+                        </DialogHeader>
+                        <FileUploadHandler
+                          acceptedTypes={['image/*', 'application/pdf', '.doc', '.docx']}
+                          maxFileSize={10}
+                          maxFiles={5}
+                          onFilesUploaded={(results) => handleFileUpload(task.id, results)}
+                          onError={(error) => setError(error)}
+                        />
+                      </DialogContent>
+                    </Dialog>
                   )}
                 </div>
 

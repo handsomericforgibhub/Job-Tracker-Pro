@@ -379,22 +379,37 @@ export default function EditJobPage() {
     try {
       console.log(`📝 Answering question ${questionId} with: ${response}`)
       
-      // Update local state first
+      // Use the proper API endpoint for stage responses
+      const apiResponse = await fetch(`/api/jobs/${jobId}/stage-response`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question_id: questionId,
+          response: response,
+          user_id: user?.id
+        })
+      })
+
+      if (!apiResponse.ok) {
+        throw new Error('Failed to save response')
+      }
+
+      const result = await apiResponse.json()
+      console.log('✅ Response saved successfully:', result)
+      
+      // Update local state
       const updatedResponses = { ...questionResponses, [questionId]: response }
       setQuestionResponses(updatedResponses)
 
-      // TODO: Save question response to database
-      // For now, we'll just track in local state
-      
-      // Check if this completes all questions for current stage
-      const completedQuestions = Object.keys(updatedResponses).length
-      
-      console.log(`📊 Progress: ${completedQuestions}/3 questions answered for ${currentStage}`)
-      
-      if (completedQuestions === 3) {
-        console.log('🎉 All questions answered! Progressing to next stage...')
-        // All questions answered - trigger stage progression
-        await progressToNextStage()
+      // Check if the job progressed to next stage
+      if (result.stage_progressed) {
+        console.log('🎉 Job progressed to next stage!')
+        // Refresh the job data to get updated stage
+        await fetchJobData()
+        // Clear question responses since we moved to next stage
+        setQuestionResponses({})
       }
       
     } catch (error) {
@@ -405,63 +420,6 @@ export default function EditJobPage() {
     }
   }
 
-  const progressToNextStage = async () => {
-    try {
-      console.log('🚀 Progressing to next stage...')
-      
-      // Use dynamic stage data from the hook
-      const nextStageName = stageProgression[currentStage]
-      if (nextStageName) {
-        const nextStageId = stageNameToId[nextStageName]
-        
-        if (nextStageId) {
-          console.log(`🔄 Advancing from ${currentStage} to ${nextStageName} (${nextStageId})`)
-          
-          // Update the job's current stage in the database
-          const { data, error } = await supabase
-            .from('jobs')
-            .update({
-              current_stage_id: nextStageId,
-              stage_entered_at: new Date().toISOString()
-            })
-            .eq('id', jobId)
-            .select(`
-              *,
-              current_stage:job_stages!current_stage_id (
-                id,
-                name,
-                color,
-                sequence_order
-              )
-            `)
-            .single()
-
-          if (error) {
-            console.error('❌ Error updating stage in database:', error)
-            throw error
-          }
-
-          console.log('✅ Stage updated in database:', data)
-          
-          // Update local state
-          setCurrentStage(nextStageName)
-          setQuestionResponses({}) // Reset for next stage
-          
-          // Update the job object to reflect new stage
-          if (data) {
-            setJob(data)
-          }
-          
-          console.log(`✅ Advanced to stage: ${nextStageName}`)
-        }
-      }
-      
-    } catch (error) {
-      console.error('❌ Error progressing stage:', error)
-      // Show error to user
-      setError('Failed to progress to next stage. Please try again.')
-    }
-  }
 
   const isQuestionAnswered = (questionId: string) => {
     return questionResponses[questionId] !== undefined

@@ -178,6 +178,90 @@ export default function FileUploadHandler({
     }
   }
 
+  const handleCameraCapture = async () => {
+    try {
+      // Check if camera access is available
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setError('Camera access is not supported on this device')
+        return
+      }
+
+      // Request camera permission and get stream
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { 
+          facingMode: 'environment', // Use back camera if available
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
+      })
+
+      // Create video element to capture frame
+      const video = document.createElement('video')
+      video.srcObject = stream
+      video.play()
+
+      // Wait for video to be ready
+      await new Promise((resolve) => {
+        video.onloadedmetadata = resolve
+      })
+
+      // Create canvas to capture frame
+      const canvas = document.createElement('canvas')
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      const ctx = canvas.getContext('2d')
+
+      if (!ctx) {
+        throw new Error('Failed to get canvas context')
+      }
+
+      // Draw current frame to canvas
+      ctx.drawImage(video, 0, 0)
+
+      // Stop the camera stream
+      stream.getTracks().forEach(track => track.stop())
+
+      // Convert canvas to blob
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          setError('Failed to capture photo')
+          return
+        }
+
+        // Create file from blob
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+        const filename = `camera-photo-${timestamp}.jpg`
+        const file = new File([blob], filename, { type: 'image/jpeg' })
+
+        // Add the captured file to the files list
+        setFiles(prev => [...prev, file])
+        setError(null)
+
+      }, 'image/jpeg', 0.8) // 80% quality
+
+    } catch (err) {
+      console.error('Camera capture error:', err)
+      
+      if (err instanceof Error) {
+        if (err.name === 'NotAllowedError') {
+          setError('Camera permission denied. Please allow camera access and try again.')
+        } else if (err.name === 'NotFoundError') {
+          setError('No camera found on this device')
+        } else if (err.name === 'NotSupportedError') {
+          setError('Camera is not supported on this device')
+        } else {
+          setError('Failed to access camera: ' + err.message)
+        }
+      } else {
+        setError('Failed to capture photo')
+      }
+
+      if (onError) {
+        onError('Camera capture failed')
+      }
+    }
+  }
+
   const getFileIcon = (file: File) => {
     if (file.type.startsWith('image/')) {
       return <Image className="w-4 h-4" />
@@ -321,10 +405,7 @@ export default function FileUploadHandler({
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => {
-              // TODO: Implement camera capture
-              console.log('Camera capture not yet implemented')
-            }}
+            onClick={handleCameraCapture}
           >
             <Camera className="w-4 h-4 mr-2" />
             Take Photo

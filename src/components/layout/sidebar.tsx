@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth-store'
 import { useCompanyContextStore } from '@/stores/company-context-store'
+import { useSiteAdminContextStore } from '@/stores/site-admin-context-store'
 import {
   LayoutDashboard,
   Briefcase,
@@ -17,7 +18,6 @@ import {
   Shield,
   ClipboardList,
   Clock,
-  UserPlus,
   Building,
   ChevronRight,
   X,
@@ -34,7 +34,7 @@ const navigation = [
     name: 'Jobs',
     href: '/dashboard/jobs',
     icon: Briefcase,
-    roles: ['owner', 'foreman', 'worker', 'site_admin'],
+    roles: ['owner', 'foreman', 'worker'],
   },
   {
     name: 'My Work',
@@ -46,49 +46,43 @@ const navigation = [
     name: 'Workers',
     href: '/dashboard/workers',
     icon: Users,
-    roles: ['owner', 'foreman', 'site_admin'],
-  },
-  {
-    name: 'Applications',
-    href: '/dashboard/applications',
-    icon: UserPlus,
-    roles: ['owner', 'foreman', 'site_admin'],
+    roles: ['owner', 'foreman'],
   },
   {
     name: 'Documents',
     href: '/dashboard/documents',
     icon: FileText,
-    roles: ['owner', 'foreman', 'worker', 'site_admin'],
+    roles: ['owner', 'foreman', 'worker'],
   },
   {
     name: 'Time Tracking',
     href: '/dashboard/time',
     icon: Clock,
-    roles: ['owner', 'foreman', 'worker', 'site_admin'],
+    roles: ['owner', 'foreman', 'worker'],
   },
   {
     name: 'Analytics',
     href: '/dashboard/analytics',
     icon: BarChart3,
-    roles: ['owner', 'foreman', 'site_admin'],
+    roles: ['owner', 'foreman'],
   },
   {
     name: 'Accounting',
     href: '/dashboard/accounting',
     icon: CreditCard,
-    roles: ['owner', 'site_admin'],
+    roles: ['owner'],
   },
   {
     name: 'Collaboration',
     href: '/dashboard/collaboration',
     icon: MessageSquare,
-    roles: ['owner', 'foreman', 'worker', 'site_admin'],
+    roles: ['owner', 'foreman', 'worker'],
   },
   {
     name: 'Subscription',
     href: '/dashboard/subscription',
     icon: Settings,
-    roles: ['owner', 'site_admin'],
+    roles: ['owner'],
   },
 ]
 
@@ -108,36 +102,54 @@ const siteAdminNavigation = [
     icon: Shield,
     roles: ['site_admin'],
   },
-  {
-    name: 'All Companies',
-    href: '/dashboard/site-admin/companies',
-    icon: Building,
-    roles: ['site_admin'],
-  },
-  {
-    name: 'All Users',
-    href: '/dashboard/site-admin/users',
-    icon: Users,
-    roles: ['site_admin'],
-  },
-  {
-    name: 'All Jobs',
-    href: '/dashboard/site-admin/jobs',
-    icon: Briefcase,
-    roles: ['site_admin'],
-  },
 ]
 
 export default function Sidebar() {
   const pathname = usePathname()
   const { user } = useAuthStore()
   const { currentCompanyContext, clearCompanyContext } = useCompanyContextStore()
+  const { clearSelection: clearSiteAdminContext } = useSiteAdminContextStore()
 
   if (!user) return null
 
-  const navItems = navigation.filter(item => 
+  // Filter navigation based on role and context
+  let navItems = navigation.filter(item => 
     item.roles.includes(user.role)
   )
+
+  // For site admins, adjust navigation based on company context
+  if (user.role === 'site_admin') {
+    if (currentCompanyContext) {
+      // When in company context, add company-specific tabs
+      const companyContextNavigation = [
+        {
+          name: 'Jobs',
+          href: '/dashboard/jobs',
+          icon: Briefcase,
+          roles: ['site_admin'],
+        },
+        {
+          name: 'Workers',
+          href: '/dashboard/workers',
+          icon: Users,
+          roles: ['site_admin'],
+        },
+        {
+          name: 'Time Tracking',
+          href: '/dashboard/time',
+          icon: Clock,
+          roles: ['site_admin'],
+        },
+        {
+          name: 'Analytics',
+          href: '/dashboard/analytics',
+          icon: BarChart3,
+          roles: ['site_admin'],
+        },
+      ]
+      navItems = navItems.concat(companyContextNavigation)
+    }
+  }
 
   // Add admin navigation for owners and site admins
   let finalNavItems = navItems
@@ -145,12 +157,14 @@ export default function Sidebar() {
   if (user.role === 'owner') {
     finalNavItems = [...navItems, ...adminNavigation]
   } else if (user.role === 'site_admin') {
-    // Site admins get access to all navigation items plus site admin navigation
+    // Site admins get site admin navigation
     finalNavItems = [...navItems, ...siteAdminNavigation]
   }
 
   const handleClearContext = () => {
+    // Clear both context stores to ensure proper synchronization
     clearCompanyContext()
+    clearSiteAdminContext()
   }
 
   return (

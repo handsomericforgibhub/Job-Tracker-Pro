@@ -63,18 +63,16 @@ export default function AdminDashboard() {
       setLoading(true)
       
       // Load platform statistics
-      const [usersResult, companiesResult, jobsResult, applicationsResult] = await Promise.allSettled([
+      const [usersResult, companiesResult, jobsResult] = await Promise.allSettled([
         supabase.from('users').select('id').eq('company_id', user?.company_id),
         supabase.from('companies').select('id'),
-        supabase.from('jobs').select('id, status').eq('company_id', user?.company_id),
-        supabase.from('worker_applications').select('id').eq('status', 'pending')
+        supabase.from('jobs').select('id, status').eq('company_id', user?.company_id)
       ])
 
       // Process results
       const users = usersResult.status === 'fulfilled' ? usersResult.value.data || [] : []
       const companies = companiesResult.status === 'fulfilled' ? companiesResult.value.data || [] : []
       const jobs = jobsResult.status === 'fulfilled' ? jobsResult.value.data || [] : []
-      const applications = applicationsResult.status === 'fulfilled' ? applicationsResult.value.data || [] : []
 
       const activeJobs = jobs.filter(job => job.status === 'active').length
 
@@ -83,7 +81,7 @@ export default function AdminDashboard() {
         totalCompanies: companies.length,
         totalJobs: jobs.length,
         activeJobs,
-        pendingApplications: applications.length,
+        pendingApplications: 0, // Applications feature removed
         systemHealth: 'healthy' // TODO: Implement actual health check
       })
 
@@ -105,14 +103,14 @@ export default function AdminDashboard() {
     }
   }
 
-  // Redirect if not owner
-  if (!user || user.role !== 'owner') {
+  // Redirect if not owner or site admin
+  if (!user || (user.role !== 'owner' && user.role !== 'site_admin')) {
     return (
       <div className="p-6">
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <div className="flex items-center">
             <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
-            <span className="text-red-800">Access denied. Only owners can access the admin dashboard.</span>
+            <span className="text-red-800">Access denied. Only owners and site administrators can access the admin dashboard.</span>
           </div>
         </div>
       </div>
@@ -149,7 +147,7 @@ export default function AdminDashboard() {
       icon: Users,
       href: '/dashboard/admin/user-management',
       color: 'bg-green-500',
-      available: false // TODO: Implement
+      available: true
     },
     {
       title: 'Company Settings',
@@ -165,7 +163,7 @@ export default function AdminDashboard() {
       icon: Database,
       href: '/dashboard/admin/system-settings',
       color: 'bg-orange-500',
-      available: false // TODO: Implement
+      available: true
     },
     {
       title: 'Audit Log',
@@ -275,44 +273,33 @@ export default function AdminDashboard() {
           {adminSections.map((section) => (
             <div
               key={section.title}
-              className={`bg-white rounded-lg shadow p-6 transition-all hover:shadow-lg ${
-                section.available ? 'hover:scale-105 cursor-pointer' : 'opacity-50 cursor-not-allowed'
-              }`}
+              className="bg-white rounded-lg shadow p-6 transition-all hover:shadow-lg hover:scale-105 cursor-pointer"
+              onClick={() => {
+                if (section.available) {
+                  window.location.href = section.href
+                } else {
+                  alert(`${section.title} is coming soon! This feature is planned for a future release.`)
+                }
+              }}
             >
-              {section.available ? (
-                <Link href={section.href}>
-                  <div className="flex items-start">
-                    <div className={`${section.color} rounded-lg p-3 mr-4`}>
-                      <section.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {section.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        {section.description}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              ) : (
-                <div className="flex items-start">
-                  <div className={`${section.color} rounded-lg p-3 mr-4`}>
-                    <section.icon className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {section.title}
-                      <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded ml-2">
+              <div className="flex items-start">
+                <div className={`${section.color} rounded-lg p-3 mr-4`}>
+                  <section.icon className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {section.title}
+                    {!section.available && (
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded ml-2">
                         Coming Soon
                       </span>
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      {section.description}
-                    </p>
-                  </div>
+                    )}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {section.description}
+                  </p>
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>

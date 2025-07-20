@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/stores/auth-store'
+import { useCompanyContextStore } from '@/stores/company-context-store'
 import { TIMEOUTS } from '@/config/timeouts'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -57,6 +58,10 @@ const statusConfig = {
 
 export default function ApplicationsPage() {
   const { user, company } = useAuthStore()
+  const { currentCompanyContext } = useCompanyContextStore()
+  
+  // Get the effective company - for site admins use context, for others use their company
+  const effectiveCompany = user?.role === 'site_admin' ? currentCompanyContext : company
   const [applications, setApplications] = useState<WorkerApplication[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -69,16 +74,16 @@ export default function ApplicationsPage() {
   const [copySuccess, setCopySuccess] = useState(false)
 
   useEffect(() => {
-    if (user && company && (user.role === 'owner' || user.role === 'foreman')) {
+    if (user && effectiveCompany && (user.role === 'owner' || user.role === 'foreman' || user.role === 'site_admin')) {
       fetchApplications()
     }
-  }, [user, company, statusFilter])
+  }, [user, effectiveCompany, statusFilter])
 
   const fetchApplications = async () => {
     try {
       setIsLoading(true)
       const statusParam = statusFilter !== 'all' ? `&status=${statusFilter}` : ''
-      const response = await fetch(`/api/applications/worker?company_id=${company?.id}${statusParam}`)
+      const response = await fetch(`/api/applications/worker?company_id=${effectiveCompany?.id}${statusParam}`)
       
       if (response.ok) {
         const data = await response.json()
@@ -204,10 +209,40 @@ export default function ApplicationsPage() {
     }
   }
 
-  if (!user || (user.role !== 'owner' && user.role !== 'foreman')) {
+  if (!user || (user.role !== 'owner' && user.role !== 'foreman' && user.role !== 'site_admin')) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Access denied. Only owners and foremen can view applications.</p>
+        <p className="text-gray-500">Access denied. Only owners, foremen, and site administrators can view applications.</p>
+      </div>
+    )
+  }
+
+  // Show site admin specific content if they're not in company context
+  if (user.role === 'site_admin' && !currentCompanyContext) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Worker Applications</h1>
+            <p className="text-gray-600">Review and manage worker applications across companies</p>
+          </div>
+        </div>
+        
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <Users className="h-12 w-12 text-blue-600" />
+          </div>
+          <h3 className="text-lg font-medium text-blue-900 mb-2">Select a Company to View Applications</h3>
+          <p className="text-blue-700 mb-4">
+            To see worker applications, navigate to a company from the Companies page and enter its context.
+          </p>
+          <Button 
+            onClick={() => window.location.href = '/dashboard/admin/companies'}
+            className="bg-blue-600 text-white hover:bg-blue-700"
+          >
+            Browse Companies
+          </Button>
+        </div>
       </div>
     )
   }

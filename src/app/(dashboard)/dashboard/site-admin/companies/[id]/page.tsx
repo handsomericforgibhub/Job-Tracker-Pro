@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/auth-store'
 import { useCompanyContextStore } from '@/stores/company-context-store'
+import { useSiteAdminContextStore } from '@/stores/site-admin-context-store'
 import { supabase } from '@/lib/supabase'
 import { CompanyWithStats, SiteAdminUser, SiteAdminJob } from '@/lib/types'
 import { 
@@ -33,6 +34,7 @@ export default function CompanyDetailPage() {
   const router = useRouter()
   const { user } = useAuthStore()
   const { setCompanyContext, currentCompanyContext } = useCompanyContextStore()
+  const { setSelectedCompany, setAvailableCompanies } = useSiteAdminContextStore()
   
   const companyId = params.id as string
   
@@ -145,8 +147,12 @@ export default function CompanyDetailPage() {
     try {
       setSwitching(true)
       
-      // Set the company context
+      // Set the company context in both stores to ensure synchronization
       setCompanyContext(company)
+      
+      // Ensure the site admin store has this company in its available companies list
+      setAvailableCompanies([company])
+      setSelectedCompany(company.id)
       
       // Navigate to the main dashboard (now in company context)
       router.push('/dashboard')

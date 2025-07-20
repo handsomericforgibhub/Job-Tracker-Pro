@@ -37,12 +37,27 @@ export default function UserManagement() {
   const [searchTerm, setSearchTerm] = useState('')
   const [roleFilter, setRoleFilter] = useState<string>('all')
   const [error, setError] = useState<string | null>(null)
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
 
   useEffect(() => {
     if (user?.role === 'owner') {
       loadUsers()
     }
   }, [user])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (openDropdown && !(event.target as Element).closest('.relative')) {
+        setOpenDropdown(null)
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [openDropdown])
 
   const loadUsers = async () => {
     try {
@@ -75,6 +90,57 @@ export default function UserManagement() {
       setError(err instanceof Error ? err.message : 'Failed to load users')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleEditUser = async (userId: string) => {
+    setOpenDropdown(null)
+    // TODO: Navigate to edit user page or open edit modal
+    console.log('Edit user:', userId)
+    alert('Edit user functionality would be implemented here')
+  }
+
+  const handleDeleteUser = async (userId: string) => {
+    setOpenDropdown(null)
+    
+    if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+      return
+    }
+
+    try {
+      const { error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', userId)
+
+      if (error) throw error
+
+      setUsers(prev => prev.filter(u => u.id !== userId))
+      alert('User deleted successfully')
+    } catch (err) {
+      console.error('Error deleting user:', err)
+      alert('Failed to delete user: ' + (err instanceof Error ? err.message : 'Unknown error'))
+    }
+  }
+
+  const handleChangeRole = async (userId: string, newRole: string) => {
+    setOpenDropdown(null)
+    
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ role: newRole })
+        .eq('id', userId)
+
+      if (error) throw error
+
+      setUsers(prev => prev.map(u => 
+        u.id === userId ? { ...u, role: newRole as User['role'] } : u
+      ))
+      alert(`User role updated to ${newRole}`)
+    } catch (err) {
+      console.error('Error updating role:', err)
+      alert('Failed to update role: ' + (err instanceof Error ? err.message : 'Unknown error'))
     }
   }
 
@@ -143,7 +209,13 @@ export default function UserManagement() {
             </div>
           </div>
         </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center">
+        <button 
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+          onClick={() => {
+            // TODO: Navigate to add user page or open add user modal
+            alert('Add User functionality would be implemented here. This would typically open a form to create a new user account.')
+          }}
+        >
           <UserPlus className="h-4 w-4 mr-2" />
           Add User
         </button>
@@ -241,10 +313,51 @@ export default function UserManagement() {
                     </span>
                     
                     <div className="relative">
-                      <button className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100">
+                      <button 
+                        className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
+                        onClick={() => setOpenDropdown(openDropdown === userItem.id ? null : userItem.id)}
+                      >
                         <MoreVertical className="h-4 w-4" />
                       </button>
-                      {/* TODO: Add dropdown menu with actions */}
+                      
+                      {openDropdown === userItem.id && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 py-1 z-10">
+                          <button
+                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleEditUser(userItem.id)}
+                          >
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit User
+                          </button>
+                          
+                          <div className="border-t border-gray-100 my-1" />
+                          
+                          <div className="px-4 py-2 text-xs text-gray-500 font-medium">Change Role</div>
+                          {['owner', 'foreman', 'worker'].map(role => (
+                            <button
+                              key={role}
+                              className={`flex items-center w-full px-6 py-1 text-sm hover:bg-gray-100 ${
+                                userItem.role === role ? 'text-blue-600 font-medium' : 'text-gray-700'
+                              }`}
+                              onClick={() => handleChangeRole(userItem.id, role)}
+                              disabled={userItem.role === role}
+                            >
+                              {userItem.role === role && <Shield className="h-3 w-3 mr-2" />}
+                              {role.charAt(0).toUpperCase() + role.slice(1)}
+                            </button>
+                          ))}
+                          
+                          <div className="border-t border-gray-100 my-1" />
+                          
+                          <button
+                            className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                            onClick={() => handleDeleteUser(userItem.id)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete User
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
