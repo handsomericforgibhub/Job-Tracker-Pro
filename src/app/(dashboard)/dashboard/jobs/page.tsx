@@ -192,23 +192,34 @@ export default function JobsPage() {
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Question-Driven Stage Overview</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {Array.from(new Set(jobs.filter(job => job.current_stage).map(job => job.current_stage.name))).map(stageName => {
-              const count = jobs.filter(job => job.current_stage?.name === stageName).length
-              const stageColor = jobs.find(job => job.current_stage?.name === stageName)?.current_stage?.color || '#6B7280'
-              
-              return (
-                <Card key={stageName} className="border-l-4" style={{ borderLeftColor: stageColor }}>
+            {Array.from(new Set(jobs.filter(job => job.current_stage).map(job => job.current_stage.name)))
+              .map(stageName => {
+                const count = jobs.filter(job => job.current_stage?.name === stageName).length
+                const stageJob = jobs.find(job => job.current_stage?.name === stageName)
+                const stageColor = stageJob?.current_stage?.color || '#6B7280'
+                const stageOrder = stageJob?.current_stage?.sequence_order || 999
+                
+                return {
+                  name: stageName,
+                  count,
+                  color: stageColor,
+                  order: stageOrder
+                }
+              })
+              .sort((a, b) => a.order - b.order) // Sort by pipeline order
+              .map(stage => (
+                <Card key={stage.name} className="border-l-4" style={{ borderLeftColor: stage.color }}>
                   <CardContent className="p-4">
                     <div className="text-center">
-                      <p className="text-xs font-medium text-gray-600 truncate" title={stageName}>
-                        {stageName}
+                      <p className="text-xs font-medium text-gray-600 truncate" title={stage.name}>
+                        {stage.name}
                       </p>
-                      <p className="text-xl font-bold text-gray-900">{count}</p>
+                      <p className="text-xl font-bold text-gray-900">{stage.count}</p>
                     </div>
                   </CardContent>
                 </Card>
-              )
-            })}
+              ))
+            }
           </div>
         </div>
       )}

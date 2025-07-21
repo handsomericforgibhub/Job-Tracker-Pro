@@ -379,16 +379,23 @@ export default function EditJobPage() {
     try {
       console.log(`📝 Answering question ${questionId} with: ${response}`)
       
+      // Get the current session token
+      const session = await supabase.auth.getSession()
+      if (!session.data.session?.access_token) {
+        throw new Error('No valid session found')
+      }
+      
       // Use the proper API endpoint for stage responses
       const apiResponse = await fetch(`/api/jobs/${jobId}/stage-response`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.data.session.access_token}`
         },
         body: JSON.stringify({
           question_id: questionId,
-          response: response,
-          user_id: user?.id
+          response_value: response,
+          response_source: 'web_app'
         })
       })
 
@@ -426,16 +433,23 @@ export default function EditJobPage() {
   }
 
   const isQuestionEnabled = (questionId: string) => {
-    // Question 1 is always enabled
-    if (questionId === 'q1') return true
+    // Get all questions for the current stage ordered by sequence
+    const questions = getQuestionsForStage(currentStage)
+    const currentQuestionIndex = questions.findIndex(q => q.id === questionId)
     
-    // Question 2 requires question 1
-    if (questionId === 'q2') return isQuestionAnswered('q1')
+    if (currentQuestionIndex === -1) return false
     
-    // Question 3 requires questions 1 and 2
-    if (questionId === 'q3') return isQuestionAnswered('q1') && isQuestionAnswered('q2')
+    // First question is always enabled
+    if (currentQuestionIndex === 0) return true
     
-    return false
+    // All previous questions must be answered
+    for (let i = 0; i < currentQuestionIndex; i++) {
+      if (!isQuestionAnswered(questions[i].id)) {
+        return false
+      }
+    }
+    
+    return true
   }
 
   const getQuestionsByStage = (stage: string) => {
@@ -444,7 +458,7 @@ export default function EditJobPage() {
     
     // Convert to the format expected by the component
     return questions.map((question, index) => ({
-      id: `q${question.sequence_order}`,
+      id: question.id, // Use the real database ID instead of artificial q1, q2, etc.
       title: question.question_text.split('?')[0] || `Question ${index + 1}`,
       text: question.question_text
     }))

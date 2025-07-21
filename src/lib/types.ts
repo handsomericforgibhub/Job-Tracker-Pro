@@ -285,6 +285,8 @@ export interface JobStatusHistory {
   notes?: string;
   duration_days: number;
   is_current: boolean;
+  stage_id?: string;
+  stage_name?: string;
 }
 
 export interface JobStatusTimeline {
