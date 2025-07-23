@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Job } from '@/lib/types'
+import { STAGE_DEFINITIONS, STAGE_IDS } from '@/config/stages'
 import { 
   Plus, 
   Calendar, 
@@ -22,6 +23,24 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { GanttChart } from '@/components/gantt/gantt-chart'
+
+// Helper function to assign default stages based on job status
+const getDefaultStageForStatus = (status: string): string => {
+  switch (status) {
+    case 'planning':
+      return STAGE_IDS.LEAD_QUALIFICATION
+    case 'active':
+      return STAGE_IDS.CONSTRUCTION_EXECUTION
+    case 'on_hold':
+      return STAGE_IDS.CLIENT_DECISION
+    case 'completed':
+      return STAGE_IDS.HANDOVER_CLOSE
+    case 'cancelled':
+      return STAGE_IDS.HANDOVER_CLOSE
+    default:
+      return STAGE_IDS.LEAD_QUALIFICATION
+  }
+}
 
 const statusConfig = {
   planning: { 
@@ -62,6 +81,7 @@ export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [refreshKey, setRefreshKey] = useState(0)
 
   // Get the effective company - for site admins use context, for others use their company
   const effectiveCompany = user?.role === 'site_admin' ? currentCompanyContext : company
@@ -74,10 +94,10 @@ export default function JobsPage() {
     }
   }, [user, effectiveCompany, currentCompanyContext])
 
-  const fetchJobs = async () => {
+  const fetchJobs = async (force = false) => {
     try {
       setIsLoading(true)
-      console.log('🔄 Fetching jobs for company:', effectiveCompany?.id)
+      console.log('🔄 Fetching jobs for company:', effectiveCompany?.id, force ? '(forced refresh)' : '')
 
       const { data, error } = await supabase
         .from('jobs')
@@ -93,7 +113,7 @@ export default function JobsPage() {
           )
         `)
         .eq('company_id', effectiveCompany?.id)
-        .order('created_at', { ascending: false })
+        .order('updated_at', { ascending: false }) // Order by updated_at to get recently modified jobs first
 
       if (error) {
         console.error('❌ Error fetching jobs:', error)
@@ -103,7 +123,50 @@ export default function JobsPage() {
 
       console.log('✅ Jobs loaded:', data)
       console.log('📊 Jobs data structure:', data?.[0]) // Log first job structure
-      setJobs(data || [])
+      
+      // Debug specific job for bug report
+      const testJob = data?.find(job => job.title?.includes('Test Job 2 20250721'))
+      if (testJob) {
+        console.log('🔍 Test Job 2 20250721 raw data:', {
+          id: testJob.id,
+          title: testJob.title,
+          current_stage_id: testJob.current_stage_id,
+          current_stage: testJob.current_stage,
+          status: testJob.status,
+          stage_entered_at: testJob.stage_entered_at,
+          updated_at: testJob.updated_at
+        })
+      }
+      
+      // Auto-assign stages to jobs that don't have current_stage
+      const jobsWithStages = (data || []).map(job => {
+        // If job doesn't have current_stage, auto-assign based on status
+        if (!job.current_stage && job.status) {
+          const defaultStageId = getDefaultStageForStatus(job.status)
+          const defaultStage = STAGE_DEFINITIONS[defaultStageId]
+          if (defaultStage) {
+            return {
+              ...job,
+              current_stage: defaultStage
+            }
+          }
+        }
+        return job
+      })
+      
+      console.log('📊 Jobs with auto-assigned stages:', jobsWithStages.filter(j => j.current_stage).length, 'out of', jobsWithStages.length)
+      console.log('📊 Jobs current stages:', jobsWithStages.map(j => ({
+        title: j.title,
+        current_stage_id: j.current_stage_id,
+        current_stage_name: j.current_stage?.name,
+        status: j.status
+      })))
+      
+      setJobs(jobsWithStages)
+      if (force) {
+        setRefreshKey(prev => prev + 1) // Force component refreshes
+        console.log('🔄 Forced refresh triggered, refreshKey updated')
+      }
     } catch (err) {
       console.error('❌ Exception fetching jobs:', err)
       setError('Failed to load jobs')
@@ -174,52 +237,92 @@ export default function JobsPage() {
           </p>
         </div>
         
-        {(user.role === 'owner' || user.role === 'foreman' || (user.role === 'site_admin' && currentCompanyContext)) && (
-          <Link href="/dashboard/jobs/new">
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              New Job
-            </Button>
-          </Link>
-        )}
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => fetchJobs(true)}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Refreshing...' : 'Refresh Data'}
+          </Button>
+          {(user.role === 'owner' || user.role === 'foreman' || (user.role === 'site_admin' && currentCompanyContext)) && (
+            <Link href="/dashboard/jobs/new">
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                New Job
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Gantt Chart */}
-      <GanttChart jobs={jobs} className="mb-6" />
+      <GanttChart key={`gantt-${refreshKey}`} jobs={jobs} className="mb-6" />
 
       {/* Stage-based Stats for Question-Driven Jobs */}
       {jobs.some(job => job.current_stage) && (
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Question-Driven Stage Overview</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Stage Overview</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {Array.from(new Set(jobs.filter(job => job.current_stage).map(job => job.current_stage.name)))
-              .map(stageName => {
-                const count = jobs.filter(job => job.current_stage?.name === stageName).length
-                const stageJob = jobs.find(job => job.current_stage?.name === stageName)
-                const stageColor = stageJob?.current_stage?.color || '#6B7280'
-                const stageOrder = stageJob?.current_stage?.sequence_order || 999
-                
-                return {
-                  name: stageName,
-                  count,
-                  color: stageColor,
-                  order: stageOrder
+            {(() => {
+              // Create stage overview using actual database colors from jobs
+              const stageGroups = new Map<string, {
+                id: string;
+                name: string;
+                color: string;
+                count: number;
+                sequence_order: number;
+                jobs: Job[];
+              }>()
+              
+              // Group jobs by their actual current stage
+              jobs.forEach(job => {
+                if (job.current_stage) {
+                  const stageId = job.current_stage.id
+                  if (!stageGroups.has(stageId)) {
+                    stageGroups.set(stageId, {
+                      id: job.current_stage.id,
+                      name: job.current_stage.name,
+                      color: job.current_stage.color, // Use database color, not config color
+                      count: 0,
+                      sequence_order: job.current_stage.sequence_order || 0,
+                      jobs: []
+                    })
+                  }
+                  const group = stageGroups.get(stageId)!
+                  group.count++
+                  group.jobs.push(job)
                 }
               })
-              .sort((a, b) => a.order - b.order) // Sort by pipeline order
-              .map(stage => (
-                <Card key={stage.name} className="border-l-4" style={{ borderLeftColor: stage.color }}>
-                  <CardContent className="p-4">
-                    <div className="text-center">
-                      <p className="text-xs font-medium text-gray-600 truncate" title={stage.name}>
-                        {stage.name}
-                      </p>
-                      <p className="text-xl font-bold text-gray-900">{stage.count}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            }
+              
+              // Debug logging for stage overview with database colors
+              stageGroups.forEach((group, stageId) => {
+                console.log(`✅ Stage "${group.name}" (id: ${stageId}): ${group.count} jobs using DATABASE color: ${group.color}`, 
+                  group.jobs.map(j => ({ 
+                    title: j.title, 
+                    current_stage_id: j.current_stage_id,
+                    current_stage_name: j.current_stage?.name,
+                    database_color: j.current_stage?.color
+                  }))
+                )
+              })
+              
+              // Convert to array and sort by sequence order
+              return Array.from(stageGroups.values())
+                .sort((a, b) => a.sequence_order - b.sequence_order)
+                .map(stage => (
+                  <Card key={stage.id} className="border-l-4" style={{ borderLeftColor: stage.color }}>
+                    <CardContent className="p-4">
+                      <div className="text-center">
+                        <p className="text-xs font-medium text-gray-600 truncate" title={stage.name}>
+                          {stage.name}
+                        </p>
+                        <p className="text-xl font-bold text-gray-900">{stage.count}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+            })()}
           </div>
         </div>
       )}

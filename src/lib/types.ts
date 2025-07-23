@@ -260,6 +260,12 @@ export interface Job {
   project_stage_id?: string;
   is_standalone: boolean; // true for jobs not part of project structure
   
+  // Question-driven stage system
+  current_stage_id?: string;
+  stage_entered_at?: string;
+  job_type?: string;
+  mobile_optimized?: boolean;
+  
   company_id: string;
   created_by: string;
   created_at: string;
@@ -273,6 +279,17 @@ export interface Job {
   };
   project?: Project;
   project_stage?: ProjectStage;
+  current_stage?: {
+    id: string;
+    name: string;
+    description?: string;
+    color: string;
+    sequence_order: number;
+    maps_to_status: JobStatus;
+    stage_type: string;
+    min_duration_hours: number;
+    max_duration_hours?: number;
+  };
 }
 
 export interface JobStatusHistory {

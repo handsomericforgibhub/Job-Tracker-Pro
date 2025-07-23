@@ -1,11 +1,13 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Job, JobStatusHistory, JobStatusTimeline } from '@/lib/types'
 import { format, addDays, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, isWithinInterval } from 'date-fns'
 import { LIMITS } from '@/config/timeouts'
-import { STAGE_COLORS, STAGE_DEFINITIONS } from '@/config/stages'
+import { STAGE_COLORS, STAGE_DEFINITIONS, STAGE_IDS } from '@/config/stages'
+import { supabase } from '@/lib/supabase'
+import { StageAuditLog } from '@/lib/types/question-driven'
 
 interface GanttChartProps {
   jobs: Job[]
@@ -35,11 +37,11 @@ interface GanttTask {
 }
 
 const statusColors = {
-  planning: '#3B82F6', // blue
-  active: '#10B981', // green
-  on_hold: '#F59E0B', // yellow/orange
-  completed: '#6B7280', // gray
-  cancelled: '#EF4444', // red
+  planning: '#3B82F6', // blue - fallback for non-stage jobs
+  active: '#10B981', // green - fallback for non-stage jobs
+  on_hold: '#F59E0B', // yellow/orange - fallback for non-stage jobs
+  completed: '#6B7280', // gray - fallback for non-stage jobs
+  cancelled: '#EF4444', // red - fallback for non-stage jobs
 }
 
 const statusLabels = {
@@ -48,6 +50,24 @@ const statusLabels = {
   on_hold: 'On Hold', 
   completed: 'Completed',
   cancelled: 'Cancelled',
+}
+
+// Helper function to assign default stages based on job status
+const getDefaultStageForStatus = (status: string): string => {
+  switch (status) {
+    case 'planning':
+      return STAGE_IDS.LEAD_QUALIFICATION
+    case 'active':
+      return STAGE_IDS.CONSTRUCTION_EXECUTION
+    case 'on_hold':
+      return STAGE_IDS.CLIENT_DECISION
+    case 'completed':
+      return STAGE_IDS.HANDOVER_CLOSE
+    case 'cancelled':
+      return STAGE_IDS.HANDOVER_CLOSE
+    default:
+      return STAGE_IDS.LEAD_QUALIFICATION
+  }
 }
 
 // Utility function to calculate completion status
@@ -78,10 +98,195 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
   const [viewEndDate, setViewEndDate] = useState<Date>(addDays(new Date(), 90))
   const [timelineScale, setTimelineScale] = useState<'day' | 'week' | 'month'>('day')
   const [statusHistories, setStatusHistories] = useState<Record<string, JobStatusHistory[]>>({})
+  const [isLoadingHistories, setIsLoadingHistories] = useState<boolean>(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  // Debug logging
-  console.log('📊 GanttChart received jobs:', jobs.length, jobs.map(j => ({ 
+  // Function to fetch real status history data from the API
+  const fetchStatusHistories = useCallback(async (jobIds: string[]) => {
+    if (jobIds.length === 0) return {}
+
+    setIsLoadingHistories(true)
+    console.log('📊 Fetching real status histories for jobs:', jobIds)
+    
+    try {
+      // Get auth token from the shared supabase client
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session?.access_token) {
+        console.warn('⚠️ No auth token found, falling back to simulated data')
+        return {}
+      }
+
+      const histories: Record<string, JobStatusHistory[]> = {}
+      
+      // Fetch status history for each job concurrently
+      const fetchPromises = jobIds.map(async (jobId) => {
+        try {
+          console.log(`🔄 Fetching status history for job ${jobId}...`)
+          const response = await fetch(`/api/jobs/${jobId}/audit-history`, {
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`,
+              'Content-Type': 'application/json'
+            }
+          })
+
+          if (!response.ok) {
+            console.warn(`⚠️ Failed to fetch history for job ${jobId}:`, response.status, await response.text())
+            return null
+          }
+
+          const auditResponse = await response.json()
+          console.log(`✅ Received audit history for job ${jobId}:`, auditResponse)
+          
+          // The audit history API returns { success: true, data: StageAuditLog[] }
+          if (auditResponse.success && auditResponse.data && auditResponse.data.length > 0) {
+            const auditLog = auditResponse.data
+            console.log(`📊 Processing ${auditLog.length} audit entries for job ${jobId}`)
+            
+            // Convert audit log entries to JobStatusHistory format
+            const jobHistory: JobStatusHistory[] = []
+            
+            // Add initial stage entry if there was a from_stage in the first transition
+            if (auditLog.length > 0 && auditLog[0].from_stage) {
+              const firstEntry = auditLog[0]
+              const firstTransitionDate = new Date(firstEntry.created_at)
+              const jobCreatedAt = new Date(firstEntry.created_at) // Approximate job start as first transition
+              
+              const initialDuration = Math.ceil((firstTransitionDate.getTime() - jobCreatedAt.getTime()) / (1000 * 60 * 60 * 24)) || 1
+              
+              jobHistory.push({
+                id: `initial-${jobId}`,
+                job_id: jobId,
+                status: firstEntry.from_stage.maps_to_status,
+                changed_at: jobCreatedAt.toISOString(),
+                changed_by: firstEntry.triggered_by,
+                changed_by_name: 'Initial',
+                duration_days: initialDuration,
+                is_current: false,
+                stage_id: firstEntry.from_stage.id,
+                stage_name: firstEntry.from_stage.name
+              })
+              
+              console.log(`📝 Added initial stage: ${firstEntry.from_stage.name}`)
+            }
+            
+            // Add entries for each stage transition
+            for (let i = 0; i < auditLog.length; i++) {
+              const entry = auditLog[i]
+              const nextEntry = auditLog[i + 1]
+              
+              if (entry.to_stage) {
+                // Calculate duration to next stage
+                let durationDays = 0
+                if (nextEntry) {
+                  const currentDate = new Date(entry.created_at)
+                  const nextDate = new Date(nextEntry.created_at)
+                  durationDays = Math.ceil((nextDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
+                } else {
+                  // For the current stage, duration is from transition to now
+                  const currentDate = new Date(entry.created_at)
+                  const now = new Date()
+                  durationDays = Math.ceil((now.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)) || 1
+                }
+                
+                jobHistory.push({
+                  id: entry.id,
+                  job_id: entry.job_id,
+                  status: entry.to_stage.maps_to_status,
+                  changed_at: entry.created_at,
+                  changed_by: entry.triggered_by,
+                  changed_by_name: entry.triggered_by_user?.full_name || 'System',
+                  duration_days: durationDays,
+                  is_current: i === auditLog.length - 1,
+                  stage_id: entry.to_stage.id,
+                  stage_name: entry.to_stage.name
+                })
+                
+                console.log(`📝 Added stage transition: ${entry.to_stage.name} (${durationDays} days)`)
+              }
+            }
+            
+            if (jobHistory.length > 0) {
+              histories[jobId] = jobHistory
+              console.log(`✅ Converted ${jobHistory.length} audit entries to history for job ${jobId}`)
+            } else {
+              console.log(`📊 No valid stage transitions found in audit log for job ${jobId}`)
+            }
+          } else {
+            console.log(`📄 No audit history found for job ${jobId}, will use fallback`)
+          }
+          
+          return { jobId, success: true }
+        } catch (error) {
+          console.error(`❌ Error fetching history for job ${jobId}:`, error)
+          return { jobId, success: false, error }
+        }
+      })
+
+      await Promise.allSettled(fetchPromises)
+      console.log(`📊 Successfully fetched histories for ${Object.keys(histories).length}/${jobIds.length} jobs`)
+      
+      return histories
+    } catch (error) {
+      console.error('❌ Error in fetchStatusHistories:', error)
+      return {}
+    } finally {
+      setIsLoadingHistories(false)
+    }
+  }, [])
+
+  // Memoize jobs with stages to prevent infinite re-renders
+  const jobsWithStages = useMemo(() => {
+    return jobs.map(job => {
+      // If job doesn't have current_stage, auto-assign based on status
+      if (!job.current_stage && job.status) {
+        const defaultStageId = getDefaultStageForStatus(job.status)
+        const defaultStage = STAGE_DEFINITIONS[defaultStageId]
+        if (defaultStage) {
+          return {
+            ...job,
+            current_stage: defaultStage
+          }
+        }
+      }
+      return job
+    })
+  }, [jobs])
+
+  // Function to refresh status histories (useful after stage transitions)
+  const refreshStatusHistories = useCallback(() => {
+    if (!jobsWithStages || jobsWithStages.length === 0) return
+    
+    const jobIds = jobsWithStages.map(job => job.id)
+    if (jobIds.length > 0) {
+      console.log('🔄 Manually refreshing status histories...')
+      fetchStatusHistories(jobIds).then(fetchedHistories => {
+        const completeHistories: Record<string, JobStatusHistory[]> = {}
+        
+        for (const job of jobsWithStages) {
+          if (fetchedHistories[job.id] && fetchedHistories[job.id].length > 0) {
+            completeHistories[job.id] = fetchedHistories[job.id]
+          } else {
+            completeHistories[job.id] = [{
+              id: `fallback-${job.id}`,
+              job_id: job.id,
+              status: job.status,
+              changed_at: job.start_date || job.created_at,
+              changed_by: job.created_by,
+              changed_by_name: 'System',
+              duration_days: 0,
+              is_current: true,
+              stage_id: job.current_stage?.id || null,
+              stage_name: job.current_stage?.name || null
+            }]
+          }
+        }
+        
+        setStatusHistories(completeHistories)
+      })
+    }
+  }, [jobsWithStages, fetchStatusHistories])
+  
+  console.log('📊 GanttChart processed jobs:', jobsWithStages.length, jobsWithStages.map(j => ({ 
     id: j.id, 
     title: j.title, 
     status: j.status, 
@@ -94,73 +299,72 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
     } : null
   })))
 
-  // Fetch or simulate stage progression history for jobs
-  const fetchStatusHistories = async () => {
-    const histories: Record<string, JobStatusHistory[]> = {}
+  // Effect to fetch real status histories when jobs change
+  useEffect(() => {
+    if (!jobsWithStages || jobsWithStages.length === 0) return
     
-    // Create realistic stage progression histories for jobs
-    for (const job of jobs) {
-      console.log(`📊 Creating stage progression for job: ${job.title} (stage: ${job.current_stage?.name})`)
-      
-      // If job has current_stage, simulate stage progression history
-      if (job.current_stage) {
-        const startDate = new Date(job.start_date || job.created_at)
-        const currentStageOrder = job.current_stage.sequence_order
-        const progressionHistory: JobStatusHistory[] = []
+    const jobIds = jobsWithStages.map(job => job.id)
+    
+    if (jobIds.length > 0) {
+      fetchStatusHistories(jobIds).then(fetchedHistories => {
+        // Merge fetched histories with fallbacks for jobs without history
+        const completeHistories: Record<string, JobStatusHistory[]> = {}
         
-        // Create entries for all stages up to current stage
-        for (let stageOrder = 1; stageOrder <= currentStageOrder; stageOrder++) {
-          const stageDefinition = Object.values(STAGE_DEFINITIONS).find(s => s.sequence_order === stageOrder)
-          if (stageDefinition) {
-            // Calculate dates for stage progression (simulate realistic timing)
-            const daysFromStart = (stageOrder - 1) * 7 // Each stage takes ~1 week
-            const stageStartDate = addDays(startDate, daysFromStart)
+        for (const job of jobsWithStages) {
+          if (fetchedHistories[job.id] && fetchedHistories[job.id].length > 0) {
+            // Use real fetched history
+            completeHistories[job.id] = fetchedHistories[job.id]
+            console.log(`✅ Using real history for job: ${job.title} (${fetchedHistories[job.id].length} entries)`)
             
-            progressionHistory.push({
-              id: `stage-${job.id}-${stageOrder}`,
+            // Debug Test Job 2 history specifically
+            if (job.title?.includes('Test Job 2 20250721')) {
+              console.log(`🔍 Test Job 2 history details:`, fetchedHistories[job.id])
+            }
+          } else {
+            // Create fallback history for jobs without stage progression
+            console.log(`📄 Creating fallback history for job: ${job.title} (no audit log data)`)
+            completeHistories[job.id] = [{
+              id: `fallback-${job.id}`,
               job_id: job.id,
-              status: stageDefinition.maps_to_status,
-              changed_at: stageStartDate.toISOString(),
+              status: job.status,
+              changed_at: job.start_date || job.created_at,
               changed_by: job.created_by,
               changed_by_name: 'System',
-              duration_days: 7,
-              is_current: stageOrder === currentStageOrder,
-              stage_id: stageDefinition.id,
-              stage_name: stageDefinition.name
-            })
+              duration_days: 0,
+              is_current: true,
+              stage_id: job.current_stage?.id || null,
+              stage_name: job.current_stage?.name || null
+            }]
           }
         }
         
-        histories[job.id] = progressionHistory
-      } else {
-        // Fallback for jobs without stages
-        histories[job.id] = [{
-          id: `fallback-${job.id}`,
-          job_id: job.id,
-          status: job.status,
-          changed_at: job.start_date || job.created_at,
-          changed_by: job.created_by,
-          changed_by_name: 'System',
-          duration_days: 0,
-          is_current: true
-        }]
-      }
+        setStatusHistories(completeHistories)
+        console.log('📊 Status histories updated:', Object.keys(completeHistories).length, 'jobs')
+      })
     }
-    
-    console.log('📊 Stage progression histories created:', Object.keys(histories).length, 'jobs')
-    setStatusHistories(histories)
-  }
+  }, [jobsWithStages, fetchStatusHistories])
 
   // Create stage-based segments for a job based on its progression history
   const createStatusSegments = (job: Job, history: JobStatusHistory[]): StatusSegment[] => {
+    // Debug Test Job 2 specifically
+    if (job.title?.includes('Test Job 2 20250721')) {
+      console.log(`🔍 Creating segments for Test Job 2:`, {
+        job_title: job.title,
+        current_stage: job.current_stage?.name,
+        history_length: history?.length || 0,
+        history: history
+      })
+    }
     if (!history || history.length === 0) {
       // Fallback to current status
       const startDate = job.start_date ? new Date(job.start_date) : new Date()
       const endDate = job.end_date ? new Date(job.end_date) : addDays(startDate, 30)
       
+      // Use stage color if available, otherwise fallback to status color
+      const fallbackColor = job.current_stage?.color || statusColors[job.status as keyof typeof statusColors] || '#6B7280'
       return [{
         status: job.status,
-        color: job.current_stage?.color || statusColors[job.status as keyof typeof statusColors] || '#6B7280',
+        color: fallbackColor,
         startDate,
         endDate,
         duration: differenceInDays(endDate, startDate),
@@ -173,6 +377,16 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
     const jobStartDate = job.start_date ? new Date(job.start_date) : new Date()
     const jobEndDate = job.end_date ? new Date(job.end_date) : addDays(jobStartDate, 30)
     const today = new Date()
+
+    console.log(`📊 Creating segments for job "${job.title}" with ${history.length} history entries:`)
+    console.log(`📊 Job dates: start=${job.start_date}, end=${job.end_date}`)
+    console.log(`📊 History entries:`, history.map((h, i) => ({
+      index: i,
+      stage_name: h.stage_name,
+      status: h.status,
+      changed_at: h.changed_at,
+      is_current: h.is_current
+    })))
 
     for (let i = 0; i < history.length; i++) {
       const currentStage = history[i]
@@ -190,22 +404,62 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
       // Determine segment end date
       let segmentEndDate: Date
       if (nextStage) {
+        // Previous stages end exactly when the next stage begins
         segmentEndDate = new Date(nextStage.changed_at)
       } else {
-        // Last segment (current stage) extends to today or job end date
+        // Last segment (current stage) - handle carefully to avoid overlap
         if (job.status === 'completed' || job.status === 'cancelled') {
           segmentEndDate = jobEndDate
         } else {
+          // For active jobs, current stage extends to today (but not beyond job end date)
           segmentEndDate = today < jobEndDate ? today : jobEndDate
         }
       }
 
+      console.log(`📊 Segment ${i}: "${currentStage.stage_name}" from ${format(segmentStartDate, 'MMM dd')} to ${format(segmentEndDate, 'MMM dd')}`)
+
       // Only add segments within the job's timeline
       if (segmentStartDate <= jobEndDate && segmentEndDate >= jobStartDate) {
-        const segmentColor = stageDefinition?.color || 
-                           STAGE_COLORS[currentStage.stage_id as keyof typeof STAGE_COLORS] || 
-                           statusColors[currentStage.status as keyof typeof statusColors] || 
-                           '#6B7280'
+        // Priority: 1. Database stage color from job, 2. Database stage color from audit, 3. Config fallback, 4. Status color
+        let segmentColor = '#6B7280' // Default fallback
+        
+        // PRIORITY 1: If this is the current stage, use job.current_stage.color (database authoritative)
+        if (currentStage.is_current && job.current_stage?.color) {
+          segmentColor = job.current_stage.color
+          console.log(`🎨 Using current stage color from job: ${segmentColor} for "${currentStage.stage_name}"`)  
+        }
+        // PRIORITY 2: If we have stage_id from audit log, try to find matching job with that stage
+        else if (currentStage.stage_id) {
+          const jobWithMatchingStage = jobsWithStages.find(j => j.current_stage?.id === currentStage.stage_id)
+          if (jobWithMatchingStage?.current_stage?.color) {
+            segmentColor = jobWithMatchingStage.current_stage.color
+            console.log(`🎨 Using database color from matching job: ${segmentColor} for "${currentStage.stage_name}"`)  
+          }
+          // PRIORITY 3: Fallback to hardcoded config colors only if no database color found
+          else if (STAGE_COLORS[currentStage.stage_id as keyof typeof STAGE_COLORS]) {
+            segmentColor = STAGE_COLORS[currentStage.stage_id as keyof typeof STAGE_COLORS]
+            console.log(`🎨 Using config fallback color: ${segmentColor} for "${currentStage.stage_name}"`)  
+          }
+          else if (stageDefinition?.color) {
+            segmentColor = stageDefinition.color
+            console.log(`🎨 Using stage definition color: ${segmentColor} for "${currentStage.stage_name}"`)  
+          }
+        }
+        // PRIORITY 4: Try to find by stage name in definitions
+        else if (currentStage.stage_name) {
+          const stageByName = Object.values(STAGE_DEFINITIONS).find(s => s.name === currentStage.stage_name)
+          if (stageByName) {
+            segmentColor = stageByName.color
+            console.log(`🎨 Using stage name lookup color: ${segmentColor} for "${currentStage.stage_name}"`)  
+          }
+        }
+        // PRIORITY 5: Final fallback to status colors
+        else if (statusColors[currentStage.status as keyof typeof statusColors]) {
+          segmentColor = statusColors[currentStage.status as keyof typeof statusColors]
+          console.log(`🎨 Using status fallback color: ${segmentColor} for "${currentStage.stage_name}"`)  
+        }
+        
+        console.log(`🎨 Segment color for "${currentStage.stage_name || currentStage.status}": ${segmentColor}`)
         
         segments.push({
           status: currentStage.status,
@@ -219,33 +473,22 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
       }
     }
 
-    return segments.length > 0 ? segments : [{
-      status: job.status,
-      color: job.current_stage?.color || statusColors[job.status as keyof typeof statusColors] || '#6B7280',
-      startDate: jobStartDate,
-      endDate: jobEndDate,
-      duration: differenceInDays(jobEndDate, jobStartDate),
-      stageName: job.current_stage?.name,
-      stageId: job.current_stage?.id
-    }]
-  }
-
-  useEffect(() => {
-    fetchStatusHistories()
-  }, [jobs])
-
-  // Add a refresh function that can be called when job status changes
-  const refreshStatusHistories = () => {
-    fetchStatusHistories()
-  }
-
-  // Refresh status histories when jobs change (including status updates)
-  useEffect(() => {
-    const jobStatuses = jobs.map(job => `${job.id}-${job.status}-${job.updated_at}`).join(',')
-    if (jobStatuses) {
-      fetchStatusHistories()
+    // Final fallback if no segments were created
+    if (segments.length === 0) {
+      const finalFallbackColor = job.current_stage?.color || statusColors[job.status as keyof typeof statusColors] || '#6B7280'
+      return [{
+        status: job.status,
+        color: finalFallbackColor,
+        startDate: jobStartDate,
+        endDate: jobEndDate,
+        duration: differenceInDays(jobEndDate, jobStartDate),
+        stageName: job.current_stage?.name,
+        stageId: job.current_stage?.id
+      }]
     }
-  }, [jobs.map(job => `${job.id}-${job.status}-${job.updated_at}`).join(',')])
+    
+    return segments
+  }
 
   useEffect(() => {
     if (Object.keys(statusHistories).length === 0) return
@@ -253,7 +496,7 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
     // Filter jobs that shouldn't appear in Gantt (completed/cancelled > 1 month ago)
     const oneMonthAgo = addDays(new Date(), -30)
     
-    const filteredJobs = jobs.filter(job => {
+    const filteredJobs = jobsWithStages.filter(job => {
       if (job.status === 'completed' || job.status === 'cancelled') {
         const endDate = job.end_date ? new Date(job.end_date) : new Date()
         return endDate >= oneMonthAgo
@@ -292,8 +535,9 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
         }
       }
 
+      // Use stage color as priority, fallback to status colors for non-stage jobs
       const taskColor = job.current_stage?.color || statusColors[job.status as keyof typeof statusColors] || '#6B7280'
-      console.log(`🎨 Task color for "${job.title}": ${taskColor} (stage: ${job.current_stage?.color}, status: ${statusColors[job.status as keyof typeof statusColors]})`)
+      console.log(`🎨 Task color for "${job.title}": ${taskColor} (stage: ${job.current_stage?.name} = ${job.current_stage?.color}, status: ${job.status} = ${statusColors[job.status as keyof typeof statusColors]})`)
 
       return {
         id: job.id,
@@ -318,7 +562,7 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
       setViewStartDate(startOfMonth(addDays(earliestStart, -30)))
       setViewEndDate(endOfMonth(addDays(latestEnd, 30)))
     }
-  }, [jobs, statusHistories])
+  }, [jobsWithStages, statusHistories])
 
   const generateTimeline = () => {
     const timeline = []
@@ -433,9 +677,17 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
             <CardTitle>Project Timeline</CardTitle>
             <p className="text-sm text-gray-600 mt-1">
               {tasks.length} jobs displayed • Jobs completed/cancelled over 30 days ago are hidden
+              {isLoadingHistories && <span className="ml-2 text-blue-600">• Loading stage histories...</span>}
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <button 
+              onClick={refreshStatusHistories}
+              className="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50"
+              disabled={isLoadingHistories}
+            >
+              {isLoadingHistories ? 'Refreshing...' : 'Refresh'}
+            </button>
             <button 
               onClick={() => {
                 const todayIndex = timeline.findIndex(item => 
@@ -466,30 +718,64 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
         <div className="relative">
           {/* Legend */}
           <div className="flex flex-wrap items-center gap-4 px-4 py-2 bg-gray-50 border-b text-xs">
-            {/* Show all stages that appear in the timeline with proper colors */}
-            {jobs.some(job => job.current_stage) ? (
-              // Get all unique stages from jobs and sort by sequence order
-              Array.from(new Set(jobs.filter(job => job.current_stage).map(job => job.current_stage!.id)))
-                .map(stageId => {
-                  const stageDefinition = STAGE_DEFINITIONS[stageId]
-                  return stageDefinition ? {
-                    id: stageId,
-                    name: stageDefinition.name,
-                    color: stageDefinition.color,
-                    order: stageDefinition.sequence_order
-                  } : null
+            {/* Show all 12 stages if any jobs use stages, otherwise show status colors */}
+            {jobsWithStages.some(job => job.current_stage) ? (
+              // Show stages using actual database colors from jobs
+              (() => {
+                // Get unique stages from actual jobs with their database colors
+                const uniqueStages = new Map<string, { id: string; name: string; color: string; sequence_order: number }>()
+                
+                jobsWithStages.forEach(job => {
+                  if (job.current_stage) {
+                    uniqueStages.set(job.current_stage.id, {
+                      id: job.current_stage.id,
+                      name: job.current_stage.name,
+                      color: job.current_stage.color,
+                      sequence_order: job.current_stage.sequence_order || 0
+                    })
+                  }
                 })
-                .filter(Boolean)
-                .sort((a, b) => a!.order - b!.order)
-                .map((stage) => (
-                  <div key={stage!.id} className="flex items-center gap-1">
-                    <div 
-                      className="w-3 h-3 rounded" 
-                      style={{ backgroundColor: stage!.color }}
-                    />
-                    <span>{stage!.name}</span>
-                  </div>
-                ))
+                
+                // Add any missing stages from history with database colors
+                Object.values(statusHistories).forEach(history => {
+                  history.forEach(h => {
+                    if (h.stage_id && h.stage_name && !uniqueStages.has(h.stage_id)) {
+                      // For stages in history, try to get color from job data first, fallback to config
+                      let stageColor = '#6B7280'
+                      const jobWithThisStage = jobsWithStages.find(j => 
+                        j.current_stage?.id === h.stage_id || 
+                        statusHistories[j.id]?.some(sh => sh.stage_id === h.stage_id)
+                      )
+                      if (jobWithThisStage?.current_stage?.id === h.stage_id) {
+                        stageColor = jobWithThisStage.current_stage.color
+                      } else {
+                        // Fallback to hardcoded config only if no job data available
+                        stageColor = STAGE_DEFINITIONS[h.stage_id]?.color || '#6B7280'
+                      }
+                      
+                      uniqueStages.set(h.stage_id, {
+                        id: h.stage_id,
+                        name: h.stage_name,
+                        color: stageColor,
+                        sequence_order: STAGE_DEFINITIONS[h.stage_id]?.sequence_order || 0
+                      })
+                    }
+                  })
+                })
+                
+                // Sort by sequence order and render
+                return Array.from(uniqueStages.values())
+                  .sort((a, b) => a.sequence_order - b.sequence_order)
+                  .map((stage) => (
+                    <div key={stage.id} className="flex items-center gap-1">
+                      <div 
+                        className="w-3 h-3 rounded" 
+                        style={{ backgroundColor: stage.color }}
+                      />
+                      <span>{stage.name}</span>
+                    </div>
+                  ))
+              })()
             ) : (
               /* Show traditional status labels when no jobs use stages */
               Object.entries(statusColors).map(([status, color]) => (
@@ -549,7 +835,7 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
                 <div className="overflow-y-auto" style={{ height: `${dynamicHeight - headerHeight}px` }}>
                   {tasks.map((task) => {
                     // Find the corresponding job to get the completion status and foreman
-                    const job = jobs.find(j => j.id === task.id)
+                    const job = jobsWithStages.find(j => j.id === task.id)
                     const completionStatus = job ? calculateCompletionStatus(job) : null
                     const foremanName = job?.foreman?.full_name || 'Unassigned'
                     
@@ -714,7 +1000,7 @@ export function GanttChart({ jobs, className }: GanttChartProps) {
                                     borderRadius: segmentIndex === 0 ? '4px 0 0 4px' : 
                                                segmentIndex === task.statusSegments.length - 1 ? '0 4px 4px 0' : '0'
                                   }}
-                                  title={`${segment.stageName || statusLabels[segment.status as keyof typeof statusLabels]}\nFrom: ${format(segment.startDate, 'MMM dd, yyyy')}\nTo: ${format(segment.endDate, 'MMM dd, yyyy')}\nDuration: ${segment.duration} days`}
+                                  title={`${segment.stageName || segment.status}\nFrom: ${format(segment.startDate, 'MMM dd, yyyy')}\nTo: ${format(segment.endDate, 'MMM dd, yyyy')}\nDuration: ${segment.duration} days`}
                                 />
                               )
                             })}

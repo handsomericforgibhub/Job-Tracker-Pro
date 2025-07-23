@@ -453,15 +453,179 @@ export default function EditJobPage() {
   }
 
   const getQuestionsByStage = (stage: string) => {
-    // Use dynamic questions from the hook
+    // Use dynamic questions from the hook (already sorted by sequence_order)
     const questions = getQuestionsForStage(stage)
     
-    // Convert to the format expected by the component
+    // Return full question data with proper types
     return questions.map((question, index) => ({
-      id: question.id, // Use the real database ID instead of artificial q1, q2, etc.
+      id: question.id,
       title: question.question_text.split('?')[0] || `Question ${index + 1}`,
-      text: question.question_text
+      text: question.question_text,
+      response_type: question.response_type,
+      help_text: question.help_text,
+      sequence_order: question.sequence_order
     }))
+  }
+
+  // Render input field based on question type
+  const renderQuestionInput = (question: any, isEnabled: boolean, isAnswered: boolean) => {
+    const currentResponse = questionResponses[question.id] || ''
+    
+    if (isAnswered) {
+      return (
+        <div className="text-green-700 font-medium">
+          ✅ Answered: {currentResponse}
+        </div>
+      )
+    }
+
+    if (!isEnabled) {
+      return (
+        <p className="text-xs text-gray-500 mt-2">
+          Complete previous questions first
+        </p>
+      )
+    }
+
+    const handleInputResponse = (value: string) => {
+      handleQuestionResponse(question.id, value)
+    }
+
+    switch (question.response_type) {
+      case 'yes_no':
+        return (
+          <div className="flex gap-3">
+            <button 
+              onClick={() => handleInputResponse('Yes')}
+              disabled={isProcessingResponse}
+              className={`px-4 py-2 rounded transition-colors ${
+                !isProcessingResponse
+                  ? 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-gray-400 text-white cursor-not-allowed'
+              }`}
+            >
+              {isProcessingResponse ? '...' : 'Yes'}
+            </button>
+            <button 
+              onClick={() => handleInputResponse('No')}
+              disabled={isProcessingResponse}
+              className={`px-4 py-2 rounded transition-colors ${
+                !isProcessingResponse
+                  ? 'bg-red-600 text-white hover:bg-red-700'
+                  : 'bg-gray-400 text-white cursor-not-allowed'
+              }`}
+            >
+              {isProcessingResponse ? '...' : 'No'}
+            </button>
+          </div>
+        )
+
+      case 'number':
+        return (
+          <div className="flex gap-3 items-center">
+            <Input
+              type="number"
+              placeholder="Enter number"
+              className="flex-1 max-w-xs"
+              disabled={isProcessingResponse}
+              id={`number-input-${question.id}`}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  const value = (e.target as HTMLInputElement).value
+                  if (value.trim()) {
+                    handleInputResponse(value.trim())
+                  }
+                }
+              }}
+            />
+            <Button
+              size="sm" 
+              onClick={() => {
+                const input = document.getElementById(`number-input-${question.id}`) as HTMLInputElement
+                if (input && input.value.trim()) {
+                  handleInputResponse(input.value.trim())
+                }
+              }}
+              disabled={isProcessingResponse}
+            >
+              {isProcessingResponse ? '...' : 'Submit'}
+            </Button>
+          </div>
+        )
+
+      case 'text':
+        return (
+          <div className="flex gap-3 items-center">
+            <Input
+              type="text"
+              placeholder="Enter text"
+              className="flex-1 max-w-md"
+              disabled={isProcessingResponse}
+              id={`text-input-${question.id}`}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  const value = (e.target as HTMLInputElement).value
+                  if (value.trim()) {
+                    handleInputResponse(value.trim())
+                  }
+                }
+              }}
+            />
+            <Button
+              size="sm" 
+              onClick={() => {
+                const input = document.getElementById(`text-input-${question.id}`) as HTMLInputElement
+                if (input && input.value.trim()) {
+                  handleInputResponse(input.value.trim())
+                }
+              }}
+              disabled={isProcessingResponse}
+            >
+              {isProcessingResponse ? '...' : 'Submit'}
+            </Button>
+          </div>
+        )
+
+      case 'date':
+        return (
+          <div className="flex gap-3 items-center">
+            <Input
+              type="date"
+              className="flex-1 max-w-xs"
+              disabled={isProcessingResponse}
+              id={`date-input-${question.id}`}
+              onChange={(e) => {
+                const value = e.target.value
+                if (value) {
+                  handleInputResponse(value)
+                }
+              }}
+            />
+          </div>
+        )
+
+      case 'multiple_choice':
+        // For multiple choice, we'd need the options from the question config
+        return (
+          <div className="text-sm text-gray-600">
+            Multiple choice questions not yet implemented
+          </div>
+        )
+
+      case 'file_upload':
+        return (
+          <div className="text-sm text-gray-600">
+            File upload questions not yet implemented
+          </div>
+        )
+
+      default:
+        return (
+          <div className="text-sm text-red-600">
+            Unknown question type: {question.response_type}
+          </div>
+        )
+    }
   }
 
   const canEditJob = user && (user.role === 'owner' || user.role === 'foreman' || (user.role === 'site_admin' && currentCompanyContext))
@@ -825,12 +989,10 @@ export default function EditJobPage() {
                                 ? 'text-blue-900' 
                                 : 'text-gray-700'
                           }`}>
-                            Question {index + 1}: {question.title}
-                            {isAnswered && (
-                              <span className="ml-2 text-sm">
-                                ✅ Answered: {response}
-                              </span>
-                            )}
+                            Question {question.sequence_order || (index + 1)}: {question.title}
+                            <span className="ml-2 text-xs text-gray-500">
+                              ({question.response_type || 'unknown'})
+                            </span>
                           </h5>
                           <p className={`mb-3 ${
                             isAnswered 
@@ -842,38 +1004,15 @@ export default function EditJobPage() {
                             {question.text}
                           </p>
                           
-                          {!isAnswered && (
-                            <div className="flex gap-3">
-                              <button 
-                                onClick={() => handleQuestionResponse(question.id, 'Yes')}
-                                disabled={!isEnabled || isProcessingResponse}
-                                className={`px-4 py-2 rounded transition-colors ${
-                                  isEnabled && !isProcessingResponse
-                                    ? 'bg-green-600 text-white hover:bg-green-700'
-                                    : 'bg-gray-400 text-white cursor-not-allowed'
-                                }`}
-                              >
-                                {isProcessingResponse ? '...' : 'Yes'}
-                              </button>
-                              <button 
-                                onClick={() => handleQuestionResponse(question.id, 'No')}
-                                disabled={!isEnabled || isProcessingResponse}
-                                className={`px-4 py-2 rounded transition-colors ${
-                                  isEnabled && !isProcessingResponse
-                                    ? 'bg-red-600 text-white hover:bg-red-700'
-                                    : 'bg-gray-400 text-white cursor-not-allowed'
-                                }`}
-                              >
-                                {isProcessingResponse ? '...' : 'No'}
-                              </button>
-                            </div>
-                          )}
-                          
-                          {!isEnabled && !isAnswered && (
-                            <p className="text-xs text-gray-500 mt-2">
-                              Complete previous questions first
+                          {question.help_text && (
+                            <p className="text-xs text-gray-500 mb-3 italic">
+                              💡 {question.help_text}
                             </p>
                           )}
+                          
+                          <div className="mt-3">
+                            {renderQuestionInput(question, isEnabled, isAnswered)}
+                          </div>
                         </div>
                       )
                     })}

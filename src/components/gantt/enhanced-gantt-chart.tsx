@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -419,24 +419,45 @@ export default function EnhancedGanttChart({
                             onClick={() => window.location.href = `/dashboard/jobs/${task.id}`}
                           >
                             {viewMode === 'stage' && task.stage_segments.length > 0 ? (
-                              // Stage segments
+                              // Stage segments with enhanced visual separation
                               task.stage_segments.map((segment, segmentIndex) => {
                                 const segmentPosition = getSegmentPosition(segment)
+                                const isFirstSegment = segmentIndex === 0
+                                const isLastSegment = segmentIndex === task.stage_segments.length - 1
+                                const isSameDayTransition = segmentPosition.width <= dayWidth
+                                
                                 return (
-                                  <div
-                                    key={segmentIndex}
-                                    className="absolute rounded shadow-sm border hover:opacity-90 transition-opacity"
-                                    style={{
-                                      left: segmentPosition.left - position.left,
-                                      width: segmentPosition.width,
-                                      height: 24,
-                                      backgroundColor: segment.stage_color,
-                                      opacity: 0.9,
-                                      borderRadius: segmentIndex === 0 ? '4px 0 0 4px' : 
-                                                 segmentIndex === task.stage_segments.length - 1 ? '0 4px 4px 0' : '0'
-                                    }}
-                                    title={`${segment.stage_name}\nFrom: ${format(segment.startDate, 'MMM dd, yyyy')}\nTo: ${format(segment.endDate, 'MMM dd, yyyy')}\nDuration: ${segment.duration_days} days`}
-                                  />
+                                  <React.Fragment key={segmentIndex}>
+                                    <div
+                                      className="absolute shadow-sm border hover:opacity-90 transition-opacity"
+                                      style={{
+                                        left: segmentPosition.left - position.left,
+                                        width: Math.max(4, segmentPosition.width - (isLastSegment ? 0 : 1)), // Add 1px gap between segments
+                                        height: 24,
+                                        backgroundColor: segment.stage_color,
+                                        opacity: segment.is_current ? 1.0 : 0.85,
+                                        borderRadius: isFirstSegment ? '4px 0 0 4px' : 
+                                                     isLastSegment ? '0 4px 4px 0' : '0',
+                                        borderRight: !isLastSegment ? `2px solid white` : 'none', // Visual separator
+                                        zIndex: segment.is_current ? 12 : 10
+                                      }}
+                                      title={`${segment.stage_name}\nFrom: ${format(segment.startDate, 'MMM dd, yyyy HH:mm')}\nTo: ${format(segment.endDate, 'MMM dd, yyyy HH:mm')}\nDuration: ${segment.duration_days} day${segment.duration_days !== 1 ? 's' : ''}`}
+                                    />
+                                    
+                                    {/* Add visual break for same-day transitions */}
+                                    {isSameDayTransition && !isLastSegment && (
+                                      <div
+                                        className="absolute bg-white"
+                                        style={{
+                                          left: segmentPosition.left - position.left + segmentPosition.width - 1,
+                                          width: 2,
+                                          height: 24,
+                                          zIndex: 15
+                                        }}
+                                        title="Stage transition"
+                                      />
+                                    )}
+                                  </React.Fragment>
                                 )
                               })
                             ) : (

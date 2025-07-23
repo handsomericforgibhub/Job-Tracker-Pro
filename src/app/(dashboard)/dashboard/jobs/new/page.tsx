@@ -14,7 +14,6 @@ import Link from 'next/link'
 import ForemanSelect from '@/components/ui/foreman-select'
 import { NewJobStatusSelect } from '@/components/ui/job-status-select'
 import { useJobStages } from '@/hooks/useJobStages'
-import { DEFAULT_STAGE_ID } from '@/config/stages'
 
 export default function NewJobPage() {
   const router = useRouter()
@@ -53,10 +52,81 @@ export default function NewJobPage() {
   
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [titleSuggestion, setTitleSuggestion] = useState('')
+
+  // Get the first available stage ID from the database
+  const getInitialStageId = async (companyId: string) => {
+    try {
+      // First, try to get company-specific or global stages from job_stages table
+      const { data: stages, error } = await supabase
+        .from('job_stages')
+        .select('id, sequence_order, name, company_id')
+        .or(`company_id.eq.${companyId},company_id.is.null`)
+        .order('sequence_order', { ascending: true })
+        .limit(1)
+
+      if (error) {
+        console.warn('Error fetching job stages:', error)
+        return null
+      }
+
+      if (stages && stages.length > 0) {
+        console.log('✅ Found initial stage:', stages[0])
+        return stages[0].id
+      }
+
+      console.warn('⚠️ No stages found in job_stages table')
+      return null
+    } catch (err) {
+      console.error('Exception fetching initial stage:', err)
+      return null
+    }
+  }
+
+  // Check for duplicate job titles and suggest alternatives
+  const checkJobTitleUniqueness = async (title: string, companyId: string) => {
+    try {
+      const { data: existingJobs, error } = await supabase
+        .from('jobs')
+        .select('title')
+        .eq('company_id', companyId)
+        .ilike('title', `%${title.trim()}%`)
+        .limit(5)
+
+      if (error) {
+        console.warn('Error checking job title uniqueness:', error)
+        return { isUnique: true, suggestions: [] }
+      }
+
+      const exactMatch = existingJobs?.find(job => 
+        job.title.toLowerCase().trim() === title.toLowerCase().trim()
+      )
+
+      if (exactMatch) {
+        // Generate alternative suggestions
+        const baseName = title.trim()
+        const now = new Date()
+        const suggestions = [
+          `${baseName} (${now.getFullYear()})`,
+          `${baseName} - Phase 2`,
+          `${baseName} - ${now.toLocaleDateString()}`,
+          `${baseName} - Copy`
+        ]
+        
+        return { isUnique: false, suggestions }
+      }
+
+      return { isUnique: true, suggestions: [] }
+    } catch (err) {
+      console.warn('Exception checking job title uniqueness:', err)
+      return { isUnique: true, suggestions: [] }
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    setTitleSuggestion('')
     
     if (!user || !effectiveCompany) {
       setError('User authentication required')
@@ -69,6 +139,23 @@ export default function NewJobPage() {
     }
 
     setIsSubmitting(true)
+
+    // Check for duplicate job title before submitting
+    const titleCheck = await checkJobTitleUniqueness(formData.title, effectiveCompany.id)
+    if (!titleCheck.isUnique) {
+      setError(`A job with the title "${formData.title}" already exists. Try one of these alternatives:`)
+      setTitleSuggestion(titleCheck.suggestions[0] || '')
+      setIsSubmitting(false)
+      return
+    }
+
+    // Get the initial stage ID dynamically
+    const initialStageId = await getInitialStageId(effectiveCompany.id)
+    if (!initialStageId) {
+      setError('Cannot create job: No valid job stages found. Please contact your administrator to set up job stages.')
+      setIsSubmitting(false)
+      return
+    }
 
     try {
       console.log('🔄 Creating new job...')
@@ -88,8 +175,8 @@ export default function NewJobPage() {
         // foreman_id: formData.foreman_id || null, // Column doesn't exist in database
         company_id: effectiveCompany.id,
         created_by: user.id,
-        // Auto-assign to first stage of question-driven system
-        current_stage_id: DEFAULT_STAGE_ID, // Lead Qualification
+        // Auto-assign to first available stage from database
+        current_stage_id: initialStageId,
         stage_entered_at: new Date().toISOString()
       }
 
@@ -102,8 +189,29 @@ export default function NewJobPage() {
         .single()
 
       if (error) {
-        console.error('❌ Error creating job:', error)
-        setError(`Failed to create job: ${error.message}`)
+        console.error('❌ Error creating job:', JSON.stringify(error, null, 2))
+        
+        // Parse Supabase error for user-friendly messages
+        let userMessage = ''
+        
+        if (error.code === '23505') {
+          // PostgreSQL unique violation
+          if (error.details && error.details.includes('title')) {
+            userMessage = `A job with the title "${formData.title}" already exists in your company. Please choose a different title.`
+          } else {
+            userMessage = 'A job with similar details already exists. Please modify your job details and try again.'
+          }
+        } else if (error.code === '23503') {
+          // Foreign key violation
+          userMessage = 'Invalid reference data. Please check your selections and try again.'
+        } else if (error.message) {
+          userMessage = `Failed to create job: ${error.message}`
+        } else {
+          // Fallback for unknown errors
+          userMessage = 'Failed to create job. Please check all fields and try again.'
+        }
+        
+        setError(userMessage)
         return
       }
 
@@ -111,8 +219,20 @@ export default function NewJobPage() {
       router.push('/dashboard/jobs')
       
     } catch (err) {
-      console.error('❌ Exception creating job:', err)
-      setError('An unexpected error occurred')
+      console.error('❌ Exception creating job:', JSON.stringify(err, null, 2))
+      
+      // Handle different types of exceptions
+      if (err instanceof Error) {
+        if (err.message.includes('fetch')) {
+          setError('Network error. Please check your connection and try again.')
+        } else if (err.message.includes('timeout')) {
+          setError('Request timed out. Please try again.')
+        } else {
+          setError(`An error occurred: ${err.message}`)
+        }
+      } else {
+        setError('An unexpected error occurred. Please try again.')
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -178,6 +298,21 @@ export default function NewJobPage() {
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
                 {error}
+                {titleSuggestion && (
+                  <div className="mt-2 pt-2 border-t border-red-300">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleInputChange('title', titleSuggestion)
+                        setError('')
+                        setTitleSuggestion('')
+                      }}
+                      className="text-blue-600 hover:text-blue-800 underline text-sm"
+                    >
+                      Use suggestion: "{titleSuggestion}"
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 

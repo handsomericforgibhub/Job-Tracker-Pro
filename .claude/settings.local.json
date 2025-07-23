@@ -29,7 +29,10 @@
       "Bash(npx tsc:*)",
       "Bash(tail:*)",
       "Bash(grep:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(npx next build:*)",
+      "Bash(timeout 15s npm run dev)",
+      "Bash(npm run:*)"
     ],
     "deny": []
   }

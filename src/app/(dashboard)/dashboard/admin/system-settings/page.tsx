@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   Database,
   AlertCircle,
+  CheckCircle,
   Settings,
   Globe,
   Mail,
@@ -32,7 +33,11 @@ import {
   ToggleLeft,
   Upload,
   Hash,
-  Copy
+  Copy,
+  ChevronUp,
+  ChevronDown as ChevronDownIcon,
+  GripVertical,
+  Move
 } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -153,7 +158,9 @@ export default function SystemSettings() {
   const [stages, setStages] = useState<Stage[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [isReordering, setIsReordering] = useState(false)
   const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const [expandedStage, setExpandedStage] = useState<string | null>(null)
   const [editingStage, setEditingStage] = useState<string | null>(null)
   const [editingQuestion, setEditingQuestion] = useState<string | null>(null)
@@ -716,6 +723,96 @@ export default function SystemSettings() {
       }
     } catch (err) {
       setError('Network error while deleting question')
+    }
+  }
+
+  // Question reordering functions
+  const reorderQuestions = async (stageId: string, questions: Question[], originalQuestions: Question[]) => {
+    if (isReordering) return // Prevent multiple simultaneous reorder operations
+    
+    try {
+      setIsReordering(true)
+      const response = await fetch('/api/admin/stages/questions/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          stage_id: stageId,
+          questions: questions.map((q, index) => ({
+            id: q.id,
+            sequence_order: index + 1
+          }))
+        })
+      })
+
+      if (response.ok) {
+        // Don't refetch immediately - the optimistic update is already applied
+        // Clear any existing error and show success message
+        setError('')
+        setSuccessMessage('Question order updated successfully')
+        setTimeout(() => setSuccessMessage(''), 3000)
+      } else {
+        // Only revert on actual API failure
+        const errorData = await response.json()
+        setError(errorData.error || 'Failed to reorder questions')
+        setSuccessMessage('') // Clear any success message
+        
+        // Revert the optimistic update
+        const revertedStages = stages.map(s => 
+          s.id === stageId 
+            ? { ...s, questions: originalQuestions }
+            : s
+        )
+        setStages(revertedStages)
+      }
+    } catch (err) {
+      setError('Network error while reordering questions')
+      setSuccessMessage('') // Clear any success message
+      
+      // Revert the optimistic update
+      const revertedStages = stages.map(s => 
+        s.id === stageId 
+          ? { ...s, questions: originalQuestions }
+          : s
+      )
+      setStages(revertedStages)
+    } finally {
+      setIsReordering(false)
+    }
+  }
+
+  const moveQuestion = (stageId: string, fromIndex: number, toIndex: number) => {
+    const stage = stages.find(s => s.id === stageId)
+    if (!stage || !stage.questions) return
+
+    // Store original questions for potential rollback
+    const originalQuestions = [...stage.questions]
+    
+    const newQuestions = [...stage.questions]
+    const [movedQuestion] = newQuestions.splice(fromIndex, 1)
+    newQuestions.splice(toIndex, 0, movedQuestion)
+
+    // Update local state immediately for better UX (optimistic update)
+    const updatedStages = stages.map(s => 
+      s.id === stageId 
+        ? { ...s, questions: newQuestions }
+        : s
+    )
+    setStages(updatedStages)
+
+    // Update sequence orders and persist to backend
+    reorderQuestions(stageId, newQuestions, originalQuestions)
+  }
+
+  const moveQuestionUp = (stageId: string, questionIndex: number) => {
+    if (questionIndex > 0) {
+      moveQuestion(stageId, questionIndex, questionIndex - 1)
+    }
+  }
+
+  const moveQuestionDown = (stageId: string, questionIndex: number) => {
+    const stage = stages.find(s => s.id === stageId)
+    if (stage && stage.questions && questionIndex < stage.questions.length - 1) {
+      moveQuestion(stageId, questionIndex, questionIndex + 1)
     }
   }
 
@@ -1599,6 +1696,15 @@ export default function SystemSettings() {
         </div>
       )}
 
+      {successMessage && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-center">
+            <CheckCircle className="h-5 w-5 text-green-400 mr-2" />
+            <span className="text-green-800">{successMessage}</span>
+          </div>
+        </div>
+      )}
+
       {/* Add New Stage */}
       <Card>
         <CardHeader>
@@ -1867,8 +1973,44 @@ export default function SystemSettings() {
                       {stage.questions?.length > 0 ? (
                         <div className="space-y-3">
                           {stage.questions.map((question, qIndex) => (
-                            <div key={question.id} className="p-4 bg-gray-50 rounded-lg border">
-                              <div className="flex items-start justify-between">
+                            <div key={question.id} className="p-4 bg-gray-50 rounded-lg border group hover:shadow-sm transition-shadow">
+                              <div className="flex items-start gap-3">
+                                {/* Drag Handle and Reorder Controls */}
+                                <div className="flex flex-col items-center gap-1 pt-1">
+                                  {/* Drag Handle */}
+                                  <div 
+                                    className="cursor-grab active:cursor-grabbing p-1 rounded hover:bg-gray-200 transition-colors opacity-0 group-hover:opacity-100"
+                                    title="Drag to reorder"
+                                  >
+                                    <GripVertical className="h-4 w-4 text-gray-400" />
+                                  </div>
+                                  
+                                  {/* Up/Down Arrow Controls */}
+                                  <div className="flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-6 w-6 p-0 hover:bg-blue-100"
+                                      onClick={() => moveQuestionUp(stage.id, qIndex)}
+                                      disabled={qIndex === 0 || isReordering}
+                                      title="Move up"
+                                    >
+                                      <ChevronUp className="h-3 w-3" />
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-6 w-6 p-0 hover:bg-blue-100"
+                                      onClick={() => moveQuestionDown(stage.id, qIndex)}
+                                      disabled={qIndex === stage.questions!.length - 1 || isReordering}
+                                      title="Move down"
+                                    >
+                                      <ChevronDownIcon className="h-3 w-3" />
+                                    </Button>
+                                  </div>
+                                </div>
+
+                                {/* Question Content */}
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2 mb-2">
                                     <span className="text-sm font-medium text-gray-500">Q{qIndex + 1}</span>
@@ -1876,6 +2018,7 @@ export default function SystemSettings() {
                                     {question.is_required && (
                                       <Badge variant="secondary" className="text-xs">Required</Badge>
                                     )}
+                                    <span className="text-xs text-gray-400">seq: {question.sequence_order}</span>
                                   </div>
                                   <p className="font-medium mb-1">{question.question_text}</p>
                                   {question.help_text && (
@@ -1891,11 +2034,14 @@ export default function SystemSettings() {
                                     </div>
                                   )}
                                 </div>
+
+                                {/* Action Buttons */}
                                 <div className="flex items-center gap-1 ml-4">
                                   <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => openQuestionEditor(question.id)}
+                                    title="Edit question"
                                   >
                                     <Edit className="h-3 w-3" />
                                   </Button>
@@ -1904,6 +2050,7 @@ export default function SystemSettings() {
                                     size="sm"
                                     onClick={() => deleteQuestion(question.id)}
                                     className="text-red-600 hover:text-red-700"
+                                    title="Delete question"
                                   >
                                     <Trash2 className="h-3 w-3" />
                                   </Button>

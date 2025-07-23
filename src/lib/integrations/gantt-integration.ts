@@ -137,7 +137,7 @@ export function createEnhancedStatusTimeline(
   return {
     job_id: job.id,
     history,
-    stage_details
+    stage_details: stageDetails
   }
 }
 
@@ -159,20 +159,23 @@ export function createGanttStageSegments(
   auditLog: StageAuditLog[]
 ): GanttStageSegment[] {
   const segments: GanttStageSegment[] = []
+  const jobStartDate = job.start_date ? new Date(job.start_date) : new Date(job.created_at)
+  const jobEndDate = job.end_date ? new Date(job.end_date) : new Date()
+  
+  console.log(`🔄 Creating stage segments for job ${job.id} with ${auditLog.length} audit entries`)
   
   if (auditLog.length === 0) {
-    // No stage history - create a single segment
-    const startDate = job.start_date ? new Date(job.start_date) : new Date()
-    const endDate = job.end_date ? new Date(job.end_date) : new Date()
+    // No stage history - create a single segment for current stage
+    console.log('📝 No audit log - creating single segment for current stage')
     
     segments.push({
       stage_id: job.current_stage_id || 'unknown',
       stage_name: job.current_stage?.name || 'Unknown Stage',
       stage_color: job.current_stage?.color || '#6B7280',
       status: job.status,
-      startDate,
-      endDate,
-      duration_days: Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)),
+      startDate: jobStartDate,
+      endDate: jobEndDate,
+      duration_days: Math.ceil((jobEndDate.getTime() - jobStartDate.getTime()) / (1000 * 60 * 60 * 24)) || 1,
       is_current: true
     })
     
@@ -180,17 +183,38 @@ export function createGanttStageSegments(
   }
   
   // Create segments based on audit log
-  const jobStartDate = job.start_date ? new Date(job.start_date) : new Date()
-  const jobEndDate = job.end_date ? new Date(job.end_date) : new Date()
+  // First, create a segment for the initial stage (from job creation to first transition)
+  const firstEntry = auditLog[0]
+  if (firstEntry.from_stage && firstEntry.created_at !== job.created_at) {
+    console.log('📝 Adding initial stage segment:', firstEntry.from_stage.name)
+    
+    segments.push({
+      stage_id: firstEntry.from_stage.id,
+      stage_name: firstEntry.from_stage.name,
+      stage_color: firstEntry.from_stage.color,
+      status: firstEntry.from_stage.maps_to_status,
+      startDate: jobStartDate,
+      endDate: new Date(firstEntry.created_at),
+      duration_days: Math.ceil((new Date(firstEntry.created_at).getTime() - jobStartDate.getTime()) / (1000 * 60 * 60 * 24)) || 1,
+      is_current: false
+    })
+  }
   
+  // Create segments for each stage transition
   for (let i = 0; i < auditLog.length; i++) {
     const entry = auditLog[i]
     const nextEntry = auditLog[i + 1]
     
-    if (!entry.to_stage) continue
+    if (!entry.to_stage) {
+      console.warn(`⚠️ Audit entry ${i} missing to_stage:`, entry)
+      continue
+    }
     
-    const segmentStartDate = i === 0 ? jobStartDate : new Date(entry.created_at)
+    const segmentStartDate = new Date(entry.created_at)
     const segmentEndDate = nextEntry ? new Date(nextEntry.created_at) : jobEndDate
+    const durationDays = Math.ceil((segmentEndDate.getTime() - segmentStartDate.getTime()) / (1000 * 60 * 60 * 24)) || 1
+    
+    console.log(`📝 Adding stage segment ${i + 1}: ${entry.to_stage.name} (${durationDays} days)`)
     
     segments.push({
       stage_id: entry.to_stage.id,
@@ -199,11 +223,12 @@ export function createGanttStageSegments(
       status: entry.to_stage.maps_to_status,
       startDate: segmentStartDate,
       endDate: segmentEndDate,
-      duration_days: Math.ceil((segmentEndDate.getTime() - segmentStartDate.getTime()) / (1000 * 60 * 60 * 24)),
+      duration_days: durationDays,
       is_current: i === auditLog.length - 1
     })
   }
   
+  console.log(`✅ Created ${segments.length} stage segments for job ${job.id}`)
   return segments
 }
 
@@ -304,18 +329,33 @@ export class GanttIntegrationHelper {
    */
   static async fetchStageAuditLog(jobId: string): Promise<StageAuditLog[]> {
     try {
+      console.log(`🔄 Fetching audit log for job: ${jobId}`)
+      
+      // Try multiple token sources
+      const token = localStorage.getItem('token') || 
+                   localStorage.getItem('supabase.auth.token') ||
+                   sessionStorage.getItem('token')
+      
       const response = await fetch(`/api/jobs/${jobId}/audit-history`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       })
       
-      if (!response.ok) return []
+      console.log(`📡 Audit log response status: ${response.status}`)
+      
+      if (!response.ok) {
+        console.warn(`⚠️ Failed to fetch audit log: ${response.status} ${response.statusText}`)
+        return []
+      }
       
       const data = await response.json()
+      console.log(`✅ Fetched ${data.data?.length || 0} audit log entries for job ${jobId}`)
+      
       return data.data || []
     } catch (error) {
-      console.error('Error fetching stage audit log:', error)
+      console.error('❌ Error fetching stage audit log:', error)
       return []
     }
   }

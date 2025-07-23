@@ -49,12 +49,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch stages' }, { status: 500 })
     }
 
+    // Sort questions within each stage by sequence_order
+    const stagesWithSortedQuestions = stages?.map(stage => ({
+      ...stage,
+      questions: stage.questions ? 
+        [...stage.questions].sort((a, b) => a.sequence_order - b.sequence_order) : 
+        []
+    }))
+
     return NextResponse.json({ 
-      data: stages,
+      data: stagesWithSortedQuestions,
       context: {
         company_id: companyId,
         is_global: !companyId || companyId === 'null',
-        stage_count: stages?.length || 0
+        stage_count: stagesWithSortedQuestions?.length || 0
       }
     })
   } catch (error) {
