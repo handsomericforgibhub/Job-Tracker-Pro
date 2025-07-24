@@ -1,0 +1,27 @@
+PROJECT: Job Tracking Web Application (Next.js + Supabase)  
+ARCHITECTURE DECISION RECORDS (ADRs) — SESSION GUIDELINES
+
+You must refer to and comply with the following ADRs, which define the core architecture, coding standards, infrastructure practices, and technology stack for this project:
+
+- ADR-001: Project Architecture — multi-tenant SaaS, mobile-first, real-time job tracking, RLS data isolation, component directory structure, and database design principles.
+- ADR-002: Coding Conventions — strict TypeScript, clear naming, React/Next.js component patterns, error handling, file/directory naming, and enforced with ESLint/Prettier.
+- ADR-003: Infrastructure Conventions — environment management, Vercel/Supabase deployment, database migrations, RLS, backup/disaster recovery, secrets, and monitoring.
+- ADR-004: Technology Stack — Next.js 15, Supabase, Tailwind CSS, Zustand, React Query, React Hook Form, Zod, Jest, Prettier, ESLint, shadcn/ui, and all other approved dependencies.
+- ADR-005: Company-Scoped Reference Data — all configurable workflow logic (stage names, status/Gantt chart colours, workflow steps, etc.) must be stored in company-scoped database tables and always referenced dynamically at runtime, not hard-coded.
+
+**Development must strictly comply with these ADRs. Every code change, feature, or suggestion must:**
+- Use only the documented patterns, libraries, and architecture.
+- Never hard-code company-specific constants (stage names, colours, etc.): always fetch from company-scoped tables.
+- For any deviation, missing guideline, or ambiguity, raise it, recommend improvements, and/or propose a new ADR.
+- All new architectural or technology choices must trigger a draft ADR, referencing related ADRs.
+- For anything marked as TODO or technical debt in any ADR (e.g. error monitoring, offline-first, disaster recovery), prompt for implementation or clearly note as tech debt.
+
+**For reference/configuration data:**
+- All business logic and UI constants that may differ by company (such as workflow stages, colours, triggers) must be defined in company-scoped database tables (`company_id` scoped).
+- The admin UI must allow company admins to update these settings.
+- If any business rule or constant is currently hard-coded, flag it for migration to the configuration tables and reference ADR-005.
+
+If you need a summary of an ADR, a code review checklist, or clarification, generate it first before coding or review.  
+If a request or code sample conflicts with any ADR, flag the conflict, cite the ADR, and recommend the correct approach.
+
+---

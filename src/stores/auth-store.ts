@@ -231,6 +231,32 @@ export const useAuthStore = create<AuthState>((set) => ({
           companyId = companyData.id
           console.log('✅ Company created:', companyId)
 
+          // Auto-apply builder preset stages for new company
+          console.log('🏗️ Auto-applying builder preset stages...')
+          try {
+            const stageSetupResponse = await fetch(`/api/companies/${companyId}/setup-stages`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                created_by_user_id: data.user.id
+              })
+            })
+
+            if (stageSetupResponse.ok) {
+              const setupResult = await stageSetupResponse.json()
+              console.log('✅ Builder preset stages applied successfully:', setupResult)
+            } else {
+              const errorResult = await stageSetupResponse.json()
+              console.error('⚠️ Failed to auto-apply builder preset:', errorResult)
+              // Don't throw error - company creation should still succeed
+            }
+          } catch (stageSetupError) {
+            console.error('⚠️ Stage setup request failed:', stageSetupError)
+            // Don't throw error - company creation should still succeed
+          }
+
           // Update user profile with company_id
           const { error: updateError } = await supabase
             .from('users')
@@ -292,6 +318,32 @@ export const useAuthStore = create<AuthState>((set) => ({
 
         if (companyError) throw companyError
         companyId = companyData.id
+        
+        // Auto-apply builder preset stages for new company
+        console.log('🏗️ Auto-applying builder preset stages...')
+        try {
+          const stageSetupResponse = await fetch(`/api/companies/${companyId}/setup-stages`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              created_by_user_id: session.user.id
+            })
+          })
+
+          if (stageSetupResponse.ok) {
+            const setupResult = await stageSetupResponse.json()
+            console.log('✅ Builder preset stages applied successfully:', setupResult)
+          } else {
+            const errorResult = await stageSetupResponse.json()
+            console.error('⚠️ Failed to auto-apply builder preset:', errorResult)
+            // Don't throw error - company creation should still succeed
+          }
+        } catch (stageSetupError) {
+          console.error('⚠️ Stage setup request failed:', stageSetupError)
+          // Don't throw error - company creation should still succeed
+        }
       }
 
       // Create user profile
