@@ -24,4 +24,6 @@ You must refer to and comply with the following ADRs, which define the core arch
 If you need a summary of an ADR, a code review checklist, or clarification, generate it first before coding or review.  
 If a request or code sample conflicts with any ADR, flag the conflict, cite the ADR, and recommend the correct approach.
 
+Please read and update 999-adr-compliance-progress.md to track all open and resolved ADR compliance issues for this project. Before making new suggestions or changes, review this log and ensure continuity from the previous session. Record all new findings, fixes, and next actions in this file.
+
 ---

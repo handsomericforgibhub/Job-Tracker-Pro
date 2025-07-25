@@ -1,0 +1,51 @@
+ONLY READ BELOW WHEN EXPLICITLY ASKED TO READ THIS FILE:
+
+Please perform a comprehensive code review of the entire codebase for the Job Tracking Web Application project.
+
+Reference the following ADRs:
+
+ADR-001: Project Architecture
+
+ADR-002: Coding Conventions
+
+ADR-003: Infrastructure Conventions
+
+ADR-004: Technology Stack
+
+ADR-005: Company-Scoped Reference Data
+
+For each file and module:
+
+Identify any code, pattern, or configuration that does not comply with the requirements, conventions, or recommendations of these ADRs.
+
+For each instance of non-compliance, cite the specific ADR (and section) that is not followed.
+
+Group findings by ADR and by severity (e.g. critical, high, moderate, minor).
+
+Prepare a structured remediation plan:
+
+For each type of violation, propose a concrete, actionable solution.
+
+Prioritize the fixes by potential impact on maintainability, security, and user experience.
+
+Where relevant, suggest automated tests or linting rules to prevent recurrence.
+
+Report Format:
+
+Summary Table: Overview of number and severity of violations by ADR.
+
+Detailed Findings:
+
+File/module
+
+Description of violation
+
+ADR reference
+
+Recommended fix
+
+Remediation Roadmap:
+
+Step-by-step prioritized plan to bring the codebase into full ADR compliance.
+
+Suggestions for automation, documentation, or team training where applicable.
