@@ -23,8 +23,8 @@ import {
 
 // Import the mobile components we just created
 import MobileQuestionInterface from './MobileQuestionInterface'
-import MobileTaskList from './MobileTaskList'
-import StageProgressIndicator from './StageProgressIndicator'
+import MobileTaskList from './mobile-task-list'
+import StageProgressIndicator from './stage-progress-indicator'
 
 interface JobDashboardProps {
   jobId: string

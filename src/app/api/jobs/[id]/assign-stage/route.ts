@@ -18,21 +18,34 @@ export async function POST(
     
     console.log('🔄 Assigning stage to job:', jobId, 'Stage ID:', stage_id)
 
+    // First get the job to find its company_id
+    const { data: job, error: jobError } = await supabase
+      .from('jobs')
+      .select('company_id')
+      .eq('id', jobId)
+      .single()
+      
+    if (jobError || !job) {
+      console.error('❌ Error finding job:', jobError)
+      return NextResponse.json({ error: 'Job not found' }, { status: 404 })
+    }
+
     // Use provided stage_id or fallback to first available stage
     let targetStageId = stage_id
     
     if (!targetStageId) {
-      // Fallback: Get the first stage by sequence order
+      // Fallback: Get the first stage by sequence order for this company
       const { data: firstStage, error: stageError } = await supabase
         .from('job_stages')
         .select('id')
+        .eq('company_id', job.company_id)
         .order('sequence_order')
         .limit(1)
         .single()
         
       if (stageError || !firstStage) {
         console.error('❌ Error finding first stage:', stageError)
-        return NextResponse.json({ error: 'No stages available' }, { status: 400 })
+        return NextResponse.json({ error: 'No stages available for this company' }, { status: 400 })
       }
       
       targetStageId = firstStage.id

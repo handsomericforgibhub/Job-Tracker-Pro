@@ -26,9 +26,9 @@ import {
   KeyRound
 } from 'lucide-react'
 import Link from 'next/link'
-import WorkerSkills from '@/components/workers/worker-skills'
-import WorkerLicenses from '@/components/workers/worker-licenses'
-import PasswordReset from '@/components/workers/password-reset'
+import WorkerSkills from '@/components/features/workers/worker-skills'
+import WorkerLicenses from '@/components/features/workers/worker-licenses'
+import PasswordReset from '@/components/features/workers/password-reset'
 
 const employmentStatusConfig = {
   active: {

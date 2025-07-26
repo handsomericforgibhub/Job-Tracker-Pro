@@ -121,7 +121,8 @@ export default function EditJobPage() {
         // Refresh job data to show the new stage
         fetchJob()
       } else {
-        console.error('❌ Failed to assign stage:', await response.text())
+        const errorData = await response.json()
+        console.error('❌ Failed to assign stage:', errorData.error || 'Unknown error')
       }
     } catch (error) {
       console.error('❌ Error assigning stage:', error)
@@ -400,7 +401,12 @@ export default function EditJobPage() {
       })
 
       if (!apiResponse.ok) {
-        throw new Error('Failed to save response')
+        const contentType = apiResponse.headers.get('content-type')
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await apiResponse.json()
+          throw new Error(`Failed to save response: ${errorData.error || 'Unknown error'}`)
+        }
+        throw new Error(`Failed to save response: ${apiResponse.status} ${apiResponse.statusText}`)
       }
 
       const result = await apiResponse.json()
@@ -414,7 +420,7 @@ export default function EditJobPage() {
       if (result.stage_progressed) {
         console.log('🎉 Job progressed to next stage!')
         // Refresh the job data to get updated stage
-        await fetchJobData()
+        await fetchJob()
         // Clear question responses since we moved to next stage
         setQuestionResponses({})
       }

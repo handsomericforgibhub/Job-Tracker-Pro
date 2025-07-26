@@ -24,7 +24,7 @@ import {
   MoreVertical
 } from 'lucide-react'
 import Link from 'next/link'
-import CompanyContextSelector from '@/components/site-admin/company-context-selector'
+import CompanyContextSelector from '@/components/features/site-admin/company-context-selector'
 import { useSiteAdminContextStore } from '@/stores/site-admin-context-store'
 
 export default function SiteAdminDashboard() {

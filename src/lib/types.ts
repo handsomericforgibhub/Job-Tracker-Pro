@@ -7,6 +7,9 @@ import {
   PriorityLevel,
   StageType 
 } from '@/config/constants'
+
+// Re-export for other modules
+export type { JobStatus, TaskStatus, ResponseType, UserRole, PriorityLevel, StageType }
 export interface User {
   id: string;
   email: string;
@@ -612,7 +615,7 @@ export interface LocationData {
   heading?: number | null;
 }
 
-export interface Document {
+export interface LegacyDocument {
   id: string;
   name: string;
   type: 'photo' | 'contract' | 'permit' | 'report' | 'other';

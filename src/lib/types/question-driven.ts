@@ -1,7 +1,8 @@
 // TypeScript types for Question-Driven Job Progression System
 // Comprehensive type definitions matching the database schema
 
-import { JobStatus, ResponseType, StageType } from '@/config/constants'
+import { ResponseType, StageType } from '@/config/constants'
+import type { JobStatus } from '@/lib/types'
 
 // =============================================
 // 1. CORE STAGE SYSTEM TYPES

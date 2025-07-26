@@ -1,13 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { EnhancedJob } from '@/lib/types/question-driven'
-import { JobDashboard } from '@/components/question-driven'
+import { JobDashboard } from '@/components/features/question-driven'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useJobQuery, useJobStatusHistoryQuery } from '@/hooks/use-jobs-query'
 import { 
   Building2, 
   MapPin, 
@@ -37,43 +38,23 @@ export default function EnhancedJobDetails({
   showQuestionDriven = true,
   className 
 }: EnhancedJobDetailsProps) {
-  const [job, setJob] = useState<EnhancedJob | null>(propJob || null)
-  const [loading, setLoading] = useState(!propJob)
-  const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState('overview')
 
-  useEffect(() => {
-    if (propJob) {
-      setJob(propJob)
-      setLoading(false)
-    } else {
-      loadJob()
-    }
-  }, [jobId, propJob])
+  // Use React Query for job data
+  const { 
+    data: job, 
+    isLoading: loading, 
+    error 
+  } = useJobQuery(jobId)
 
-  const loadJob = async () => {
-    // Don't attempt to load if we already have job data
-    if (propJob) return
-    
-    try {
-      setLoading(true)
-      setError(null)
+  // Use React Query for status history
+  const { 
+    data: statusHistory, 
+    isLoading: statusLoading 
+  } = useJobStatusHistoryQuery(jobId)
 
-      // Use Next.js server-side request instead of client-side fetch
-      const response = await fetch(`/api/jobs/${jobId}`)
-
-      if (!response.ok) {
-        throw new Error('Failed to load job details')
-      }
-
-      const data = await response.json()
-      setJob(data.data)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load job details')
-    } finally {
-      setLoading(false)
-    }
-  }
+  // If propJob is provided, use it as initial data
+  const currentJob = propJob || job
 
   if (loading) {
     return (
@@ -88,15 +69,14 @@ export default function EnhancedJobDetails({
     return (
       <Alert className={className} variant="destructive">
         <AlertTriangle className="w-4 h-4" />
-        <AlertDescription>{error}</AlertDescription>
-        <Button onClick={loadJob} className="mt-2">
-          Try Again
-        </Button>
+        <AlertDescription>
+          {error instanceof Error ? error.message : 'Failed to load job details'}
+        </AlertDescription>
       </Alert>
     )
   }
 
-  if (!job) {
+  if (!currentJob) {
     return (
       <Alert className={className}>
         <AlertDescription>Job not found</AlertDescription>
@@ -105,7 +85,7 @@ export default function EnhancedJobDetails({
   }
 
   // Check if this job uses the question-driven system
-  const hasQuestionDrivenSystem = job.current_stage_id && showQuestionDriven
+  const hasQuestionDrivenSystem = currentJob.current_stage_id && showQuestionDriven
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -114,24 +94,24 @@ export default function EnhancedJobDetails({
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <CardTitle className="text-2xl mb-2">{job.title}</CardTitle>
+              <CardTitle className="text-2xl mb-2">{currentJob.title}</CardTitle>
               <div className="flex flex-wrap gap-2 mb-4">
-                {job.current_stage ? (
+                {currentJob.current_stage ? (
                   <Badge 
                     variant="default" 
                     className="text-sm"
-                    style={{ backgroundColor: job.current_stage.color }}
+                    style={{ backgroundColor: currentJob.current_stage.color }}
                   >
-                    {job.current_stage.name}
+                    {currentJob.current_stage.name}
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="text-sm">
-                    {job.status}
+                    {currentJob.status}
                   </Badge>
                 )}
-                {job.job_type && (
+                {currentJob.job_type && (
                   <Badge variant="secondary" className="text-sm">
-                    {job.job_type}
+                    {currentJob.job_type}
                   </Badge>
                 )}
                 {hasQuestionDrivenSystem && (
@@ -155,57 +135,57 @@ export default function EnhancedJobDetails({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {job.client_name && (
+            {currentJob.client_name && (
               <div className="flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-gray-500" />
                 <span className="font-medium">Client:</span>
-                <span>{job.client_name}</span>
+                <span>{currentJob.client_name}</span>
               </div>
             )}
-            {job.location && (
+            {currentJob.location && (
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-gray-500" />
                 <span className="font-medium">Location:</span>
-                <span>{job.location}</span>
+                <span>{currentJob.location}</span>
               </div>
             )}
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-gray-500" />
               <span className="font-medium">Start Date:</span>
-              <span>{new Date(job.start_date).toLocaleDateString()}</span>
+              <span>{new Date(currentJob.start_date).toLocaleDateString()}</span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-gray-500" />
               <span className="font-medium">End Date:</span>
-              <span>{new Date(job.end_date).toLocaleDateString()}</span>
+              <span>{new Date(currentJob.end_date).toLocaleDateString()}</span>
             </div>
-            {job.foreman && (
+            {currentJob.foreman && (
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4 text-gray-500" />
                 <span className="font-medium">Foreman:</span>
-                <span>{job.foreman.full_name}</span>
+                <span>{currentJob.foreman.full_name}</span>
               </div>
             )}
-            {job.budget && (
+            {currentJob.budget && (
               <div className="flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-gray-500" />
                 <span className="font-medium">Budget:</span>
-                <span>${job.budget.toLocaleString()}</span>
+                <span>${currentJob.budget.toLocaleString()}</span>
               </div>
             )}
-            {job.stage_entered_at && (
+            {currentJob.stage_entered_at && (
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-gray-500" />
                 <span className="font-medium">Current Stage Since:</span>
-                <span>{new Date(job.stage_entered_at).toLocaleDateString()}</span>
+                <span>{new Date(currentJob.stage_entered_at).toLocaleDateString()}</span>
               </div>
             )}
           </div>
           
-          {job.description && (
+          {currentJob.description && (
             <div className="mt-4 p-4 bg-gray-50 rounded-lg">
               <h4 className="font-medium mb-2">Description</h4>
-              <p className="text-gray-700">{job.description}</p>
+              <p className="text-gray-700">{currentJob.description}</p>
             </div>
           )}
         </CardContent>
@@ -230,7 +210,7 @@ export default function EnhancedJobDetails({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600">Status</p>
-                    <p className="text-lg font-semibold">{job.status}</p>
+                    <p className="text-lg font-semibold">{currentJob.status}</p>
                   </div>
                   <CheckCircle className="w-8 h-8 text-green-500" />
                 </div>
@@ -243,7 +223,7 @@ export default function EnhancedJobDetails({
                   <div>
                     <p className="text-sm text-gray-600">Days Running</p>
                     <p className="text-lg font-semibold">
-                      {Math.ceil((Date.now() - new Date(job.start_date).getTime()) / (1000 * 60 * 60 * 24))}
+                      {Math.ceil((Date.now() - new Date(currentJob.start_date).getTime()) / (1000 * 60 * 60 * 24))}
                     </p>
                   </div>
                   <Clock className="w-8 h-8 text-blue-500" />
@@ -257,7 +237,7 @@ export default function EnhancedJobDetails({
                   <div>
                     <p className="text-sm text-gray-600">Active Tasks</p>
                     <p className="text-lg font-semibold">
-                      {job.active_tasks?.filter(t => t.status === 'in_progress').length || 0}
+                      {currentJob.active_tasks?.filter(t => t.status === 'in_progress').length || 0}
                     </p>
                   </div>
                   <TrendingUp className="w-8 h-8 text-orange-500" />
@@ -271,7 +251,7 @@ export default function EnhancedJobDetails({
                   <div>
                     <p className="text-sm text-gray-600">Completed Tasks</p>
                     <p className="text-lg font-semibold">
-                      {job.active_tasks?.filter(t => t.status === 'completed').length || 0}
+                      {currentJob.active_tasks?.filter(t => t.status === 'completed').length || 0}
                     </p>
                   </div>
                   <CheckCircle className="w-8 h-8 text-green-500" />
@@ -287,7 +267,7 @@ export default function EnhancedJobDetails({
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {job.audit_history?.slice(0, 5).map((entry, index) => (
+                {currentJob.audit_history?.slice(0, 5).map((entry, index) => (
                   <div key={entry.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
                     <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
                     <div className="flex-1">
@@ -334,19 +314,19 @@ export default function EnhancedJobDetails({
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Created:</span>
-                      <span className="text-sm">{new Date(job.created_at).toLocaleDateString()}</span>
+                      <span className="text-sm">{new Date(currentJob.created_at).toLocaleDateString()}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Start Date:</span>
-                      <span className="text-sm">{new Date(job.start_date).toLocaleDateString()}</span>
+                      <span className="text-sm">{new Date(currentJob.start_date).toLocaleDateString()}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">End Date:</span>
-                      <span className="text-sm">{new Date(job.end_date).toLocaleDateString()}</span>
+                      <span className="text-sm">{new Date(currentJob.end_date).toLocaleDateString()}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">Last Updated:</span>
-                      <span className="text-sm">{new Date(job.updated_at).toLocaleDateString()}</span>
+                      <span className="text-sm">{new Date(currentJob.updated_at).toLocaleDateString()}</span>
                     </div>
                   </div>
                 </div>
@@ -354,11 +334,11 @@ export default function EnhancedJobDetails({
                 <div>
                   <h4 className="font-medium mb-3">Team</h4>
                   <div className="space-y-2">
-                    {job.foreman && (
+                    {currentJob.foreman && (
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4 text-gray-500" />
                         <span className="text-sm">
-                          {job.foreman.full_name} (Foreman)
+                          {currentJob.foreman.full_name} (Foreman)
                         </span>
                       </div>
                     )}
@@ -366,24 +346,24 @@ export default function EnhancedJobDetails({
                   </div>
                 </div>
                 
-                {job.address_components && (
+                {currentJob.address_components && (
                   <div>
                     <h4 className="font-medium mb-3">Location Details</h4>
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Address:</span>
-                        <span className="text-sm">{job.address_components.formatted}</span>
+                        <span className="text-sm">{currentJob.address_components.formatted}</span>
                       </div>
-                      {job.address_components.city && (
+                      {currentJob.address_components.city && (
                         <div className="flex justify-between">
                           <span className="text-sm text-gray-600">City:</span>
-                          <span className="text-sm">{job.address_components.city}</span>
+                          <span className="text-sm">{currentJob.address_components.city}</span>
                         </div>
                       )}
-                      {job.address_components.state && (
+                      {currentJob.address_components.state && (
                         <div className="flex justify-between">
                           <span className="text-sm text-gray-600">State:</span>
-                          <span className="text-sm">{job.address_components.state}</span>
+                          <span className="text-sm">{currentJob.address_components.state}</span>
                         </div>
                       )}
                     </div>
@@ -404,7 +384,7 @@ export default function EnhancedJobDetails({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {job.audit_history?.map((entry, index) => (
+                {currentJob.audit_history?.map((entry, index) => (
                   <div key={entry.id} className="flex items-start gap-4 p-4 border rounded-lg">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-medium"
                          style={{ backgroundColor: entry.to_stage?.color || '#6B7280' }}>

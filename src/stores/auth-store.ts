@@ -52,6 +52,7 @@ export const useAuthStore = create<AuthState>((set) => ({
           // Get company information (only if user has a company_id)
           let company = null
           if (profile.company_id) {
+            console.log('🔄 Fetching company data for ID:', profile.company_id)
             const { data: companyData, error: companyError } = await supabase
               .from('companies')
               .select('*')
@@ -61,10 +62,13 @@ export const useAuthStore = create<AuthState>((set) => ({
             if (companyError) {
               console.error('❌ Company fetch error:', companyError)
               console.log('🔍 Company ID:', profile.company_id)
+              // Still proceed without company for now
             } else {
               company = companyData
               console.log('✅ Company found:', company)
             }
+          } else {
+            console.log('⚠️ User has no company_id - company setup required')
           }
 
           set({ 
@@ -374,8 +378,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 }))
 
-// Listen to auth changes
+// Auth state change listener
 supabase.auth.onAuthStateChange((event, session) => {
+  console.log('🔄 Auth state change:', event, session?.user?.id)
+  
   if (event === 'SIGNED_OUT') {
     useAuthStore.getState().signOut()
   } else if (event === 'SIGNED_IN' && session) {

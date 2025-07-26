@@ -7,9 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "db:migrate": "node scripts/run-consolidated-migrations.js",
+    "db:migrate:dry-run": "node scripts/run-consolidated-migrations.js --dry-run",
+    "db:reset": "node scripts/run-consolidated-migrations.js --reset",
+    "docs:generate": "node scripts/generate-api-docs.js",
+    "docs:build": "npm run docs:generate && echo 'Documentation generated successfully'"
   },
   "dependencies": {
     "@geoapify/geocoder-autocomplete": "^2.1.0",
@@ -42,6 +48,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@tanstack/react-query-devtools": "^5.83.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

@@ -99,11 +99,17 @@ export async function validateAuth(request: NextRequest): Promise<AuthenticatedU
       .from('users')
       .select('id, email, role, company_id')
       .eq('id', user.id)
-      .single()
+      .maybeSingle()
     
-    if (profileError || !userProfile) {
-      console.error('User profile fetch failed:', profileError?.message)
-      throw createAuthError('User profile not found', 404, 'USER_NOT_FOUND')
+    if (profileError) {
+      console.error('User profile query failed:', profileError?.message)
+      throw createAuthError('Failed to access user profile', 500, 'PROFILE_QUERY_ERROR')
+    }
+    
+    if (!userProfile) {
+      console.error('User profile not found:', { userId: user.id, userEmail: user.email })
+      console.log('This may indicate incomplete user registration. User exists in auth but not in users table.')
+      throw createAuthError('User profile incomplete. Please complete your registration or contact support.', 404, 'INCOMPLETE_PROFILE')
     }
     
     return {

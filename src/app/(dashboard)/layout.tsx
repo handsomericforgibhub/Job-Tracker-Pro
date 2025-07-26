@@ -1,6 +1,7 @@
-import ProtectedRoute from '@/components/layout/protected-route'
-import Sidebar from '@/components/layout/sidebar'
-import Header from '@/components/layout/header'
+import ProtectedRoute from '@/components/shared/layout/protected-route'
+import Sidebar from '@/components/shared/layout/sidebar'
+import Header from '@/components/shared/layout/header'
+import { PageErrorBoundary, ComponentErrorBoundary } from '@/components/shared/error-boundary'
 
 export default function DashboardLayout({
   children,
@@ -10,11 +11,17 @@ export default function DashboardLayout({
   return (
     <ProtectedRoute>
       <div className="flex h-screen bg-gray-100">
-        <Sidebar />
+        <ComponentErrorBoundary componentName="Sidebar">
+          <Sidebar />
+        </ComponentErrorBoundary>
         <div className="flex-1 flex flex-col overflow-hidden">
-          <Header />
+          <ComponentErrorBoundary componentName="Header">
+            <Header />
+          </ComponentErrorBoundary>
           <main className="flex-1 overflow-y-auto p-6">
-            {children}
+            <PageErrorBoundary>
+              {children}
+            </PageErrorBoundary>
           </main>
         </div>
       </div>

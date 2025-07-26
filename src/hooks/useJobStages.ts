@@ -52,25 +52,14 @@ export function useJobStages(): UseJobStagesReturn {
         throw new Error('Company not found')
       }
 
-      // First try to get company-specific job stages
-      let companySettings = null
-      let companyError = null
-      
-      try {
-        const result = await supabase
-          .from('company_settings')
-          .select('setting_value')
-          .eq('company_id', effectiveCompany.id)
-          .eq('setting_key', 'job_stages')
-          .eq('is_active', true)
-          .single()
-          
-        companySettings = result.data
-        companyError = result.error
-      } catch (err) {
-        console.warn('Company settings table may not exist, using fallback:', err)
-        companyError = err
-      }
+      // Try to get company-specific job stages with safe query
+      const { data: companySettings, error: companyError } = await supabase
+        .from('company_settings')
+        .select('setting_value')
+        .eq('company_id', effectiveCompany.id)
+        .eq('setting_key', 'job_stages')
+        .eq('is_active', true)
+        .maybeSingle()
 
       if (companyError && companyError.code !== 'PGRST116') { // PGRST116 = no rows returned
         console.warn('Error fetching company settings, falling back to platform defaults:', companyError)
@@ -85,24 +74,13 @@ export function useJobStages(): UseJobStagesReturn {
         return
       }
 
-      // Fallback to platform default job stages
-      let platformSettings = null
-      let platformError = null
-      
-      try {
-        const result = await supabase
-          .from('platform_settings')
-          .select('setting_value')
-          .eq('setting_key', 'default_job_stages')
-          .eq('is_active', true)
-          .single()
-          
-        platformSettings = result.data
-        platformError = result.error
-      } catch (err) {
-        console.warn('Platform settings table may not exist, using hardcoded fallback:', err)
-        platformError = err
-      }
+      // Try platform default job stages with safe query
+      const { data: platformSettings, error: platformError } = await supabase
+        .from('platform_settings')
+        .select('setting_value')
+        .eq('setting_key', 'default_job_stages')
+        .eq('is_active', true)
+        .maybeSingle()
 
       console.log('Platform settings result:', { platformSettings, platformError })
       

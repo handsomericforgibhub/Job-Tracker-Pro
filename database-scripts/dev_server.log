@@ -1,0 +1,2093 @@
+
+> jobtracker-web@0.1.0 dev
+> next dev -H localhost
+
+   ▲ Next.js 15.3.5
+   - Local:        http://localhost:3000
+   - Network:      http://localhost:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 14.8s
+ ○ Compiling / ...
+ ✓ Compiled / in 17.4s (1093 modules)
+ ✓ Compiled in 2.2s (463 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ HEAD / 200 in 20698ms
+ ✓ Compiled in 3.1s (463 modules)
+ ✓ Compiled in 2s (463 modules)
+ ✓ Compiled in 2.1s (463 modules)
+ ✓ Compiled in 2.1s (463 modules)
+ ✓ Compiled in 1937ms (463 modules)
+ ✓ Compiled in 2s (463 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 6.3s (1087 modules)
+ ✓ Compiled in 2.2s (467 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ GET /login 200 in 9056ms
+ ✓ Compiled in 2.3s (467 modules)
+ ✓ Compiled in 1963ms (467 modules)
+ ✓ Compiled in 2.2s (467 modules)
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 5.2s (1173 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ GET /dashboard 200 in 7498ms
+ ✓ Compiled in 2.3s (506 modules)
+ ✓ Compiled in 1929ms (506 modules)
+ ✓ Compiled in 1925ms (506 modules)
+ ✓ Compiled in 1898ms (506 modules)
+ ○ Compiling /dashboard/jobs ...
+ ✓ Compiled /dashboard/jobs in 4.3s (1180 modules)
+ ✓ Compiled in 2s (508 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ GET /dashboard/jobs 200 in 6589ms
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1296ms (508 modules)
+ ✓ Compiled in 1882ms (508 modules)
+ ✓ Compiled in 1890ms (508 modules)
+ ✓ Compiled in 1897ms (508 modules)
+ ✓ Compiled in 1987ms (508 modules)
+ ✓ Compiled in 1932ms (508 modules)
+ ✓ Compiled in 1848ms (508 modules)
+ ✓ Compiled in 1875ms (508 modules)
+ ✓ Compiled in 1841ms (508 modules)
+ ✓ Compiled in 1836ms (508 modules)
+ ✓ Compiled in 1847ms (508 modules)
+ ✓ Compiled in 1843ms (508 modules)
+ ✓ Compiled in 1861ms (508 modules)
+ ✓ Compiled in 1836ms (508 modules)
+ ✓ Compiled in 1836ms (508 modules)
+ ✓ Compiled in 1921ms (508 modules)
+ ✓ Compiled in 1826ms (508 modules)
+ ✓ Compiled in 1242ms (508 modules)
+ ✓ Compiled in 1859ms (508 modules)
+ ✓ Compiled in 1814ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1865ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 4s (1161 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ GET / 404 in 8454ms
+ ✓ Compiled in 2.4s (508 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ GET /_next/static/css/app/layout.css?v=1753447892582 404 in 222ms
+ GET /_next/static/media/569ce4b8f30dc480-s.p.woff2 404 in 292ms
+ GET /_next/static/media/93f479601ee12b01-s.p.woff2 404 in 268ms
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1944ms (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 1683ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 1985ms (508 modules)
+ ✓ Compiled in 1996ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1987ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 1939ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1976ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1411ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.4s (508 modules)
+ ✓ Compiled in 2.4s (508 modules)
+ ✓ Compiled in 2.9s (508 modules)
+ ✓ Compiled in 2.7s (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.4s (508 modules)
+ ✓ Compiled in 2.5s (508 modules)
+ ✓ Compiled in 1731ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1990ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1500ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 1976ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 1444ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.4s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.4s (508 modules)
+ ✓ Compiled in 2.9s (508 modules)
+ ✓ Compiled in 2.7s (508 modules)
+ ✓ Compiled in 1952ms (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.5s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1999ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1417ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1998ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 1584ms (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1984ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.4s (508 modules)
+ ✓ Compiled in 2.4s (508 modules)
+ ✓ Compiled in 1708ms (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.4s (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 1355ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 1985ms (508 modules)
+ ✓ Compiled in 2000ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 1997ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 1989ms (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1963ms (508 modules)
+ ✓ Compiled in 1337ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1988ms (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 2.1s (508 modules)
+ ✓ Compiled in 1963ms (508 modules)
+ ✓ Compiled in 2.2s (508 modules)
+ ○ Compiling /api/admin/run-sql ...
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/cache/webpack/client-development/4.pack.gz_' -> '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/cache/webpack/client-development/4.pack.gz'
+ ✓ Compiled /api/admin/run-sql in 5.5s (687 modules)
+ ✓ Compiled in 2.3s (508 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 3.2s (1212 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ✓ Compiled in 3.3s (508 modules)
+ ✓ Compiled in 2.6s (508 modules)
+ ✓ Compiled in 3.6s (508 modules)
+ ✓ Compiled in 2.6s (508 modules)
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 6.3s (1546 modules)
+ POST /api/admin/run-sql 500 in 37991ms
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.9s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 4.7s (1555 modules)
+ ✓ Compiled in 2.1s (755 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '4066700572'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/src/app/error.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3429027152'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/render-from-template-context.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '1125050364'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/src/providers/query-provider.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3571881360'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/src/components/shared/layout/auth-provider.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3910189648'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3283140624'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/src/app/error.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '120467164'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/render-from-template-context.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '1002457840'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/app-dir/link.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3604086425'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '4066700572'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/render-from-template-context.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '1125050364'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3283140624'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/render-from-template-context.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '1002457840'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/layout-router.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '4184344313'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/render-from-template-context.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3281362073'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/client-page.js#ClientPageRoot" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '649573433'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/src/app/(auth)/login/page.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3282590645'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/metadata/metadata-boundary.js#OutletBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '1574702905'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/metadata/async-metadata.js#AsyncMetadataOutlet" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '1962376176'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/metadata/metadata-boundary.js#ViewportBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '2864382512'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/metadata/metadata-boundary.js#MetadataBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3360710800'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/error-boundary.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '1120992825'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/metadata/async-metadata.js#AsyncMetadata" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3690815184'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/metadata/metadata-boundary.js#MetadataBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '2852929341'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/metadata/metadata-boundary.js#ViewportBoundary" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '3866865745'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/error-boundary.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3477415992'
+}
+[0m[7m Server [0m  [Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/error-boundary.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.] {
+  environmentName: 'Server',
+  digest: '3477415992'
+}
+ ⨯ Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/metadata/async-metadata.js#AsyncMetadata" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '3891954353'
+}
+ ⨯ [Error: Could not find the module "/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/node_modules/next/dist/client/components/error-boundary.js#" in the React Client Manifest. This is probably a bug in the React Server Components bundler.] {
+  environmentName: 'Server',
+  digest: '3477415992',
+  page: '/login'
+}
+ ✓ Compiled in 11s (1457 modules)
+ GET /login 500 in 20173ms
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.9s (755 modules)
+ ✓ Compiled in 1907ms (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled /_not-found in 2.9s (1458 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ GET /test-auth 404 in 801ms
+ ✓ Compiled in 3.2s (755 modules)
+ ✓ Compiled in 3s (755 modules)
+ ✓ Compiled in 3s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 1752ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/8e80befbab3fd405.webpack.hot-update.json 404 in 2268ms
+ ✓ Compiled in 2.4s (755 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled / in 3s (1463 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/next-font-manifest.json'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/next-font-manifest.json',
+  page: '/'
+}
+ ✓ Compiled in 5.3s (1463 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ GET / 500 in 8580ms
+ ✓ Compiled in 2.4s (755 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'
+}
+ ✓ Compiled in 5s (1463 modules)
+ GET /_next/static/chunks/fallback/webpack.js 500 in 5191ms
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 5124ms
+ GET /_next/static/chunks/fallback/main.js 500 in 5119ms
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 1538ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 3s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 1561ms (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.9s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 3.9s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1977ms (755 modules)
+ ✓ Compiled in 1348ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1911ms (755 modules)
+ ✓ Compiled in 1917ms (755 modules)
+ ✓ Compiled in 1895ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1950ms (755 modules)
+ ✓ Compiled in 1933ms (755 modules)
+ ✓ Compiled in 1946ms (755 modules)
+ ✓ Compiled in 1917ms (755 modules)
+ ✓ Compiled in 1960ms (755 modules)
+ ✓ Compiled in 1939ms (755 modules)
+ ✓ Compiled in 1965ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1297ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1950ms (754 modules)
+ ✓ Compiled in 1886ms (754 modules)
+ ✓ Compiled in 1873ms (754 modules)
+ ✓ Compiled in 1912ms (754 modules)
+ ✓ Compiled in 1877ms (754 modules)
+ ✓ Compiled in 1935ms (754 modules)
+ ✓ Compiled in 1900ms (754 modules)
+ ✓ Compiled in 1926ms (754 modules)
+ ✓ Compiled in 1935ms (754 modules)
+ ✓ Compiled in 1938ms (754 modules)
+ ✓ Compiled in 1917ms (754 modules)
+ ✓ Compiled in 1901ms (754 modules)
+ ✓ Compiled in 1940ms (754 modules)
+ ✓ Compiled in 1945ms (754 modules)
+ ✓ Compiled in 1338ms (754 modules)
+ ✓ Compiled in 1888ms (754 modules)
+ ✓ Compiled in 2s (754 modules)
+ ✓ Compiled in 1935ms (754 modules)
+ ✓ Compiled in 1992ms (754 modules)
+ ✓ Compiled in 1991ms (754 modules)
+ ✓ Compiled in 1950ms (754 modules)
+ ✓ Compiled in 1925ms (754 modules)
+ ✓ Compiled in 1905ms (754 modules)
+ ✓ Compiled in 1896ms (754 modules)
+ ✓ Compiled in 1917ms (754 modules)
+ ✓ Compiled in 1994ms (754 modules)
+ ✓ Compiled in 2.1s (754 modules)
+ ✓ Compiled in 1943ms (754 modules)
+ ✓ Compiled in 1950ms (754 modules)
+ ✓ Compiled in 1934ms (754 modules)
+ ✓ Compiled in 1310ms (754 modules)
+ ✓ Compiled in 1884ms (754 modules)
+ ✓ Compiled in 2s (754 modules)
+ ✓ Compiled in 1954ms (754 modules)
+ ✓ Compiled in 1962ms (754 modules)
+ ✓ Compiled in 2.2s (754 modules)
+ ✓ Compiled in 1975ms (754 modules)
+ ✓ Compiled in 1917ms (754 modules)
+ ✓ Compiled in 2.2s (754 modules)
+ ✓ Compiled in 2.2s (754 modules)
+ ✓ Compiled /_error in 2.6s (1441 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ GET / 500 in 4980ms
+ ✓ Compiled in 2.3s (755 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'
+}
+ GET /_next/static/chunks/fallback/main.js 500 in 314ms
+ GET /_next/static/chunks/fallback/webpack.js 500 in 290ms
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 275ms
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1323ms (755 modules)
+ ✓ Compiled in 1992ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 1623ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.9s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1916ms (755 modules)
+ ✓ Compiled in 1884ms (755 modules)
+ ✓ Compiled in 1912ms (755 modules)
+ ✓ Compiled in 1981ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1976ms (755 modules)
+ ✓ Compiled in 1257ms (755 modules)
+ ✓ Compiled in 1866ms (755 modules)
+ ✓ Compiled in 1905ms (755 modules)
+ ✓ Compiled in 1974ms (755 modules)
+ ✓ Compiled in 1923ms (755 modules)
+ ✓ Compiled in 1976ms (755 modules)
+ ✓ Compiled in 2s (754 modules)
+ ✓ Compiled in 2000ms (754 modules)
+ ✓ Compiled in 2s (754 modules)
+ ✓ Compiled in 1959ms (754 modules)
+ ✓ Compiled in 1960ms (754 modules)
+ ✓ Compiled in 1899ms (754 modules)
+ ✓ Compiled in 1957ms (754 modules)
+ ✓ Compiled in 2s (754 modules)
+ ✓ Compiled in 1979ms (754 modules)
+ ✓ Compiled in 1959ms (754 modules)
+ ✓ Compiled in 1967ms (754 modules)
+ ✓ Compiled in 1334ms (754 modules)
+ ✓ Compiled in 2.1s (754 modules)
+ ✓ Compiled in 2.1s (754 modules)
+ ✓ Compiled in 1913ms (754 modules)
+ ✓ Compiled in 2s (754 modules)
+ ✓ Compiled in 1918ms (754 modules)
+ ✓ Compiled in 1918ms (754 modules)
+ ✓ Compiled in 1950ms (754 modules)
+ ✓ Compiled in 1938ms (754 modules)
+ ✓ Compiled in 1900ms (754 modules)
+ ✓ Compiled in 1892ms (754 modules)
+ ✓ Compiled in 1938ms (754 modules)
+ ✓ Compiled in 1898ms (754 modules)
+ ✓ Compiled in 2s (754 modules)
+ ✓ Compiled in 2.2s (754 modules)
+ ✓ Compiled in 2.1s (754 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/page.js:138:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43) {
+  page: '/'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 4.1s (1454 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ GET / 500 in 6390ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 4.6s (1455 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ✓ Compiled in 5.2s (1455 modules)
+ GET /_next/static/chunks/fallback/main.js 500 in 7706ms
+ GET /_next/static/chunks/fallback/webpack.js 500 in 7687ms
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 7675ms
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 5.9s (1463 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ GET / 404 in 4768ms
+ GET /login 404 in 7592ms
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.6s (1449 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ GET / 500 in 4866ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'
+}
+ ✓ Compiled in 4.4s (1463 modules)
+ GET /login 500 in 9249ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/page.js',
+  page: '/'
+}
+ ✓ Compiled in 4.5s (1463 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ ✓ Compiled in 2.3s (1463 modules)
+ GET / 500 in 9238ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/(auth)/login/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/(auth)/login/page.js',
+  page: '/login'
+}
+ ✓ Compiled in 5.1s (1463 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ GET /login 500 in 10210ms
+ ✓ Compiled in 2.3s (755 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43) {
+  page: '/'
+}
+ ✓ Compiled in 4.9s (1463 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/(auth)/login/page.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/(auth)/login/page.js',
+  page: '/login'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ GET /login 500 in 5216ms
+ ✓ Compiled in 1670ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2000ms (755 modules)
+ ✓ Compiled in 1995ms (755 modules)
+ ✓ Compiled in 1989ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1952ms (755 modules)
+ ✓ Compiled in 1915ms (755 modules)
+ ✓ Compiled in 1923ms (755 modules)
+ ✓ Compiled in 1962ms (755 modules)
+ ✓ Compiled in 1877ms (755 modules)
+ ✓ Compiled in 1979ms (755 modules)
+ ✓ Compiled in 1901ms (755 modules)
+ ✓ Compiled in 1944ms (755 modules)
+ ✓ Compiled in 1925ms (755 modules)
+ ✓ Compiled in 1939ms (755 modules)
+ ✓ Compiled in 1310ms (755 modules)
+ ✓ Compiled in 1944ms (755 modules)
+ ✓ Compiled in 1953ms (755 modules)
+ ✓ Compiled in 1893ms (755 modules)
+ ✓ Compiled in 1900ms (755 modules)
+ ✓ Compiled in 1917ms (755 modules)
+ ✓ Compiled in 1937ms (755 modules)
+ ✓ Compiled in 1926ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1910ms (755 modules)
+ ✓ Compiled in 1935ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1930ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1886ms (755 modules)
+ ✓ Compiled in 1306ms (755 modules)
+ ✓ Compiled in 1919ms (755 modules)
+ ✓ Compiled in 1932ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ⨯ Error: ENOENT: no such file or directory, fstat
+    at <unknown> (.next/server/app/page.js:593:27)
+    at Object.<anonymous> (.next/server/app/page.js:599:3) {
+  errno: -2,
+  syscall: 'fstat',
+  code: 'ENOENT',
+  page: '/'
+}
+ ✓ Compiled in 4.4s (1454 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ GET / 500 in 6706ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 4.7s (1455 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ✓ Compiled in 5.2s (1455 modules)
+ GET /_next/static/chunks/fallback/main.js 500 in 7720ms
+ GET /_next/static/chunks/fallback/webpack.js 500 in 7710ms
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 7698ms
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1999ms (755 modules)
+ ✓ Compiled in 1994ms (755 modules)
+ ✓ Compiled in 1398ms (755 modules)
+ ✓ Compiled in 1992ms (755 modules)
+ ✓ Compiled in 1972ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1955ms (755 modules)
+ ✓ Compiled in 1985ms (755 modules)
+ ✓ Compiled in 1968ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1387ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1361ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1713ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1396ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1471ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1445ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 1679ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1468ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1400ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1334ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.9s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 1445ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1609ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1595ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1434ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1425ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1990ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1983ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1340ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1516ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1973ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.4s (1441 modules)
+ ⨯ [Error: ENOENT: no such file or directory, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'] {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/pages/_document.js'
+}
+ GET / 500 in 6947ms
+ ✓ Compiled in 2.3s (755 modules)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ ⨯ TypeError: Cannot read properties of undefined (reading 'call')
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(rsc)/./src/app/layout.tsx:8:195)
+    at <unknown> (rsc)/./src/app/layout.tsx (/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/server/app/_not-found/page.js:128:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:43)
+ GET /_next/static/chunks/fallback/react-refresh.js 500 in 1133ms
+ GET /_next/static/chunks/fallback/main.js 500 in 1122ms
+ GET /_next/static/chunks/fallback/webpack.js 500 in 1113ms
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1999ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 3s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 1566ms (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1393ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1466ms (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 1798ms (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1482ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1988ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1353ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1453ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1414ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1424ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1359ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1991ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1411ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1394ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1995ms (755 modules)
+ ✓ Compiled in 1961ms (755 modules)
+ ✓ Compiled in 1986ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1999ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1960ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1291ms (755 modules)
+ ✓ Compiled in 1977ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1975ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1998ms (755 modules)
+ ✓ Compiled in 1989ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1438ms (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1303ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1938ms (755 modules)
+ ✓ Compiled in 1963ms (755 modules)
+ ✓ Compiled in 1994ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1410ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 1608ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 1939ms (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1960ms (755 modules)
+ ✓ Compiled in 1977ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1985ms (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1469ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1341ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1355ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 1895ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.9s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 1617ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1458ms (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1364ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1412ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1995ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1316ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1304ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1306ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1990ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1275ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1986ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1991ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1972ms (755 modules)
+ ✓ Compiled in 1400ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1425ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1998ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1985ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1337ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1285ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1390ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1371ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1310ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1472ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1401ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1387ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.3s (755 modules)
+ ✓ Compiled in 1552ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 3s (755 modules)
+ ✓ Compiled in 2.7s (755 modules)
+ ✓ Compiled in 3s (755 modules)
+ ✓ Compiled in 3s (755 modules)
+ ✓ Compiled in 2.6s (755 modules)
+ ✓ Compiled in 2.5s (755 modules)
+ ✓ Compiled in 2.8s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.4s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 1370ms (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1325ms (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1987ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 1976ms (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2s (755 modules)
+ ✓ Compiled in 2.1s (755 modules)
+ ✓ Compiled in 2.2s (755 modules)
+ ✓ Compiled in 1940ms (755 modules)
+ ✓ Compiled in 1955ms (755 modules)
+ ✓ Compiled in 1960ms (755 modules)
+ ✓ Compiled in 1894ms (754 modules)
+ ✓ Compiled in 2s (754 modules)
+ ✓ Compiled in 1356ms (754 modules)
+ ✓ Compiled in 1895ms (754 modules)
+ ✓ Compiled in 1863ms (754 modules)
+ ✓ Compiled in 1911ms (754 modules)
+ ✓ Compiled in 1895ms (754 modules)
+ ✓ Compiled in 1887ms (754 modules)
+ ✓ Compiled in 1925ms (754 modules)
+ ✓ Compiled in 1864ms (754 modules)
+ ✓ Compiled in 1858ms (754 modules)
+ ✓ Compiled in 1852ms (754 modules)
+ ✓ Compiled in 1925ms (754 modules)
+ ✓ Compiled in 1946ms (754 modules)
+ ✓ Compiled in 1937ms (754 modules)
+ ✓ Compiled in 2.1s (754 modules)
+ ✓ Compiled in 1976ms (754 modules)
+ ✓ Compiled in 1915ms (754 modules)
+ ✓ Compiled in 1914ms (754 modules)
+ ✓ Compiled in 1234ms (754 modules)
+ ✓ Compiled in 1857ms (754 modules)
+ ✓ Compiled in 1885ms (754 modules)
+ ✓ Compiled in 1857ms (754 modules)
+ ✓ Compiled in 1835ms (754 modules)
+ ✓ Compiled in 1891ms (754 modules)
+ ✓ Compiled in 1858ms (754 modules)
+ ✓ Compiled in 1848ms (754 modules)
+ ✓ Compiled in 1856ms (754 modules)
+ ✓ Compiled in 1868ms (754 modules)
+ ✓ Compiled in 1841ms (754 modules)
+ ✓ Compiled in 1875ms (754 modules)
+ ✓ Compiled in 1879ms (754 modules)
+ ✓ Compiled in 1873ms (754 modules)
+ ✓ Compiled in 1864ms (754 modules)
+ ⨯ [Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/mnt/d/MyApplication/ClaudeCode/Keith_Job_Management/Pilot/jobtracker-web/.next/static/chunks/app/layout.js'
+}

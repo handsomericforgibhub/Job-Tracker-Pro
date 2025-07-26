@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { GET, POST } from '@/app/api/jobs/[id]/status-history/route'
 import { supabase } from '@/lib/supabase'
+import { JobStatus } from '@/lib/types'
 import { 
   createMockJob, 
   createMockUser, 
@@ -299,7 +300,7 @@ describe('/api/jobs/[id]/status-history', () => {
       
       for (const status of validStatuses) {
         const mockJob = createMockJob({ id: jobId, status: 'planning' })
-        const mockUpdatedJob = createMockJob({ id: jobId, status })
+        const mockUpdatedJob = createMockJob({ id: jobId, status: status as JobStatus })
         
         const mockJobQuery = mockSupabaseQuery(mockJob)
         const mockUpdatedJobQuery = mockSupabaseQuery(mockUpdatedJob)

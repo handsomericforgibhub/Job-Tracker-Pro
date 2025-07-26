@@ -27,12 +27,12 @@ import {
   Upload
 } from 'lucide-react'
 import Link from 'next/link'
-import TaskList from '@/components/tasks/task-list'
-import JobAssignments from '@/components/workers/job-assignments'
+import TaskList from '@/components/features/tasks/task-list'
+import JobAssignments from '@/components/features/workers/job-assignments'
 import { DocumentList } from '@/components/ui/document-list'
 import { DocumentUpload } from '@/components/ui/document-upload'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import JobQRGenerator from '@/components/qr/job-qr-generator'
+import JobQRGenerator from '@/components/shared/qr/job-qr-generator'
 
 const statusConfig = {
   planning: { 

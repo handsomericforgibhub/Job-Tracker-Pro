@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { TimeEntry, Worker, Job } from '@/lib/types'
-import SignatureCapture from '@/components/signature/signature-capture'
+import SignatureCapture from '@/components/shared/signature/signature-capture'
 import { 
   CheckCircle, 
   XCircle, 

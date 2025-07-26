@@ -24,7 +24,7 @@ import {
   Loader2,
   X
 } from 'lucide-react'
-import FileUploadHandler from './FileUploadHandler'
+import FileUploadHandler from './file-upload-handler'
 import { FileUploadResult } from '@/lib/types/question-driven'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 

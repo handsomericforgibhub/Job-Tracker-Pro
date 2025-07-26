@@ -5,7 +5,169 @@
    ▲ Next.js 15.3.5
    - Local:        http://localhost:3000
    - Network:      http://localhost:3000
-   - Environments: .env.local, .env
+   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 15.3s
+ ✓ Ready in 12.5s
+ ○ Compiling /api/jobs/[id]/stage-response ...
+ ✓ Compiled /api/jobs/[id]/stage-response in 3.9s (460 modules)
+🔍 Auth middleware - extractToken: {
+  hasAuthHeader: true,
+  authHeaderPrefix: 'Bearer invalid-token...',
+  allHeaders: {
+    accept: '*/*',
+    authorization: 'Bearer invalid-token',
+    'content-length': '67',
+    'content-type': 'application/json',
+    host: 'localhost:3000',
+    'user-agent': 'curl/8.5.0',
+    'x-forwarded-for': '127.0.0.1',
+    'x-forwarded-host': 'localhost:3000',
+    'x-forwarded-port': '3000',
+    'x-forwarded-proto': 'http'
+  }
+}
+✅ Auth middleware: Token extracted successfully, length: 13
+🔍 Auth middleware - validateAuth: Starting token validation
+🔍 Auth middleware - validateAuth: {
+  hasUser: false,
+  userId: undefined,
+  userEmail: undefined,
+  authError: 'invalid JWT: unable to parse or verify signature, token is malformed: token contains an invalid number of segments'
+}
+❌ Auth middleware: Token validation failed: invalid JWT: unable to parse or verify signature, token is malformed: token contains an invalid number of segments
+❌ Error in stage-response API: Error: Invalid or expired token
+    at createAuthError (src/lib/auth-middleware.ts:34:16)
+    at validateAuth (src/lib/auth-middleware.ts:94:12)
+    at async POST (src/app/api/jobs/[id]/stage-response/route.ts:27:13)
+  32 |  */
+  33 | function createAuthError(message: string, status: number, code: string): AuthenticationError {
+> 34 |   const error = new Error(message) as AuthenticationError
+     |                ^
+  35 |   error.status = status
+  36 |   error.code = code
+  37 |   return error {
+  status: 401,
+  code: 'INVALID_TOKEN'
+}
+ POST /api/jobs/test-job-id/stage-response 401 in 10870ms
+🔍 Auth middleware - extractToken: {
+  hasAuthHeader: true,
+  authHeaderPrefix: 'Bearer eyJhbGciOiJIU...',
+  allHeaders: {
+    accept: '*/*',
+    'accept-encoding': 'gzip, deflate, br',
+    authorization: 'Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IkcrOStBcFA2VmVLS2t1SSIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzM3ODcwNDgyLCJpYXQiOjE3Mzc4NjY4ODIsImlzcyI6Imh0dHBzOi8vaXlmcmpydWRxamZ0a2p2ZWdldmkuc3VwYWJhc2UuY28vYXV0aC92MSIsInN1YiI6IjI3ZjAzNWFiLTVjZjEtNDlhMC1hNDJiLWNhMWJkOGI1MDhhNSIsImVtYWlsIjoiaGFuZHNvbWVyaWNAaG90bWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7fSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTczNzg2Njg4Mn1dLCJzZXNzaW9uX2lkIjoiZmIzZTQxNGEtMzliMy00YTBmLWJkNzYtZjM4OTczZjkzZmQ3In0.R9lKqMUOgPQAYAmSn-j9hJpIrK0YpHX3jzBXVcGKN-w',
+    connection: 'close',
+    'content-length': '115',
+    'content-type': 'application/json',
+    host: 'localhost:3000',
+    'user-agent': 'node-fetch',
+    'x-forwarded-for': '127.0.0.1',
+    'x-forwarded-host': 'localhost:3000',
+    'x-forwarded-port': '3000',
+    'x-forwarded-proto': 'http'
+  }
+}
+✅ Auth middleware: Token extracted successfully, length: 676
+🔍 Auth middleware - validateAuth: Starting token validation
+🔍 Auth middleware - validateAuth: {
+  hasUser: false,
+  userId: undefined,
+  userEmail: undefined,
+  authError: 'invalid JWT: unable to parse or verify signature, token is unverifiable: error while executing keyfunc: invalid kid: G+9+ApP6VeKKkuI'
+}
+❌ Auth middleware: Token validation failed: invalid JWT: unable to parse or verify signature, token is unverifiable: error while executing keyfunc: invalid kid: G+9+ApP6VeKKkuI
+❌ Error in stage-response API: Error: Invalid or expired token
+    at createAuthError (src/lib/auth-middleware.ts:34:16)
+    at validateAuth (src/lib/auth-middleware.ts:94:12)
+    at async POST (src/app/api/jobs/[id]/stage-response/route.ts:27:13)
+  32 |  */
+  33 | function createAuthError(message: string, status: number, code: string): AuthenticationError {
+> 34 |   const error = new Error(message) as AuthenticationError
+     |                ^
+  35 |   error.status = status
+  36 |   error.code = code
+  37 |   return error {
+  status: 401,
+  code: 'INVALID_TOKEN'
+}
+ POST /api/jobs/test-job-id/stage-response 401 in 468ms
+ ○ Compiling / ...
+ ✓ Compiled / in 13.8s (1105 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+🔄 Auth state change: INITIAL_SESSION undefined
+ GET / 200 in 14568ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1298ms (1074 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+🔄 Auth state change: INITIAL_SESSION undefined
+ GET /_next/static/chunks/main-app.js?v=1753506740388 404 in 1595ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 535ms (1084 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+🔄 Auth state change: INITIAL_SESSION undefined
+ GET /login 200 in 1022ms
+ ○ Compiling /api/test-auth ...
+ ✓ Compiled /api/test-auth in 1731ms (637 modules)
+🔄 Testing authentication...
+Token received: eyJhbGciOiJIUzI1NiIsImtpZCI6IkcrOStBcFA2VmVLS2t1SS...
+User error: Error [AuthApiError]: invalid JWT: unable to parse or verify signature, token is unverifiable: error while executing keyfunc: invalid kid: G+9+ApP6VeKKkuI
+    at async POST (src/app/api/test-auth/route.ts:23:49)
+  21 |     )
+  22 |
+> 23 |     const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token)
+     |                                                 ^
+  24 |     
+  25 |     if (userError) {
+  26 |       console.error('User error:', userError) {
+  __isAuthError: true,
+  status: 403,
+  code: 'bad_jwt'
+}
+ POST /api/test-auth 401 in 3223ms
+ ✓ Compiled /login in 334ms (720 modules)
+✅ Environment validation passed
+📋 Environment configuration:
+  - Environment: development
+  - App URL: http://localhost:3000
+  - Supabase URL: https://iyfrjrudqjftkjvegevi.supabase.co
+  - Log Level: info
+🔄 Auth state change: INITIAL_SESSION undefined
+ GET /login 200 in 1947ms
+ ⨯ ./src/app/api/jobs/[id]/stage-response/route.ts
+Module parse failed: Identifier 'result' has already been declared (281:14)
+|         }
+|         // Build comprehensive response
+>         const result = {
+|             ...progressionResult,
+|             job: updatedJob,
+
+Import trace for requested module:
+./src/app/api/jobs/[id]/stage-response/route.ts
+ ○ Compiling /_not-found ...
+ ⨯ ./src/app/api/jobs/[id]/stage-response/route.ts
+Module parse failed: Identifier 'result' has already been declared (281:14)
+|         }
+|         // Build comprehensive response
+>         const result = {
+|             ...progressionResult,
+|             job: updatedJob,
+
+Import trace for requested module:
+./src/app/api/jobs/[id]/stage-response/route.ts

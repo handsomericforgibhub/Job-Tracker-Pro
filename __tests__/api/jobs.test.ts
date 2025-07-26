@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { GET, POST } from '@/app/api/jobs/route'
 import { supabase } from '@/lib/supabase'
+import { JobStatus } from '@/lib/types'
 import { 
   createMockJob, 
   createMockUser, 
@@ -123,7 +124,7 @@ describe('/api/jobs', () => {
     const mockJobData = {
       title: 'New Job',
       description: 'Job description',
-      status: 'planning',
+      status: 'planning' as JobStatus,
       start_date: '2024-01-01',
       end_date: '2024-01-31',
       company_id: 'test-company-id',

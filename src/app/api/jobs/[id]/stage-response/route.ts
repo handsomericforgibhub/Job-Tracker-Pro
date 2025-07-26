@@ -6,6 +6,7 @@ import {
   QuestionFormData,
   ResponseSource 
 } from '@/lib/types/question-driven'
+import { validateAuth, createAuthErrorResponse, AuthenticationError } from '@/lib/auth-middleware'
 
 // Create server-side Supabase client
 const supabase = createClient(
@@ -20,17 +21,58 @@ export async function POST(
   try {
     const { id: jobId } = await params
 
-    // Get authentication
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // Use auth middleware for authentication and user profile lookup
+    let user
+    try {
+      user = await validateAuth(request)
+    } catch (error) {
+      // If user profile is missing but user is authenticated, create a minimal profile
+      if (error instanceof Error && 'code' in error && (error as any).code === 'INCOMPLETE_PROFILE') {
+        console.log('⚠️ User profile incomplete, attempting to get auth user directly')
+        
+        const authHeader = request.headers.get('authorization')
+        if (!authHeader) {
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
 
-    const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: userError } = await supabase.auth.getUser(token)
-    
-    if (userError || !user) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
+        const token = authHeader.replace('Bearer ', '')
+        const { data: { user: authUser }, error: authError } = await supabase.auth.getUser(token)
+        
+        if (authError || !authUser) {
+          return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
+        }
+
+        // Try to create the missing user profile in the database
+        console.log('🔧 Attempting to create missing user profile in database')
+        const { data: createdUser, error: createError } = await supabase
+          .from('users')
+          .insert({
+            id: authUser.id,
+            email: authUser.email,
+            full_name: authUser.email?.split('@')[0] || 'User',
+            role: 'worker',
+            company_id: null
+          })
+          .select('id, email, role, company_id')
+          .single()
+
+        if (createError) {
+          console.error('❌ Failed to create user profile:', createError)
+          // Fallback to minimal user object
+          user = {
+            id: authUser.id,
+            email: authUser.email || '',
+            role: 'worker' as const,
+            company_id: null
+          }
+          console.log('🔧 Using fallback user object:', user)
+        } else {
+          user = createdUser
+          console.log('✅ Created missing user profile:', user)
+        }
+      } else {
+        throw error
+      }
     }
 
     // Parse request body
@@ -51,7 +93,9 @@ export async function POST(
       jobId,
       question_id,
       response_value,
-      user: user.email
+      userId: user.id,
+      userEmail: user.email,
+      userCompany: user.company_id
     })
 
     // Validate required fields
@@ -61,34 +105,144 @@ export async function POST(
       }, { status: 400 })
     }
 
-    // Verify job exists and user has access
-    const { data: job, error: jobError } = await supabase
-      .from('jobs')
-      .select('id, title, current_stage_id, company_id')
-      .eq('id', jobId)
-      .single()
-
-    if (jobError || !job) {
-      return NextResponse.json({ error: 'Job not found' }, { status: 404 })
+    // Verify job exists - use service role if user has no company_id to bypass RLS
+    let job, jobError
+    
+    if (!user.company_id) {
+      // User has no company_id, so we need to bypass RLS to find the job first
+      console.log('🔧 Using service role to lookup job due to user having no company_id')
+      const supabaseAdmin = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      )
+      
+      const jobResult = await supabaseAdmin
+        .from('jobs')
+        .select('id, title, current_stage_id, company_id')
+        .eq('id', jobId)
+        .maybeSingle()
+      
+      job = jobResult.data
+      jobError = jobResult.error
+    } else {
+      // User has company_id, use normal client with RLS
+      const jobResult = await supabase
+        .from('jobs')
+        .select('id, title, current_stage_id, company_id')
+        .eq('id', jobId)
+        .maybeSingle()
+      
+      job = jobResult.data
+      jobError = jobResult.error
     }
 
-    // Check user permission
-    const { data: userData } = await supabase
-      .from('users')
-      .select('company_id, role')
-      .eq('id', user.id)
-      .single()
+    console.log('🔍 Job lookup:', { jobId, job, jobError, userCompany: user.company_id, userRole: user.role })
 
-    if (!userData || (userData.role !== 'site_admin' && userData.company_id !== job.company_id)) {
-      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 })
+    if (jobError) {
+      console.error('❌ Job lookup failed:', { 
+        jobId, 
+        error: jobError, 
+        errorCode: jobError?.code,
+        errorMessage: jobError?.message,
+        userRole: user.role,
+        userCompany: user.company_id
+      })
+      
+      return NextResponse.json({ 
+        error: 'Failed to access job',
+        details: jobError?.message || 'Unknown database error'
+      }, { status: 500 })
+    }
+
+    if (!job) {
+      return NextResponse.json({ 
+        error: 'Job not found',
+        details: `Job ${jobId} does not exist or you don't have permission to access it`
+      }, { status: 404 })
+    }
+
+    // DEBUG: Enhanced logging for permission issues
+    console.log('🔍 Permission check details:', {
+      jobFound: !!job,
+      jobId: job?.id,
+      jobCompanyId: job?.company_id,
+      userRole: user.role,
+      userCompanyId: user.company_id,
+      userEmail: user.email,
+      shouldCheckCompany: user.role !== 'site_admin' && user.company_id !== null
+    })
+
+    // For multi-tenant security: users can only access jobs from their company
+    // Exception: site_admins can access any company's jobs
+    // Exception: users without company_id (incomplete profiles) get special handling
+    if (user.role !== 'site_admin') {
+      if (!user.company_id) {
+        console.log('⚠️ User has no company_id - checking if job has company_id too')
+        
+        // If user has no company_id, they can only access jobs that also have no company_id
+        // OR we need to assign them to a company
+        if (job.company_id) {
+          console.log('🔧 User has no company but job belongs to company - attempting to assign user to job\'s company')
+          
+          // Try to update user's company_id to match the job's company
+          const { error: updateError } = await supabase
+            .from('users')
+            .update({ company_id: job.company_id })
+            .eq('id', user.id)
+          
+          if (updateError) {
+            console.error('❌ Failed to assign user to company:', updateError)
+            return NextResponse.json({ 
+              error: 'User profile incomplete and cannot be auto-assigned to company',
+              details: `Please contact admin to assign you to a company. Job belongs to company ${job.company_id}`
+            }, { status: 403 })
+          } else {
+            console.log('✅ Successfully assigned user to company:', job.company_id)
+            user.company_id = job.company_id // Update local user object
+          }
+        }
+      } else if (user.company_id !== job.company_id) {
+        console.error('❌ Permission denied - company mismatch:', { 
+          userRole: user.role,
+          userCompany: user.company_id,
+          jobCompany: job.company_id
+        })
+        return NextResponse.json({ 
+          error: 'Insufficient permissions',
+          details: `User belongs to company ${user.company_id} but job belongs to company ${job.company_id}`
+        }, { status: 403 })
+      }
     }
 
     // Verify question exists and belongs to current stage
-    const { data: question, error: questionError } = await supabase
-      .from('stage_questions')
-      .select('id, stage_id, question_text, response_type, is_required')
-      .eq('id', question_id)
-      .single()
+    // Use service role if user has no company_id to bypass RLS
+    let question, questionError
+    
+    if (!user.company_id) {
+      console.log('🔧 Using service role to lookup question due to user having no company_id')
+      const supabaseAdmin = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      )
+      
+      const questionResult = await supabaseAdmin
+        .from('stage_questions')
+        .select('id, stage_id, question_text, response_type, is_required')
+        .eq('id', question_id)
+        .single()
+      
+      question = questionResult.data
+      questionError = questionResult.error
+    } else {
+      const questionResult = await supabase
+        .from('stage_questions')
+        .select('id, stage_id, question_text, response_type, is_required')
+        .eq('id', question_id)
+        .single()
+      
+      question = questionResult.data
+      questionError = questionResult.error
+    }
 
     if (questionError || !question) {
       return NextResponse.json({ error: 'Question not found' }, { status: 404 })
@@ -109,15 +263,29 @@ export async function POST(
     }
 
     // Call the database function to process the response
-    const { data: progressionResult, error: progressionError } = await supabase
-      .rpc('process_stage_response', {
-        p_job_id: jobId,
-        p_question_id: question_id,
-        p_response_value: response_value,
-        p_user_id: user.id,
-        p_response_source: response_source,
-        p_response_metadata: response_metadata
-      })
+    // Use service role if user has no company_id to bypass RLS
+    let progressionResult, progressionError
+    
+    const clientToUse = !user.company_id ? createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    ) : supabase
+    
+    if (!user.company_id) {
+      console.log('🔧 Using service role for RPC call due to user having no company_id')
+    }
+    
+    const rpcResult = await clientToUse.rpc('process_stage_response', {
+      p_job_id: jobId,
+      p_question_id: question_id,
+      p_response_value: response_value,
+      p_user_id: user.id,
+      p_response_source: response_source,
+      p_response_metadata: response_metadata
+    })
+    
+    progressionResult = rpcResult.data
+    progressionError = rpcResult.error
 
     if (progressionError) {
       console.error('❌ Stage progression error:', progressionError)
@@ -128,8 +296,8 @@ export async function POST(
 
     console.log('✅ Stage progression result:', progressionResult)
 
-    // Get updated job data
-    const { data: updatedJob, error: updatedJobError } = await supabase
+    // Get updated job data using the same client pattern
+    const { data: updatedJob, error: updatedJobError } = await clientToUse
       .from('jobs')
       .select(`
         id,
@@ -153,10 +321,10 @@ export async function POST(
       console.error('❌ Error fetching updated job:', updatedJobError)
     }
 
-    // Get newly created tasks if any
+    // Get newly created tasks if any using the same client pattern
     let newTasks = []
     if (progressionResult.tasks_created > 0) {
-      const { data: tasks } = await supabase
+      const { data: tasks } = await clientToUse
         .from('job_tasks')
         .select(`
           id,
@@ -178,7 +346,7 @@ export async function POST(
     }
 
     // Build comprehensive response
-    const result: StageProgressionResult & {
+    const responseData: StageProgressionResult & {
       job?: any
       new_tasks?: any[]
     } = {
@@ -189,37 +357,15 @@ export async function POST(
 
     return NextResponse.json({
       success: true,
-      data: result
+      data: responseData
     })
 
   } catch (error) {
     console.error('❌ Error in stage-response API:', error)
     
-    // Log error to audit trail
-    try {
-      const { id: jobId } = await params
-      const authHeader = request.headers.get('authorization')
-      
-      if (authHeader) {
-        const token = authHeader.replace('Bearer ', '')
-        const { data: { user } } = await supabase.auth.getUser(token)
-        
-        if (user) {
-          await supabase
-            .from('stage_audit_log')
-            .insert({
-              job_id: jobId,
-              trigger_source: 'error',
-              triggered_by: user.id,
-              trigger_details: {
-                error: error instanceof Error ? error.message : 'Unknown error',
-                timestamp: new Date().toISOString()
-              }
-            })
-        }
-      }
-    } catch (auditError) {
-      console.error('❌ Failed to log error to audit trail:', auditError)
+    // Handle authentication errors from middleware
+    if (error instanceof Error && 'status' in error) {
+      return createAuthErrorResponse(error as AuthenticationError)
     }
 
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

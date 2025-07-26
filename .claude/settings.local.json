@@ -32,7 +32,13 @@
       "Bash(mv:*)",
       "Bash(npx next build:*)",
       "Bash(timeout 15s npm run dev)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(touch:*)",
+      "Bash(timeout 5 npm run dev)",
+      "Bash(NODE_ENV=development node -e \"require(''./src/lib/env.ts'')\")",
+      "Bash(killall:*)",
+      "Bash(npx eslint:*)",
+      "Bash(timeout 60 npm run build:*)"
     ],
     "deny": []
   }
